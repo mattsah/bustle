@@ -25,7 +25,8 @@
 		"dotink/inkwell-core": "dev-master",
 		"dotink/inkwell-events": "dev-master",
 		"dotink/inkwell-routing": "dev-master",
-		"dotink/inkwell-http": "dev-master"
+		"dotink/inkwell-http": "dev-master",
+		"propel/propel": "~2.0@dev"
 	},
 	"autoload": {
 		"classmap": ["user/"]

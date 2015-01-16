@@ -1,0 +1,69 @@
+.day {
+	box-sizing: border-box;
+	width: 18%;
+	float: left;
+	margin-left: 2%;
+}
+
+.day:first-child {
+	margin-left: 0;
+}
+
+.queue {
+	position: fixed;
+	z-index: 10000;
+	top: 0;
+	left: -18%;
+	bottom: 0;
+	width: 18%;
+}
+
+.queue.active {
+	left: 0;
+}
+
+.queue .toggle {
+	position: absolute;
+	right: -1.5em;
+	bottom: 0;
+	width: 1.5em;
+	height: 1.5em;
+}
+
+.queue > ul {
+	position: absolute;
+	top: 5.5em;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	overflow: auto;
+}
+
+li {
+	position: relative;
+}
+
+li .close {
+	position: absolute;
+	top: .9em;
+	right: .5em;
+}
+
+@media (max-width: 1280px) {
+	.day {
+		width: 100%;
+	}
+
+	.queue {
+		width: 80%;
+		left: -80%;
+	}
+
+	.day:not(.active) {
+		display: none;
+	}
+
+	.day:target {
+		display: block !important;
+	}
+}

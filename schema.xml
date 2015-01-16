@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<database name="bustle" defaultIdMethod="native" defaultPhpNamingMethod="underscore">
+  <table name="people" idMethod="native" phpName="Person">
+    <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
+    <column name="full_name" phpName="FullName" type="VARCHAR" size="128"/>
+  </table>
+  <table name="tasks" idMethod="native" phpName="Task">
+    <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="title" phpName="Title" type="VARCHAR" required="true"/>
+    <column name="owner" phpName="Owner" type="INTEGER" required="true"/>
+    <column name="assignee" phpName="Assignee" type="INTEGER" required="true"/>
+    <column name="description" phpName="Description" type="LONGVARCHAR"/>
+    <foreign-key foreignTable="users" name="tasks_assignee_fkey" onDelete="RESTRICT" onUpdate="CASCADE">
+      <reference local="assignee" foreign="person"/>
+    </foreign-key>
+    <foreign-key foreignTable="users" name="tasks_owner_fkey" onDelete="RESTRICT" onUpdate="CASCADE">
+      <reference local="owner" foreign="person"/>
+    </foreign-key>
+  </table>
+  <table name="users" idMethod="native" phpName="User">
+    <column name="person" phpName="Id" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="password" phpName="Password" type="VARCHAR"/>
+    <foreign-key foreignTable="people" name="users_person_fkey" onDelete="RESTRICT" onUpdate="CASCADE">
+      <reference local="person" foreign="id"/>
+    </foreign-key>
+    <behavior name="delegate">
+        <parameter name="to" value="people" />
+    </behavior>
+  </table>
+</database>
