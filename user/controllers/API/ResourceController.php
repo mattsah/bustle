@@ -55,6 +55,7 @@
 
 			switch ($this['request']->getMethod()) {
 				case HTTP\GET:
+<<<<<<< HEAD
 					$query    = new $query_class();
 					$page     = $this['request']->params->get('page',     1);
 					$limit    = $this['request']->params->get('limit',    15);
@@ -71,6 +72,11 @@
 					}
 
 					$result = $result->limit($limit)->offset(($page - 1) * $limit)->find();
+=======
+					$query  = new $query_class();
+					$limit  = $this['request']->params->get('limit', 15);
+					$result = $query->create()->limit($limit)->find();
+>>>>>>> Initial Bustle concepts
 
 					return $result->toArray(NULL, FALSE, TableMap::TYPE_CAMELNAME, TRUE);
 
@@ -82,6 +88,11 @@
 
 					return $entity->toArray(TableMap::TYPE_CAMELNAME, TRUE, array(), TRUE);
 			}
+<<<<<<< HEAD
+=======
+
+			return $data;
+>>>>>>> Initial Bustle concepts
 		}
 
 
@@ -90,6 +101,7 @@
 		 */
 		public function handleEntity()
 		{
+<<<<<<< HEAD
 			switch ($this['request']->getMethod()) {
 				case HTTP\PUT:
 
@@ -97,6 +109,9 @@
 
 
 			}
+=======
+
+>>>>>>> Initial Bustle concepts
 		}
 	}
 }
