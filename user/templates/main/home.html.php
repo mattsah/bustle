@@ -1,17 +1,10 @@
-<!doctype html>
-<html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<link rel="stylesheet" href="/style/theme.css" />
-		<link rel="stylesheet" href="/style/layout.css" />
-		<link rel="stylesheet" href="https://www.google.com/fonts#ChoosePlace:select/Collection:Source+Sans+Pro" />
-	</head>
-	<body>
-		<header>
+<% namespace Inkwell\HTML
+{
+	$this->expand('content', 'layouts/full.html');
+	$this->assign('header',  'common/header.html');
 
-		</header>
-
-		<section class="tasks">
+	%>
+		<section class="tasks" role="main">
 			<div class="queue">
 				<h2>
 					Available Tasks
@@ -84,12 +77,5 @@
 
 			</div>
 		</section>
-		<footer>
-
-		</footer>
-
-		<script data-dojo-config="dojoBlankHtmlUrl:'/blank.html', baseUrl: '/', modulePaths: {local: 'script'}" src="//ajax.googleapis.com/ajax/libs/dojo/1.10.3/dojo/dojo.js"></script>
-		<script src="/script/main.js"></script>
-
-	</body>
-</html>
+	<%
+}
