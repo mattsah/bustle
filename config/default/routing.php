@@ -35,8 +35,7 @@
 
 			'mapping' => [
 				'Inkwell\Routing\ParserInterface'   => 'Inkwell\Routing\Parser',
-				'Inkwell\Routing\CompilerInterface' => 'Inkwell\Routing\Compiler',
-				'Inkwell\Routing\ResolverInterface' => 'Inkwell\Controller\Resolver'
+				'Inkwell\Routing\CompilerInterface' => 'Inkwell\Routing\Compiler'
 			]
 		],
 
