@@ -27,7 +27,7 @@
 		"dotink/inkwell-routing": "dev-master",
 		"dotink/inkwell-http": "dev-master",
 		"dotink/inkwell-view": "dev-master",
-		"dotink/inkwell-html": "dev-master"
+		"dotink/inkwell-html": "dev-master",
 		"propel/propel": "~2.0@dev"
 	},
 	"autoload": {

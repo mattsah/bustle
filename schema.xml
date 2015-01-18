@@ -11,6 +11,8 @@
     <column name="owner" phpName="Owner" type="INTEGER" required="true"/>
     <column name="assignee" phpName="Assignee" type="INTEGER" required="true"/>
     <column name="description" phpName="Description" type="LONGVARCHAR"/>
+    <column name="creation_date" phpName="CreationDate" type="DATE" required="true" defaultValue="(now"/>
+    <column name="start_date" phpName="StartDate" type="DATE"/>
     <foreign-key foreignTable="users" name="tasks_assignee_fkey" onDelete="RESTRICT" onUpdate="CASCADE">
       <reference local="assignee" foreign="person"/>
     </foreign-key>
