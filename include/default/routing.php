@@ -1,6 +1,6 @@
 <?php
 
-	return Affinity\Action::create(['core'], function($app, $resolver) {
+	return Affinity\Action::create(['core', 'response'], function($app, $resolver) {
 
 		$router     = $resolver->make('Inkwell\Routing\Engine');
 		$collection = $router->getCollection();
