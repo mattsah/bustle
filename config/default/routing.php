@@ -3,6 +3,12 @@
 	return Affinity\Config::create(['providers', 'routes'], [
 
 		//
+		// Whether or not we allow action output to override returned value
+		//
+
+		'mutable' => TRUE,
+
+		//
 		// Whether or not we should attempt to try URLs with and without trailing slashes
 		//
 
