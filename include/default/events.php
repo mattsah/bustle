@@ -1,9 +1,9 @@
 <?php
 
-	return Affinity\Action::create(['core'], function($app, $resolver) {
-		$app['events'] = $resolver->make('Inkwell\Event\Manager');
+	return Affinity\Action::create(['core'], function($app, $container) {
+		$app['events'] = $container->make('Inkwell\Event\Manager');
 
-		$resolver->prepare('Inkwell\Event\EmitterInterface', function($emitter) use ($app) {
+		$container->prepare('Inkwell\Event\EmitterInterface', function($emitter) use ($app) {
 			$app['events']->watch($emitter);
 		});
 	});

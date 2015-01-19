@@ -1,5 +1,7 @@
 <?php
 
+	use IW\HTTP;
+
 	return Affinity\Config::create(['providers', 'routes'], [
 
 		//
@@ -33,7 +35,8 @@
 
 			'mapping' => [
 				'Inkwell\Routing\ParserInterface'   => 'Inkwell\Routing\Parser',
-				'Inkwell\Routing\CompilerInterface' => 'Inkwell\Routing\Compiler'
+				'Inkwell\Routing\CompilerInterface' => 'Inkwell\Routing\Compiler',
+				'Inkwell\Routing\ResolverInterface' => 'Inkwell\Controller\Resolver'
 			]
 		],
 
@@ -71,7 +74,9 @@
 			//
 
 			'redirects' => [
-
+				HTTP\REDIRECT_PERMANENT => [
+						'/' => '/docs/'
+				]
 			]
 		]
 	]);

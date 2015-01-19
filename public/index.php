@@ -40,43 +40,17 @@
 
 			$app = include($init_path);
 
-			$app['engine']->exec(function($app, $resolver) {
-				$request  = $resolver->make('Inkwell\HTTP\Resource\Request');
-				$gateway  = $resolver->make('Inkwell\HTTP\Gateway\Server');
+			$app->run(function($app, $container) {
+				$request  = $container->make('Inkwell\HTTP\Resource\Request');
+				$gateway  = $container->make('Inkwell\HTTP\Gateway\Server');
 
 				$gateway->populate($request);
 
-				$response = $app['router']->run($request, function($action) use ($resolver) {
-					if ($action instanceof Closure) {
-						$class      = 'Inkwell\Controller';
-						$controller = $resolver->make($class);
-						$action     = $action->bindTo($controller, $controller);
-						$reference  = [$controller, '{closure}'];
-
-					} elseif (is_array($action)) {
-						$class      = $action[0];
-						$controller = $resolver->make($class);
-						$action     = $action[1];
-						$reference  = [$controller, $action];
-
-					} else {
-						$reference  = [$action];
-					}
-
-					if (isset($controller)) {
-						$controller->prepare($action, [
-							'router'   => $this,
-							'request'  => $this->request,
-							'response' => $this->response
-						]);
-					}
-
-					return $reference;
-				});
+				$resolver = $container->make('Inkwell\Routing\ResolverInterface');
+				$response = $app['router']->run($request, $resolver);
 
 				$gateway->transport($response);
 			});
-
 		});
 
 	} catch (Exception $e) {

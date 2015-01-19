@@ -1,9 +1,9 @@
 <?php
 
-	return Affinity\Action::create(['core'], function($app, $resolver) {
+	return Affinity\Action::create(['core'], function($app, $container) {
 		$root_directory = $app['engine']->fetch('view', 'root_directory', 'user/templates');
 
-		$resolver->define('Inkwell\View', [
+		$container->define('Inkwell\View', [
 			':root_directory' => $app->getDirectory($root_directory)
 		]);
 	});

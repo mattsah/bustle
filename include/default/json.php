@@ -1,6 +1,6 @@
 <?php
 
-	return Affinity\Action::create(['core', 'events'], function($app, $resolver) {
+	return Affinity\Action::create(['core', 'events'], function($app, $container) {
 		$app['events']->on('Router::actionComplete', function($action, $context) {
 			$response = $context['response'];
 

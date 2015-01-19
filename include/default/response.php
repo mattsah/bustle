@@ -1,6 +1,6 @@
 <?php
 
-	return Affinity\Action::create(['core'], function($app, $resolver) {
+	return Affinity\Action::create(['core'], function($app, $container) {
 		foreach ($app['engine']->fetch('response', 'states') as $status => $data) {
 			if (isset($data['code'])) {
 				Inkwell\HTTP\Resource\Response::addCode($status, $data['code']);

@@ -3,7 +3,7 @@
 	use Whoops\Handler\PrettyPageHandler;
 	use Whoops\Handler\JsonResponseHandler;
 
-	return Affinity\Action::create(function($app, $resolver) {
+	return Affinity\Action::create(function($app, $container) {
 
 		//
 		// Setup execution mode and debugging
@@ -52,12 +52,17 @@
 			$provider_params  = $app['engine']->fetch($id, '@providers.params',  []);
 
 			foreach ($provider_mapping as $interface => $provider) {
-				$resolver->alias($interface, $provider);
+				$container->alias($interface, $provider);
 			}
 
 			foreach ($provider_params as $provider => $params) {
-				$resolver->define($provider, $params);
+				$container->define($provider, $params);
 			}
 		}
 
+		//
+		// Make our container a shared instance for itself so we maintain all of the above
+		//
+
+		$container->share($container);
 	});
