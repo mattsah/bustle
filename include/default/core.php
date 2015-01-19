@@ -12,10 +12,9 @@
 		ini_set('display_errors', 0);
 		ini_set('display_startup_errors', 0);
 
-		$engine            = $app['engine'];
 		$server_admin      = $app->getEnvironment('SERVER_ADMIN', 'root');
-		$debugging         = $engine->fetch('core', 'debugging', []);
-		$execution_mode    = $engine->fetch('core', 'execution_mode', IW\EXEC_MODE\PRODUCTION);
+		$debugging         = $app['engine']->fetch('core', 'debugging', []);
+		$execution_mode    = $app['engine']->fetch('core', 'execution_mode', IW\EXEC_MODE\PRODUCTION);
 
 		if (!isset($debugging['destination'])) {
 			$debugging['destination'] = $execution_mode != IW\EXEC_MODE\PRODUCTION
@@ -46,7 +45,7 @@
 		}
 
 		$app->setExecutionMode($execution_mode);
-		$app->setWriteDirectory($engine->fetch('core', 'write_directory', 'writable'));
+		$app->setWriteDirectory($app['engine']->fetch('core', 'write_directory', 'writable'));
 
 		foreach ($app['engine']->fetch('@providers') as $id) {
 			$provider_mapping = $app['engine']->fetch($id, '@providers.mapping', []);
