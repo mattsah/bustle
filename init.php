@@ -7,7 +7,7 @@
 	@include 'constants.php';
 
 	$app  	       = new Core(realpath(__DIR__));
-	$container     = new Auryn\Provider();
+	$broker        = new Auryn\Provider();
 	$config_dir    = $app->getDirectory($app->getEnvironment('IW_CONFIG_ROOT', 'config'));
 	$action_dir    = $app->getDirectory($app->getEnvironment('IW_ACTION_ROOT', 'include'));
 	$environment   = $app->getEnvironment('IW_ENVIRONMENT', 'prod');
@@ -17,7 +17,7 @@
 		new Affinity\NativeDriver($action_dir)
 	);
 
-	$app['engine']->start($environment, $app, $container);
+	$app['engine']->start($environment, $app, $broker);
 
 	return $app;
 }
