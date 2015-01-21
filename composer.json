@@ -19,7 +19,6 @@
 	],
 	"require": {
 		"php": ">=5.4.0",
-		"filp/whoops": "1.*",
 		"rdlowrey/auryn": "dev-master",
 		"dotink/affinity": "dev-master",
 		"dotink/inkwell-core": "dev-master",
