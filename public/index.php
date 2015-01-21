@@ -42,14 +42,18 @@
 
 			$app->run(function($app, $container) {
 				$request  = $container->make('Inkwell\HTTP\Resource\Request');
+				$resolver = $container->make('Inkwell\Routing\ResolverInterface');
 				$gateway  = $container->make('Inkwell\HTTP\Gateway\Server');
 
 				$gateway->populate($request);
+				$gateway->transport(
 
-				$resolver = $container->make('Inkwell\Routing\ResolverInterface');
-				$response = $app['router']->run($request, $resolver);
+					//
+					// Running the router will return the response for transport
+					//
 
-				$gateway->transport($response);
+					$app['router']->run($request, $resolver)
+				);
 			});
 		});
 
