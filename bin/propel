@@ -1,0 +1,27 @@
+#!/usr/bin/php
+<?php
+
+use Propel\Runtime\Propel;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Console\Application;
+
+$app       = include __DIR__ . '/../init.php';
+$finder    = new Finder();
+$console   = new Application('Propel', Propel::VERSION);
+
+$cmd_dir   = dirname($app['loader']->findFile('Inkwell\Propel\ConfigInjector'));
+$cmd_files = $finder->files()->name('*Command.php')->in($cmd_dir)->depth(1);
+$config    = ['propel' => array_merge(
+	$app['engine']->fetch('propel'),
+	['database' => $app['engine']->fetch('database')]
+)];
+
+foreach ($cmd_files as $cmd_file) {
+	$class   = 'Inkwell\\Propel\\Command\\' . $cmd_file->getBasename('.php');
+	$command = new $class();
+
+	$command->setConfigProperties($config);
+	$console->add($command);
+}
+
+$console->run();

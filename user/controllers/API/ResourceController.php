@@ -2,13 +2,14 @@
 {
 	use IW\HTTP;
 	use Inkwell;
-	use Dotink\Flourish;
+	use Inkwell\Controller;
 	use Propel\Runtime\Map\TableMap;
+	use Dotink\Flourish;
 
 	/**
 	 *
 	 */
-	class ResourceController extends Inkwell\Controller
+	class ResourceController extends Controller\BaseController
 	{
 		/**
 		 *

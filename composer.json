@@ -27,7 +27,8 @@
 		"dotink/inkwell-routing": "dev-master",
 		"dotink/inkwell-controller": "dev-master",
 		"dotink/inkwell-view": "dev-master",
-		"dotink/inkwell-html": "dev-master"
+		"dotink/inkwell-html": "dev-master",
+		"dotink/inkwell-orm": "dev-master"
 	},
 	"autoload": {
 		"classmap": ["user/"]

@@ -4,8 +4,66 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ea95312c26c5dc43297faac10ad5c8b5",
+    "hash": "0a51ca467aa4ea9f496cbc041a070a18",
     "packages": [
+        {
+            "name": "aura/accept",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/auraphp/Aura.Accept.git",
+                "reference": "fc5f086784f8dd03cfddd66f6682dd2226a9747f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/auraphp/Aura.Accept/zipball/fc5f086784f8dd03cfddd66f6682dd2226a9747f",
+                "reference": "fc5f086784f8dd03cfddd66f6682dd2226a9747f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "aura": {
+                    "type": "library",
+                    "config": {
+                        "common": "Aura\\Accept\\_Config\\Common"
+                    }
+                },
+                "branch-alias": {
+                    "dev-develop-2": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Aura\\Accept\\": "src/",
+                    "Aura\\Accept\\_Config\\": "config/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Aura.Accept Contributors",
+                    "homepage": "https://github.com/auraphp/Aura.Accept/contributors"
+                }
+            ],
+            "description": "Provides content-negotiation tools using Accept* headers.",
+            "homepage": "https://github.com/auraphp/Aura.Accept/releases",
+            "keywords": [
+                "accept",
+                "accept-charset",
+                "accept-encoding",
+                "accept-language",
+                "content negotiation",
+                "content type",
+                "media type"
+            ],
+            "time": "2014-10-04 16:52:22"
+        },
         {
             "name": "dotink/affinity",
             "version": "dev-master",
@@ -222,15 +280,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-controller.git",
-                "reference": "f59b10806b71b7cd7aa86a4b45f636bb0f17e1e1"
+                "reference": "2b398586f37c13f4bc5432a75603d186047419f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-controller/zipball/f59b10806b71b7cd7aa86a4b45f636bb0f17e1e1",
-                "reference": "f59b10806b71b7cd7aa86a4b45f636bb0f17e1e1",
+                "url": "https://api.github.com/repos/dotink/inkwell-controller/zipball/2b398586f37c13f4bc5432a75603d186047419f0",
+                "reference": "2b398586f37c13f4bc5432a75603d186047419f0",
                 "shasum": ""
             },
             "require": {
+                "aura/accept": "dev-master",
                 "dotink/flourish-core": "dev-master",
                 "imarc/opus": "dev-master",
                 "php": ">=5.4.0"
@@ -268,7 +327,7 @@
                 "source": "https://github.com/dotink/inkwell-controller/tree/master",
                 "issues": "https://github.com/dotink/inkwell-controller/issues"
             },
-            "time": "2015-01-23 04:48:00"
+            "time": "2015-01-24 11:37:41"
         },
         {
             "name": "dotink/inkwell-core",
@@ -383,12 +442,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-html.git",
-                "reference": "2e8134a80044c217293903a94eb3a79fc10cce62"
+                "reference": "4714b4783d3c3c094995e411d01cdda9825648e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-html/zipball/2e8134a80044c217293903a94eb3a79fc10cce62",
-                "reference": "2e8134a80044c217293903a94eb3a79fc10cce62",
+                "url": "https://api.github.com/repos/dotink/inkwell-html/zipball/4714b4783d3c3c094995e411d01cdda9825648e9",
+                "reference": "4714b4783d3c3c094995e411d01cdda9825648e9",
                 "shasum": ""
             },
             "require": {
@@ -398,7 +457,10 @@
             "type": "opus-package",
             "extra": {
                 "opus": {
-                    "inkwell/framework": []
+                    "inkwell/framework": {
+                        "plugin/config": "config",
+                        "plugin/include": "include"
+                    }
                 }
             },
             "autoload": {
@@ -425,7 +487,7 @@
                 "source": "https://github.com/dotink/inkwell-html/tree/master",
                 "issues": "https://github.com/dotink/inkwell-html/issues"
             },
-            "time": "2015-01-21 06:16:30"
+            "time": "2015-01-24 11:46:18"
         },
         {
             "name": "dotink/inkwell-http",
@@ -433,12 +495,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-http.git",
-                "reference": "980ba41b4607ca4d1b8f2f3df346cc9c7ea183e9"
+                "reference": "026717146ba3814b953951b6232dad42a0f6dedf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-http/zipball/980ba41b4607ca4d1b8f2f3df346cc9c7ea183e9",
-                "reference": "980ba41b4607ca4d1b8f2f3df346cc9c7ea183e9",
+                "url": "https://api.github.com/repos/dotink/inkwell-http/zipball/026717146ba3814b953951b6232dad42a0f6dedf",
+                "reference": "026717146ba3814b953951b6232dad42a0f6dedf",
                 "shasum": ""
             },
             "require": {
@@ -481,7 +543,61 @@
                 "source": "https://github.com/dotink/inkwell-http/tree/master",
                 "issues": "https://github.com/dotink/inkwell-http/issues"
             },
-            "time": "2015-01-22 02:06:54"
+            "time": "2015-01-23 06:41:03"
+        },
+        {
+            "name": "dotink/inkwell-orm",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dotink/inkwell-orm.git",
+                "reference": "8f34eeba18a21f77328d137f1dcb7679d4e7f68a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dotink/inkwell-orm/zipball/8f34eeba18a21f77328d137f1dcb7679d4e7f68a",
+                "reference": "8f34eeba18a21f77328d137f1dcb7679d4e7f68a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0",
+                "propel/propel": "~2.0@dev"
+            },
+            "type": "opus-package",
+            "extra": {
+                "opus": {
+                    "inkwell/framework": {
+                        "plugin/bin": "bin",
+                        "plugin/config": "config",
+                        "plugin/include": "include"
+                    }
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "license": [
+                "AGPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Matthew J. Sahagian",
+                    "email": "matt@imarc.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "An ORM for inKWell (Propel 2)",
+            "keywords": [
+                "ORM",
+                "database"
+            ],
+            "support": {
+                "source": "https://github.com/dotink/inkwell-orm/tree/master",
+                "issues": "https://github.com/dotink/inkwell-orm/issues"
+            },
+            "time": "2015-01-24 23:09:54"
         },
         {
             "name": "dotink/inkwell-routing",
@@ -595,12 +711,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-view.git",
-                "reference": "45a0beb41bfd86d06ea873b4df805c309d04b513"
+                "reference": "92a334d94ac608e4b556c580382b0ae363f9081a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-view/zipball/45a0beb41bfd86d06ea873b4df805c309d04b513",
-                "reference": "45a0beb41bfd86d06ea873b4df805c309d04b513",
+                "url": "https://api.github.com/repos/dotink/inkwell-view/zipball/92a334d94ac608e4b556c580382b0ae363f9081a",
+                "reference": "92a334d94ac608e4b556c580382b0ae363f9081a",
                 "shasum": ""
             },
             "require": {
@@ -641,7 +757,7 @@
                 "source": "https://github.com/dotink/inkwell-view/tree/master",
                 "issues": "https://github.com/dotink/inkwell-view/issues"
             },
-            "time": "2015-01-21 09:09:42"
+            "time": "2015-01-23 20:44:30"
         },
         {
             "name": "filp/whoops",
@@ -1293,11 +1409,13 @@
         "rdlowrey/auryn": 20,
         "dotink/affinity": 20,
         "dotink/inkwell-core": 20,
+        "dotink/inkwell-events": 20,
+        "dotink/inkwell-http": 20,
         "dotink/inkwell-routing": 20,
         "dotink/inkwell-controller": 20,
         "dotink/inkwell-view": 20,
         "dotink/inkwell-html": 20,
-        "propel/propel": 20
+        "dotink/inkwell-orm": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
