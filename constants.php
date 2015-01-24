@@ -1,6 +1,6 @@
-<?php namespace IW
-{
-	foreach([
+<?php
+
+	return [
 
 		//
 		// UTILITY SHORTHANDS
@@ -71,8 +71,4 @@
 		//
 
 		'REGEX\ABSOLUTE_PATH' => '#^(/|\\\\|[a-z]:(\\\\|/)|\\\\|//)#i'
-
-	] as $const => $value) {
-		define(__NAMESPACE__ . '\\' . $const, $value);
-	}
-}
+	];
