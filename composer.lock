@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0a51ca467aa4ea9f496cbc041a070a18",
+    "hash": "f3a9d18ccd6be6fbfaca8f0e52310acd",
     "packages": [
         {
             "name": "aura/accept",
@@ -218,6 +218,61 @@
             "time": "2015-01-21 05:57:36"
         },
         {
+            "name": "dotink/flourish-text",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dotink/flourish-text.git",
+                "reference": "752700f5da07752f4fbae6f29e66f0df7535997f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dotink/flourish-text/zipball/752700f5da07752f4fbae6f29e66f0df7535997f",
+                "reference": "752700f5da07752f4fbae6f29e66f0df7535997f",
+                "shasum": ""
+            },
+            "require": {
+                "dotink/flourish-core": "dev-master",
+                "imarc/opus": "dev-master",
+                "php": ">=5.4.0"
+            },
+            "type": "opus-package",
+            "extra": {
+                "opus": {
+                    "dotink/inkwell-2.0": {
+                        "src": "library/flourish"
+                    }
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "license": [
+                "AGPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Matthew J. Sahagian",
+                    "email": "msahagian@dotink.org",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Language sensitive text transformation and translation",
+            "keywords": [
+                "i18n",
+                "language",
+                "multi-lingual",
+                "text transformation"
+            ],
+            "support": {
+                "source": "https://github.com/dotink/flourish-text/tree/master",
+                "issues": "https://github.com/dotink/flourish-text/issues"
+            },
+            "time": "2015-01-21 05:57:45"
+        },
+        {
             "name": "dotink/flourish-url",
             "version": "dev-master",
             "source": {
@@ -335,12 +390,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-core.git",
-                "reference": "d80df3f97a29dd32ccc15f2938044225ff79393f"
+                "reference": "b6890da90d7aa1bbaf708bff28349442a066a0e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-core/zipball/d80df3f97a29dd32ccc15f2938044225ff79393f",
-                "reference": "d80df3f97a29dd32ccc15f2938044225ff79393f",
+                "url": "https://api.github.com/repos/dotink/inkwell-core/zipball/b6890da90d7aa1bbaf708bff28349442a066a0e8",
+                "reference": "b6890da90d7aa1bbaf708bff28349442a066a0e8",
                 "shasum": ""
             },
             "require": {
@@ -381,7 +436,7 @@
                 "source": "https://github.com/dotink/inkwell-core/tree/master",
                 "issues": "https://github.com/dotink/inkwell-core/issues"
             },
-            "time": "2015-01-22 02:10:07"
+            "time": "2015-01-25 02:14:16"
         },
         {
             "name": "dotink/inkwell-events",
@@ -551,12 +606,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-orm.git",
-                "reference": "8f34eeba18a21f77328d137f1dcb7679d4e7f68a"
+                "reference": "fa3df35517dcc3e339c3cc07cca3e6075c3e5773"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-orm/zipball/8f34eeba18a21f77328d137f1dcb7679d4e7f68a",
-                "reference": "8f34eeba18a21f77328d137f1dcb7679d4e7f68a",
+                "url": "https://api.github.com/repos/dotink/inkwell-orm/zipball/fa3df35517dcc3e339c3cc07cca3e6075c3e5773",
+                "reference": "fa3df35517dcc3e339c3cc07cca3e6075c3e5773",
                 "shasum": ""
             },
             "require": {
@@ -597,7 +652,7 @@
                 "source": "https://github.com/dotink/inkwell-orm/tree/master",
                 "issues": "https://github.com/dotink/inkwell-orm/issues"
             },
-            "time": "2015-01-24 23:09:54"
+            "time": "2015-01-25 02:14:44"
         },
         {
             "name": "dotink/inkwell-routing",
@@ -1291,12 +1346,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Validator.git",
-                "reference": "b6a9f0be6ad7e8b202d2ca680a9a5e01a182c2fc"
+                "reference": "bdcea46252ff14b88700efb30de25737fe28f337"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Validator/zipball/b6a9f0be6ad7e8b202d2ca680a9a5e01a182c2fc",
-                "reference": "b6a9f0be6ad7e8b202d2ca680a9a5e01a182c2fc",
+                "url": "https://api.github.com/repos/symfony/Validator/zipball/bdcea46252ff14b88700efb30de25737fe28f337",
+                "reference": "bdcea46252ff14b88700efb30de25737fe28f337",
                 "shasum": ""
             },
             "require": {
@@ -1352,7 +1407,7 @@
             ],
             "description": "Symfony Validator Component",
             "homepage": "http://symfony.com",
-            "time": "2015-01-20 23:07:46"
+            "time": "2015-01-25 01:21:24"
         },
         {
             "name": "symfony/yaml",
@@ -1415,7 +1470,8 @@
         "dotink/inkwell-controller": 20,
         "dotink/inkwell-view": 20,
         "dotink/inkwell-html": 20,
-        "dotink/inkwell-orm": 20
+        "dotink/inkwell-orm": 20,
+        "dotink/flourish-text": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
