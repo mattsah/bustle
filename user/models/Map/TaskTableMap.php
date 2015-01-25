@@ -39,7 +39,7 @@ class TaskTableMap extends TableMap
     /**
      * The default database name for this class
      */
-    const DATABASE_NAME = 'bustle';
+    const DATABASE_NAME = 'default';
 
     /**
      * The table name for this class
@@ -59,7 +59,7 @@ class TaskTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 5;
+    const NUM_COLUMNS = 7;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class TaskTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 5;
+    const NUM_HYDRATE_COLUMNS = 7;
 
     /**
      * the column name for the id field
@@ -97,6 +97,16 @@ class TaskTableMap extends TableMap
     const COL_DESCRIPTION = 'tasks.description';
 
     /**
+     * the column name for the creation_date field
+     */
+    const COL_CREATION_DATE = 'tasks.creation_date';
+
+    /**
+     * the column name for the start_date field
+     */
+    const COL_START_DATE = 'tasks.start_date';
+
+    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -108,11 +118,11 @@ class TaskTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Title', 'Owner', 'Assignee', 'Description', ),
-        self::TYPE_CAMELNAME     => array('id', 'title', 'owner', 'assignee', 'description', ),
-        self::TYPE_COLNAME       => array(TaskTableMap::COL_ID, TaskTableMap::COL_TITLE, TaskTableMap::COL_OWNER, TaskTableMap::COL_ASSIGNEE, TaskTableMap::COL_DESCRIPTION, ),
-        self::TYPE_FIELDNAME     => array('id', 'title', 'owner', 'assignee', 'description', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
+        self::TYPE_PHPNAME       => array('Id', 'Title', 'Owner', 'Assignee', 'Description', 'CreationDate', 'StartDate', ),
+        self::TYPE_CAMELNAME     => array('id', 'title', 'owner', 'assignee', 'description', 'creationDate', 'startDate', ),
+        self::TYPE_COLNAME       => array(TaskTableMap::COL_ID, TaskTableMap::COL_TITLE, TaskTableMap::COL_OWNER, TaskTableMap::COL_ASSIGNEE, TaskTableMap::COL_DESCRIPTION, TaskTableMap::COL_CREATION_DATE, TaskTableMap::COL_START_DATE, ),
+        self::TYPE_FIELDNAME     => array('id', 'title', 'owner', 'assignee', 'description', 'creation_date', 'start_date', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -122,11 +132,11 @@ class TaskTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Title' => 1, 'Owner' => 2, 'Assignee' => 3, 'Description' => 4, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'title' => 1, 'owner' => 2, 'assignee' => 3, 'description' => 4, ),
-        self::TYPE_COLNAME       => array(TaskTableMap::COL_ID => 0, TaskTableMap::COL_TITLE => 1, TaskTableMap::COL_OWNER => 2, TaskTableMap::COL_ASSIGNEE => 3, TaskTableMap::COL_DESCRIPTION => 4, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'title' => 1, 'owner' => 2, 'assignee' => 3, 'description' => 4, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Title' => 1, 'Owner' => 2, 'Assignee' => 3, 'Description' => 4, 'CreationDate' => 5, 'StartDate' => 6, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'title' => 1, 'owner' => 2, 'assignee' => 3, 'description' => 4, 'creationDate' => 5, 'startDate' => 6, ),
+        self::TYPE_COLNAME       => array(TaskTableMap::COL_ID => 0, TaskTableMap::COL_TITLE => 1, TaskTableMap::COL_OWNER => 2, TaskTableMap::COL_ASSIGNEE => 3, TaskTableMap::COL_DESCRIPTION => 4, TaskTableMap::COL_CREATION_DATE => 5, TaskTableMap::COL_START_DATE => 6, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'title' => 1, 'owner' => 2, 'assignee' => 3, 'description' => 4, 'creation_date' => 5, 'start_date' => 6, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -152,6 +162,8 @@ class TaskTableMap extends TableMap
         $this->addForeignKey('owner', 'Owner', 'INTEGER', 'users', 'person', true, null, null);
         $this->addForeignKey('assignee', 'Assignee', 'INTEGER', 'users', 'person', true, null, null);
         $this->addColumn('description', 'Description', 'LONGVARCHAR', false, null, null);
+        $this->addColumn('creation_date', 'CreationDate', 'DATE', true, null, 'now()');
+        $this->addColumn('start_date', 'StartDate', 'DATE', false, null, null);
     } // initialize()
 
     /**
@@ -159,8 +171,20 @@ class TaskTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('UserRelatedByAssignee', '\\User', RelationMap::MANY_TO_ONE, array('assignee' => 'person', ), 'RESTRICT', 'CASCADE');
-        $this->addRelation('UserRelatedByOwner', '\\User', RelationMap::MANY_TO_ONE, array('owner' => 'person', ), 'RESTRICT', 'CASCADE');
+        $this->addRelation('UserRelatedByAssignee', '\\User', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':assignee',
+    1 => ':person',
+  ),
+), 'RESTRICT', 'CASCADE', null, false);
+        $this->addRelation('UserRelatedByOwner', '\\User', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':owner',
+    1 => ':person',
+  ),
+), 'RESTRICT', 'CASCADE', null, false);
     } // buildRelations()
 
     /**
@@ -309,12 +333,16 @@ class TaskTableMap extends TableMap
             $criteria->addSelectColumn(TaskTableMap::COL_OWNER);
             $criteria->addSelectColumn(TaskTableMap::COL_ASSIGNEE);
             $criteria->addSelectColumn(TaskTableMap::COL_DESCRIPTION);
+            $criteria->addSelectColumn(TaskTableMap::COL_CREATION_DATE);
+            $criteria->addSelectColumn(TaskTableMap::COL_START_DATE);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.title');
             $criteria->addSelectColumn($alias . '.owner');
             $criteria->addSelectColumn($alias . '.assignee');
             $criteria->addSelectColumn($alias . '.description');
+            $criteria->addSelectColumn($alias . '.creation_date');
+            $criteria->addSelectColumn($alias . '.start_date');
         }
     }
 

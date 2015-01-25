@@ -35,9 +35,9 @@
 		/**
 		 *
 		 */
-		public function prepare($action, $context = array())
+		public function __prepare($action, $context = array())
 		{
-			parent::prepare($action, $context);
+			parent::__prepare($action, $context);
 
 			$this->collection = $this['request']->params->get('collection');
 			$this->entity     = $this['inflector']->create($this->collection)->singularize()->camelize(TRUE);

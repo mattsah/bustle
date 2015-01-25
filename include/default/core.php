@@ -49,6 +49,8 @@
 		$app->setExecutionMode($execution_mode);
 		$app->setWriteDirectory($app['engine']->fetch('core', 'write_directory', 'writable'));
 
+		date_default_timezone_set($app['engine']->fetch('core', 'timezone', 'GMT'));
+
 		foreach ($app['engine']->fetch('@providers') as $id) {
 			$provider_mapping = $app['engine']->fetch($id, '@providers.mapping', []);
 			$provider_params  = $app['engine']->fetch($id, '@providers.params',  []);

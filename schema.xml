@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<database name="bustle" defaultIdMethod="native" defaultPhpNamingMethod="underscore">
+<database name="default" defaultIdMethod="native" defaultPhpNamingMethod="underscore">
   <table name="people" idMethod="native" phpName="Person">
     <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
@@ -11,7 +11,7 @@
     <column name="owner" phpName="Owner" type="INTEGER" required="true"/>
     <column name="assignee" phpName="Assignee" type="INTEGER" required="true"/>
     <column name="description" phpName="Description" type="LONGVARCHAR"/>
-    <column name="creation_date" phpName="CreationDate" type="DATE" required="true" defaultValue="(now"/>
+    <column name="creation_date" phpName="CreationDate" type="DATE" required="true" defaultExpr="now()"/>
     <column name="start_date" phpName="StartDate" type="DATE"/>
     <foreign-key foreignTable="users" name="tasks_assignee_fkey" onDelete="RESTRICT" onUpdate="CASCADE">
       <reference local="assignee" foreign="person"/>

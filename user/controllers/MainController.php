@@ -34,9 +34,9 @@
 		/**
 		 *
 		 */
-		public function prepare($action, $context = array())
+		public function __prepare($action, $context = array())
 		{
-			parent::prepare($action, $context);
+			parent::__prepare($action, $context);
 		}
 
 

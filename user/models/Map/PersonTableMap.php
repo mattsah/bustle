@@ -39,7 +39,7 @@ class PersonTableMap extends TableMap
     /**
      * The default database name for this class
      */
-    const DATABASE_NAME = 'bustle';
+    const DATABASE_NAME = 'default';
 
     /**
      * The table name for this class
@@ -147,7 +147,13 @@ class PersonTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('User', '\\User', RelationMap::ONE_TO_ONE, array('id' => 'person', ), 'RESTRICT', 'CASCADE');
+        $this->addRelation('User', '\\User', RelationMap::ONE_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':person',
+    1 => ':id',
+  ),
+), 'RESTRICT', 'CASCADE', null, false);
     } // buildRelations()
 
     /**

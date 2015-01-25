@@ -25,12 +25,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildTaskQuery orderByOwner($order = Criteria::ASC) Order by the owner column
  * @method     ChildTaskQuery orderByAssignee($order = Criteria::ASC) Order by the assignee column
  * @method     ChildTaskQuery orderByDescription($order = Criteria::ASC) Order by the description column
+ * @method     ChildTaskQuery orderByCreationDate($order = Criteria::ASC) Order by the creation_date column
+ * @method     ChildTaskQuery orderByStartDate($order = Criteria::ASC) Order by the start_date column
  *
  * @method     ChildTaskQuery groupById() Group by the id column
  * @method     ChildTaskQuery groupByTitle() Group by the title column
  * @method     ChildTaskQuery groupByOwner() Group by the owner column
  * @method     ChildTaskQuery groupByAssignee() Group by the assignee column
  * @method     ChildTaskQuery groupByDescription() Group by the description column
+ * @method     ChildTaskQuery groupByCreationDate() Group by the creation_date column
+ * @method     ChildTaskQuery groupByStartDate() Group by the start_date column
  *
  * @method     ChildTaskQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildTaskQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -53,7 +57,9 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildTask findOneByTitle(string $title) Return the first ChildTask filtered by the title column
  * @method     ChildTask findOneByOwner(int $owner) Return the first ChildTask filtered by the owner column
  * @method     ChildTask findOneByAssignee(int $assignee) Return the first ChildTask filtered by the assignee column
- * @method     ChildTask findOneByDescription(string $description) Return the first ChildTask filtered by the description column *
+ * @method     ChildTask findOneByDescription(string $description) Return the first ChildTask filtered by the description column
+ * @method     ChildTask findOneByCreationDate(string $creation_date) Return the first ChildTask filtered by the creation_date column
+ * @method     ChildTask findOneByStartDate(string $start_date) Return the first ChildTask filtered by the start_date column *
 
  * @method     ChildTask requirePk($key, ConnectionInterface $con = null) Return the ChildTask by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildTask requireOne(ConnectionInterface $con = null) Return the first ChildTask matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -63,6 +69,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildTask requireOneByOwner(int $owner) Return the first ChildTask filtered by the owner column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildTask requireOneByAssignee(int $assignee) Return the first ChildTask filtered by the assignee column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildTask requireOneByDescription(string $description) Return the first ChildTask filtered by the description column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildTask requireOneByCreationDate(string $creation_date) Return the first ChildTask filtered by the creation_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildTask requireOneByStartDate(string $start_date) Return the first ChildTask filtered by the start_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildTask[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildTask objects based on current ModelCriteria
  * @method     ChildTask[]|ObjectCollection findById(int $id) Return ChildTask objects filtered by the id column
@@ -70,6 +78,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildTask[]|ObjectCollection findByOwner(int $owner) Return ChildTask objects filtered by the owner column
  * @method     ChildTask[]|ObjectCollection findByAssignee(int $assignee) Return ChildTask objects filtered by the assignee column
  * @method     ChildTask[]|ObjectCollection findByDescription(string $description) Return ChildTask objects filtered by the description column
+ * @method     ChildTask[]|ObjectCollection findByCreationDate(string $creation_date) Return ChildTask objects filtered by the creation_date column
+ * @method     ChildTask[]|ObjectCollection findByStartDate(string $start_date) Return ChildTask objects filtered by the start_date column
  * @method     ChildTask[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -84,7 +94,7 @@ abstract class TaskQuery extends ModelCriteria
      * @param     string $modelName The phpName of a model, e.g. 'Book'
      * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'bustle', $modelName = '\\Task', $modelAlias = null)
+    public function __construct($dbName = 'default', $modelName = '\\Task', $modelAlias = null)
     {
         parent::__construct($dbName, $modelName, $modelAlias);
     }
@@ -162,7 +172,7 @@ abstract class TaskQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, title, owner, assignee, description FROM tasks WHERE id = :p0';
+        $sql = 'SELECT id, title, owner, assignee, description, creation_date, start_date FROM tasks WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -435,6 +445,92 @@ abstract class TaskQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(TaskTableMap::COL_DESCRIPTION, $description, $comparison);
+    }
+
+    /**
+     * Filter the query on the creation_date column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByCreationDate('2011-03-14'); // WHERE creation_date = '2011-03-14'
+     * $query->filterByCreationDate('now'); // WHERE creation_date = '2011-03-14'
+     * $query->filterByCreationDate(array('max' => 'yesterday')); // WHERE creation_date > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $creationDate The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildTaskQuery The current query, for fluid interface
+     */
+    public function filterByCreationDate($creationDate = null, $comparison = null)
+    {
+        if (is_array($creationDate)) {
+            $useMinMax = false;
+            if (isset($creationDate['min'])) {
+                $this->addUsingAlias(TaskTableMap::COL_CREATION_DATE, $creationDate['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($creationDate['max'])) {
+                $this->addUsingAlias(TaskTableMap::COL_CREATION_DATE, $creationDate['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(TaskTableMap::COL_CREATION_DATE, $creationDate, $comparison);
+    }
+
+    /**
+     * Filter the query on the start_date column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByStartDate('2011-03-14'); // WHERE start_date = '2011-03-14'
+     * $query->filterByStartDate('now'); // WHERE start_date = '2011-03-14'
+     * $query->filterByStartDate(array('max' => 'yesterday')); // WHERE start_date > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $startDate The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildTaskQuery The current query, for fluid interface
+     */
+    public function filterByStartDate($startDate = null, $comparison = null)
+    {
+        if (is_array($startDate)) {
+            $useMinMax = false;
+            if (isset($startDate['min'])) {
+                $this->addUsingAlias(TaskTableMap::COL_START_DATE, $startDate['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($startDate['max'])) {
+                $this->addUsingAlias(TaskTableMap::COL_START_DATE, $startDate['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(TaskTableMap::COL_START_DATE, $startDate, $comparison);
     }
 
     /**

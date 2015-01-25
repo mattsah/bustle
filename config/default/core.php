@@ -10,6 +10,12 @@
 		'execution_mode'  => IW\EXEC_MODE\DEVELOPMENT,
 
 		//
+		// Timezone
+		//
+
+		'timezone' => 'US/Pacific',
+
+		//
 		// Debugging information to use.  Keeping the debugging destination to NULL will
 		// change the default depending on the execution mode.  If the execution mode
 		// is IW\EXEC_MODE\DEVELOPMENT, it will dump errors to the screen.  Otherwise it will

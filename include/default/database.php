@@ -4,10 +4,18 @@
 	use Propel\Runtime\Connection\ConnectionManagerSingle;
 
 	return Affinity\Action::create(['core'], function($app, $broker) {
-		$container = Propel::getServiceContainer();
-		$manager   = new ConnectionManagerSingle();
+		$container   = Propel::getServiceContainer();
+		$connections = $app['engine']->fetch('database', 'connections', array());
 
-		//
-		// Runtime Config Here
-		//
+		foreach ($connections as $name => $config) {
+			if (!isset($config['adapter'])) {
+				continue;
+			}
+
+			$manager = new ConnectionManagerSingle();
+
+			$manager->setConfiguration($config);
+			$container->setAdapterClass($name, $config['adapter']);
+			$container->setConnectionManager($name, $manager);
+		}
 	});

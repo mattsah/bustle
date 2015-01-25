@@ -5,6 +5,7 @@ namespace Base;
 use \TaskQuery as ChildTaskQuery;
 use \User as ChildUser;
 use \UserQuery as ChildUserQuery;
+use \DateTime;
 use \Exception;
 use \PDO;
 use Map\TaskTableMap;
@@ -19,6 +20,7 @@ use Propel\Runtime\Exception\LogicException;
 use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Parser\AbstractParser;
+use Propel\Runtime\Util\PropelDateTime;
 
 /**
  * Base class that represents a row from the 'tasks' table.
@@ -92,6 +94,19 @@ abstract class Task implements ActiveRecordInterface
     protected $description;
 
     /**
+     * The value for the creation_date field.
+     * Note: this column has a database default value of: (expression) now()
+     * @var        \DateTime
+     */
+    protected $creation_date;
+
+    /**
+     * The value for the start_date field.
+     * @var        \DateTime
+     */
+    protected $start_date;
+
+    /**
      * @var        ChildUser
      */
     protected $aUserRelatedByAssignee;
@@ -110,10 +125,22 @@ abstract class Task implements ActiveRecordInterface
     protected $alreadyInSave = false;
 
     /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see __construct()
+     */
+    public function applyDefaultValues()
+    {
+    }
+
+    /**
      * Initializes internal state of Base\Task object.
+     * @see applyDefaults()
      */
     public function __construct()
     {
+        $this->applyDefaultValues();
     }
 
     /**
@@ -377,6 +404,46 @@ abstract class Task implements ActiveRecordInterface
     }
 
     /**
+     * Get the [optionally formatted] temporal [creation_date] column value.
+     *
+     *
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getCreationDate($format = NULL)
+    {
+        if ($format === null) {
+            return $this->creation_date;
+        } else {
+            return $this->creation_date instanceof \DateTime ? $this->creation_date->format($format) : null;
+        }
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [start_date] column value.
+     *
+     *
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getStartDate($format = NULL)
+    {
+        if ($format === null) {
+            return $this->start_date;
+        } else {
+            return $this->start_date instanceof \DateTime ? $this->start_date->format($format) : null;
+        }
+    }
+
+    /**
      * Set the value of [id] column.
      *
      * @param  int $v new value
@@ -485,6 +552,46 @@ abstract class Task implements ActiveRecordInterface
     } // setDescription()
 
     /**
+     * Sets the value of [creation_date] column to a normalized version of the date/time value specified.
+     *
+     * @param  mixed $v string, integer (timestamp), or \DateTime value.
+     *               Empty strings are treated as NULL.
+     * @return $this|\Task The current object (for fluent API support)
+     */
+    public function setCreationDate($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->creation_date !== null || $dt !== null) {
+            if ($dt !== $this->creation_date) {
+                $this->creation_date = $dt;
+                $this->modifiedColumns[TaskTableMap::COL_CREATION_DATE] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    } // setCreationDate()
+
+    /**
+     * Sets the value of [start_date] column to a normalized version of the date/time value specified.
+     *
+     * @param  mixed $v string, integer (timestamp), or \DateTime value.
+     *               Empty strings are treated as NULL.
+     * @return $this|\Task The current object (for fluent API support)
+     */
+    public function setStartDate($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->start_date !== null || $dt !== null) {
+            if ($dt !== $this->start_date) {
+                $this->start_date = $dt;
+                $this->modifiedColumns[TaskTableMap::COL_START_DATE] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    } // setStartDate()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -534,6 +641,12 @@ abstract class Task implements ActiveRecordInterface
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : TaskTableMap::translateFieldName('Description', TableMap::TYPE_PHPNAME, $indexType)];
             $this->description = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : TaskTableMap::translateFieldName('CreationDate', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->creation_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : TaskTableMap::translateFieldName('StartDate', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->start_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -542,7 +655,7 @@ abstract class Task implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 5; // 5 = TaskTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 7; // 7 = TaskTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Task'), 0, $e);
@@ -790,6 +903,12 @@ abstract class Task implements ActiveRecordInterface
         if ($this->isColumnModified(TaskTableMap::COL_DESCRIPTION)) {
             $modifiedColumns[':p' . $index++]  = 'description';
         }
+        if ($this->isColumnModified(TaskTableMap::COL_CREATION_DATE)) {
+            $modifiedColumns[':p' . $index++]  = 'creation_date';
+        }
+        if ($this->isColumnModified(TaskTableMap::COL_START_DATE)) {
+            $modifiedColumns[':p' . $index++]  = 'start_date';
+        }
 
         $sql = sprintf(
             'INSERT INTO tasks (%s) VALUES (%s)',
@@ -815,6 +934,12 @@ abstract class Task implements ActiveRecordInterface
                         break;
                     case 'description':
                         $stmt->bindValue($identifier, $this->description, PDO::PARAM_STR);
+                        break;
+                    case 'creation_date':
+                        $stmt->bindValue($identifier, $this->creation_date ? $this->creation_date->format("Y-m-d H:i:s") : null, PDO::PARAM_STR);
+                        break;
+                    case 'start_date':
+                        $stmt->bindValue($identifier, $this->start_date ? $this->start_date->format("Y-m-d H:i:s") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -886,6 +1011,12 @@ abstract class Task implements ActiveRecordInterface
             case 4:
                 return $this->getDescription();
                 break;
+            case 5:
+                return $this->getCreationDate();
+                break;
+            case 6:
+                return $this->getStartDate();
+                break;
             default:
                 return null;
                 break;
@@ -921,7 +1052,23 @@ abstract class Task implements ActiveRecordInterface
             $keys[2] => $this->getOwner(),
             $keys[3] => $this->getAssignee(),
             $keys[4] => $this->getDescription(),
+            $keys[5] => $this->getCreationDate(),
+            $keys[6] => $this->getStartDate(),
         );
+
+        $utc = new \DateTimeZone('utc');
+        if ($result[$keys[5]] instanceof \DateTime) {
+            // When changing timezone we don't want to change existing instances
+            $dateTime = clone $result[$keys[5]];
+            $result[$keys[5]] = $dateTime->setTimezone($utc)->format('Y-m-d\TH:i:s\Z');
+        }
+
+        if ($result[$keys[6]] instanceof \DateTime) {
+            // When changing timezone we don't want to change existing instances
+            $dateTime = clone $result[$keys[6]];
+            $result[$keys[6]] = $dateTime->setTimezone($utc)->format('Y-m-d\TH:i:s\Z');
+        }
+
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
@@ -1007,6 +1154,12 @@ abstract class Task implements ActiveRecordInterface
             case 4:
                 $this->setDescription($value);
                 break;
+            case 5:
+                $this->setCreationDate($value);
+                break;
+            case 6:
+                $this->setStartDate($value);
+                break;
         } // switch()
 
         return $this;
@@ -1047,6 +1200,12 @@ abstract class Task implements ActiveRecordInterface
         }
         if (array_key_exists($keys[4], $arr)) {
             $this->setDescription($arr[$keys[4]]);
+        }
+        if (array_key_exists($keys[5], $arr)) {
+            $this->setCreationDate($arr[$keys[5]]);
+        }
+        if (array_key_exists($keys[6], $arr)) {
+            $this->setStartDate($arr[$keys[6]]);
         }
     }
 
@@ -1103,6 +1262,12 @@ abstract class Task implements ActiveRecordInterface
         }
         if ($this->isColumnModified(TaskTableMap::COL_DESCRIPTION)) {
             $criteria->add(TaskTableMap::COL_DESCRIPTION, $this->description);
+        }
+        if ($this->isColumnModified(TaskTableMap::COL_CREATION_DATE)) {
+            $criteria->add(TaskTableMap::COL_CREATION_DATE, $this->creation_date);
+        }
+        if ($this->isColumnModified(TaskTableMap::COL_START_DATE)) {
+            $criteria->add(TaskTableMap::COL_START_DATE, $this->start_date);
         }
 
         return $criteria;
@@ -1194,6 +1359,8 @@ abstract class Task implements ActiveRecordInterface
         $copyObj->setOwner($this->getOwner());
         $copyObj->setAssignee($this->getAssignee());
         $copyObj->setDescription($this->getDescription());
+        $copyObj->setCreationDate($this->getCreationDate());
+        $copyObj->setStartDate($this->getStartDate());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1342,8 +1509,11 @@ abstract class Task implements ActiveRecordInterface
         $this->owner = null;
         $this->assignee = null;
         $this->description = null;
+        $this->creation_date = null;
+        $this->start_date = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);

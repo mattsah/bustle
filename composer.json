@@ -28,7 +28,8 @@
 		"dotink/inkwell-controller": "dev-master",
 		"dotink/inkwell-view": "dev-master",
 		"dotink/inkwell-html": "dev-master",
-		"dotink/inkwell-orm": "dev-master"
+		"dotink/inkwell-orm": "dev-master",
+		"dotink/flourish-text": "dev-master"
 	},
 	"autoload": {
 		"classmap": ["user/"]

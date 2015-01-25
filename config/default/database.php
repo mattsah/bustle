@@ -3,9 +3,9 @@
 	return Affinity\Config::create([
 		'connections' => [
 			'default' => [
-				'adapter'    => NULL,
-				'dsn'        => NULL,
-				'user'       => NULL,
+				'adapter'    => 'pgsql',
+				'dsn'        => 'pgsql:host=localhost;dbname=bustle',
+				'user'       => 'web',
 				'password'   => NULL,
 				'attributes' => [],
 				'classname'  => 'Propel\Runtime\Connection\ConnectionWrapper',

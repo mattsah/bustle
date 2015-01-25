@@ -39,7 +39,7 @@ class UserTableMap extends TableMap
     /**
      * The default database name for this class
      */
-    const DATABASE_NAME = 'bustle';
+    const DATABASE_NAME = 'default';
 
     /**
      * The table name for this class
@@ -140,9 +140,27 @@ class UserTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Person', '\\Person', RelationMap::MANY_TO_ONE, array('person' => 'id', ), 'RESTRICT', 'CASCADE');
-        $this->addRelation('TaskRelatedByAssignee', '\\Task', RelationMap::ONE_TO_MANY, array('person' => 'assignee', ), 'RESTRICT', 'CASCADE', 'TasksRelatedByAssignee');
-        $this->addRelation('TaskRelatedByOwner', '\\Task', RelationMap::ONE_TO_MANY, array('person' => 'owner', ), 'RESTRICT', 'CASCADE', 'TasksRelatedByOwner');
+        $this->addRelation('Person', '\\Person', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':person',
+    1 => ':id',
+  ),
+), 'RESTRICT', 'CASCADE', null, false);
+        $this->addRelation('TaskRelatedByAssignee', '\\Task', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':assignee',
+    1 => ':person',
+  ),
+), 'RESTRICT', 'CASCADE', 'TasksRelatedByAssignee', false);
+        $this->addRelation('TaskRelatedByOwner', '\\Task', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':owner',
+    1 => ':person',
+  ),
+), 'RESTRICT', 'CASCADE', 'TasksRelatedByOwner', false);
     } // buildRelations()
 
     /**

@@ -73,7 +73,7 @@ abstract class UserQuery extends ModelCriteria
      * @param     string $modelName The phpName of a model, e.g. 'Book'
      * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'bustle', $modelName = '\\User', $modelAlias = null)
+    public function __construct($dbName = 'default', $modelName = '\\User', $modelAlias = null)
     {
         parent::__construct($dbName, $modelName, $modelAlias);
     }
@@ -393,7 +393,7 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Filter the query by a related \Task object
      *
-     * @param \Task|ObjectCollection $task  the related object to use as filter
+     * @param \Task|ObjectCollection $task the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildUserQuery The current query, for fluid interface
@@ -466,7 +466,7 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Filter the query by a related \Task object
      *
-     * @param \Task|ObjectCollection $task  the related object to use as filter
+     * @param \Task|ObjectCollection $task the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildUserQuery The current query, for fluid interface

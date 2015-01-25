@@ -70,7 +70,7 @@ abstract class PersonQuery extends ModelCriteria
      * @param     string $modelName The phpName of a model, e.g. 'Book'
      * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'bustle', $modelName = '\\Person', $modelAlias = null)
+    public function __construct($dbName = 'default', $modelName = '\\Person', $modelAlias = null)
     {
         parent::__construct($dbName, $modelName, $modelAlias);
     }
@@ -340,7 +340,7 @@ abstract class PersonQuery extends ModelCriteria
     /**
      * Filter the query by a related \User object
      *
-     * @param \User|ObjectCollection $user  the related object to use as filter
+     * @param \User|ObjectCollection $user the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildPersonQuery The current query, for fluid interface
