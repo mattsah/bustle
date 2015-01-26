@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f3a9d18ccd6be6fbfaca8f0e52310acd",
+    "hash": "1863017c304b901bc2cd827e965679df",
     "packages": [
         {
             "name": "aura/accept",
@@ -216,6 +216,60 @@
                 "issues": "https://github.com/dotink/flourish-core/issues"
             },
             "time": "2015-01-21 05:57:36"
+        },
+        {
+            "name": "dotink/flourish-datetime",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dotink/flourish-datetime.git",
+                "reference": "1378845be96d3df6850fb824d694683cc0f1ff08"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dotink/flourish-datetime/zipball/1378845be96d3df6850fb824d694683cc0f1ff08",
+                "reference": "1378845be96d3df6850fb824d694683cc0f1ff08",
+                "shasum": ""
+            },
+            "require": {
+                "dotink/flourish-core": "dev-master",
+                "imarc/opus": "dev-master",
+                "php": ">=5.4.0"
+            },
+            "type": "opus-package",
+            "extra": {
+                "opus": {
+                    "dotink/inkwell-2.0": {
+                        "src": "library/flourish"
+                    }
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "license": [
+                "AGPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Matthew J. Sahagian",
+                    "email": "msahagian@dotink.org",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Useful classes for working with dates and times",
+            "keywords": [
+                "date",
+                "time",
+                "timestamp"
+            ],
+            "support": {
+                "source": "https://github.com/dotink/flourish-datetime/tree/master",
+                "issues": "https://github.com/dotink/flourish-datetime/issues"
+            },
+            "time": "2015-01-21 05:57:39"
         },
         {
             "name": "dotink/flourish-text",
@@ -1471,7 +1525,8 @@
         "dotink/inkwell-view": 20,
         "dotink/inkwell-html": 20,
         "dotink/inkwell-orm": 20,
-        "dotink/flourish-text": 20
+        "dotink/flourish-text": 20,
+        "dotink/flourish-datetime": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
