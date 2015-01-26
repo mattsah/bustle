@@ -1,9 +1,9 @@
-<% namespace Inkwell\HTML
+<?php namespace Inkwell\HTML
 {
 	$this->expand('content', 'layouts/full.html');
 	$this->assign('header',  'common/header.html');
 
-	%>
+	?>
 		<section class="tasks" role="main">
 			<div class="queue">
 				<h2>
@@ -20,62 +20,19 @@
 			</div>
 
 			<div>
-				<div id="monday" class="day" data-date="">
-					<h3>Monday</h3>
-					<form method="post">
-						<input type="text" name="title" />
-						<button type="submit">Go</button>
-					</form>
-					<ul>
+				<?php html::per($this('days'), function($i, $day) { ?>
+					<div id="<?= html::lower($day->format('l')) ?>" class="day" data-date="<?= html::out($day->format('Y-m-d')) ?>">
+						<h3><?= html::out($day->format('l')) ?></h3>
+						<form method="post">
+							<input type="text" name="title" />
+							<button type="submit">Go</button>
+						</form>
+						<ul>
 
-					</ul>
-				</div>
-
-				<div class="day" data-date="">
-					<h3>Tuesday</h3>
-					<form method="post">
-						<input type="text" name="title" />
-						<button type="submit">Go</button>
-					</form>
-					<ul>
-
-					</ul>
-				</div>
-
-				<div class="day" data-date="">
-					<h3>Wednesday</h3>
-					<form method="post">
-						<input type="text" name="title" />
-						<button type="submit">Go</button>
-					</form>
-					<ul>
-
-					</ul>
-				</div>
-
-				<div class="day" data-date="">
-					<h3>Thursday</h3>
-					<form method="post">
-						<input type="text" name="title" />
-						<button type="submit">Go</button>
-					</form>
-					<ul>
-
-					</ul>
-				</div>
-
-				<div class="day" data-date="">
-					<h3>Friday</h3>
-					<form method="post">
-						<input type="text" name="title" />
-						<button type="submit">Go</button>
-					</form>
-					<ul>
-
-					</ul>
-				</div>
-
+						</ul>
+					</div>
+				<?php }) ?>
 			</div>
 		</section>
-	<%
+	<?php
 }

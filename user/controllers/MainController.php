@@ -1,7 +1,6 @@
 <?php
 
 	use IW\HTTP;
-	use Inkwell;
 	use Inkwell\Controller;
 	use Dotink\Flourish;
 
@@ -25,9 +24,10 @@
 		/**
 		 *
 		 */
-		public function __construct(Inkwell\View $view)
+		public function __construct(Inkwell\View $view, Flourish\Date $date)
 		{
-			$this['view'] = $view;
+			$this->view = $view;
+			$this->date = $date;
 		}
 
 
@@ -45,14 +45,17 @@
 		 */
 		public function home()
 		{
-			$this['response']->setStatus(HTTP\OK);
-			$this['response']->set(
-				$this['view']
-					->load('main/home.html')
-					->assign('inner', 'main/home.html')
-					->compose()
-			);
+			$date = $this->date->adjust('-1 day');
 
-			return $this['response'];
+			for ($days = array(); count($days) != 5; $date = $date->adjust('+1 day')) {
+				$days[] = $date;
+			}
+
+			return $this['view']
+				->load('main/home.html')
+				->assign('inner', 'main/home.html')
+				->set([
+					'days' => $days
+				]);
 		}
 	}

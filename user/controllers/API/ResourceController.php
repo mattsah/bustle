@@ -28,7 +28,7 @@
 		 */
 		public function __construct(Flourish\Text $inflector)
 		{
-			$this['inflector'] = $inflector;
+			$this->inflector = $inflector;
 		}
 
 
@@ -39,8 +39,11 @@
 		{
 			parent::__prepare($action, $context);
 
-			$this->collection = $this['request']->params->get('collection');
-			$this->entity     = $this['inflector']->create($this->collection)->singularize()->camelize(TRUE);
+			$this->params     = $this->request->params;
+			$this->collection = $this->inflector->create($this->params->get('collection'));
+			$this->entity     = $this->collection->singularize();
+
+			$this->response->headers->set('Content-Type', 'application/json');
 		}
 
 
@@ -49,18 +52,16 @@
 		 */
 		public function handleCollection()
 		{
-			$entity_class = $this->entity->compose();
+			$entity_class = $this->entity->camelize(TRUE)->compose();
 			$query_class  = $entity_class . 'Query';
 
-			$this['response']->headers->set('Content-Type', 'application/json');
-
-			switch ($this['request']->getMethod()) {
+			switch ($this->authorizeMethod([HTTP\GET, HTTP\POST])) {
 				case HTTP\GET:
 					$query    = new $query_class();
-					$page     = $this['request']->params->get('page',     1);
-					$limit    = $this['request']->params->get('limit',    15);
-					$filters  = $this['request']->params->get('filters',  array());
-					$ordering = $this['request']->params->get('ordering', array());
+					$page     = $this->request->params->get('page',     1);
+					$limit    = $this->request->params->get('limit',    15);
+					$filters  = $this->request->params->get('filters',  array());
+					$ordering = $this->request->params->get('ordering', array());
 					$result   = $query->create();
 
 					foreach ($filters as $field => $value) {
@@ -71,21 +72,23 @@
 						$result->orderBy($field, $order);
 					}
 
-					$result = $result->limit($limit)->offset(($page - 1) * $limit)->find();
-					$query  = new $query_class();
-					$limit  = $this['request']->params->get('limit', 15);
-					$result = $query->create()->limit($limit)->find();
+					$result->limit($limit);
+					$result->offset(($page - 1) * $limit);
 
-					return $result->toArray(NULL, FALSE, TableMap::TYPE_CAMELNAME, TRUE);
+					$data = $result->find()->toArray(NULL, FALSE, TableMap::TYPE_CAMELNAME, TRUE);
+					break;
 
 				case HTTP\POST:
 					$entity = new $entity_class();
-					$values = $this['request']->params->get();
+					$values = $this->request->params->get();
 
 					$entity->fromArray($values, TableMap::TYPE_CAMELNAME)->save();
 
-					return $entity->toArray(TableMap::TYPE_CAMELNAME, TRUE, array(), TRUE);
+					$data = $entity->toArray(TableMap::TYPE_CAMELNAME, TRUE, array(), TRUE);
+					break;
 			}
+
+			return $data;
 		}
 
 
@@ -98,7 +101,6 @@
 				case HTTP\PUT:
 
 				case HTTP\DELETE:
-
 
 			}
 		}
