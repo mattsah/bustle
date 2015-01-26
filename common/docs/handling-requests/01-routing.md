@@ -24,7 +24,9 @@ a new action such as `include/default/routes/base.php`.  For example:
 
 ```php
 return Affinity\Action::create(['core', 'routing'], function($app, $broker) {
-	$app['router.collection']->link('/', '/hello/[!:name]', function(){
+	$routes = $app['router.collection'];
+
+	$routes->link('/', '/hello/[!:name]', function(){
 		return sprintf('Hello %s!', ucwords($this->request->params->get('name')));
 	});
 });
@@ -32,16 +34,17 @@ return Affinity\Action::create(['core', 'routing'], function($app, $broker) {
 
 <div class="notice">
 	<p>
-		Note that the first parameter is a base url.  You may wish to group various related routes
-		into distinct action files and allow for configuring the base URL in the config, for
-		example `include/default/forums/routes.php`:
+		The first parameter is a base url.  You may wish to group various related routes
+		into distinct action files and allow for configuring the base URL in the config.
 	</p>
 </div>
+
+A hypothetical example using a base url `include/default/forums/routes.php`:
 
 ```php
 return Affinity\Action::create(['core', 'routing'], function($app, $broker) {
 	$routes   = $app['router.collection'];
-	$base_url = $app['engine']->fetch('forums', '@routing.base_url', '/forums');
+	$base_url = $app['engine']->fetch('forums', '@routes.base_url', '/forums');
 
 	$routes->link($base_url, '/[!:topic]/', function(){
 		//
@@ -64,11 +67,11 @@ return Affinity\Action::create(['core', 'routing'], function($app, $broker) {
 });
 ```
 
-And then an example config `include/default/forums.php`:
+And then an example config `config/default/forums.php`:
 
 ```php
-return Affinity\Config::create(['routing'], [
-	'@routing' => [
+return Affinity\Config::create(['routes'], [
+	'@routes' => [
 		'base_url' => '/forums'
 	]
 ]);
@@ -82,7 +85,8 @@ change the `'base_url' => '/'`.
 
 As seen in the first example on this page, you can get the request object using a closure by simply
 accessing `$this->request`, the same is true with the current response object which is available
-as `$this->response`.
+as `$this->response`.  Since closures are bound to the router itself, to get the router you need
+only to access `$this`.
 
 ## Controller Resolver
 
@@ -134,7 +138,7 @@ existing relevant action:
 $app['router.resolver'] = $broker->make('Example\Router\Resolver');
 ```
 
-Alternatively, you may with to make the resolver more configurable.  The following line is taken
+Alternatively, you may wish to make the resolver more configurable.  The following line is taken
 from the official controller component:
 
 ```php
@@ -184,8 +188,8 @@ a forward slash.  Alternatively, you can specify a completely custom regular exp
 If the URL does not match all patterns in the route, completely, the route will be skipped.  If it
 does, the data in the position of the tokens will be parsed and added to the request object.
 
-You can use the following characters in place of custom regular expressions (similar, to how `!`
-	was used in the earlier example) in order match and parse some common data:
+You can use the following characters in place of custom regular expressions (similar to how `!`
+was used in the earlier example) in order match and parse some common data:
 
 | Character | Regex                                        | Matches
 |-----------|----------------------------------------------|-----------------------------------------

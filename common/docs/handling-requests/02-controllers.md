@@ -16,6 +16,26 @@ composer require dotink/inkwell-controller
 |-----------------------------|-----------------------------------------------------
 | `$app['router.resolver']`   | A router resolver supporting controller insantiation, context filling, and closure encapsulation
 
+
+## Creating a Basic Controller and Action
+
+```php
+use Inkwell\Controller;
+
+class MainController extends Controller\BaseController
+{
+	/**
+	 * Handles the homepage
+	 */
+	public function home()
+	{
+		//
+		// Return your homepage content
+		//
+	}
+}
+```
+
 ## Overall Features
 
 The controller component provides both a base controller class as well as a number of traits and

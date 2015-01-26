@@ -47,6 +47,6 @@ then simply add the following to your `composer.json`:
 
 Once you've got the package registered with [packagist](https://packagist.org/) simply run:
 
-```
+```bash
 composer require package/name
 ```
