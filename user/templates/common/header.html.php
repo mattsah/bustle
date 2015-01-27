@@ -1,7 +1,7 @@
-<% namespace Inkwell\HTML
+<?php namespace Inkwell\HTML
 {
-	%>
+	?>
 		<header>
 		</header>
-	<%
+	<?php
 }

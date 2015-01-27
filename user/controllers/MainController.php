@@ -53,7 +53,6 @@
 
 			return $this['view']
 				->load('main/home.html')
-				->assign('inner', 'main/home.html')
 				->set([
 					'days' => $days
 				]);
