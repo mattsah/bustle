@@ -1,4 +1,14 @@
 #!/usr/bin/php
 <?php
 
-passthru('php -c public/.user.ini -S localhost:8080 -t public');
+$app = include __DIR__ . '/../init.php';
+$cmd = sprintf(
+	'%s -c %s/.user.ini -S %s:%s -t %s',
+	$app['engine']->fetch('core',   'php',     'php'),
+	$app['engine']->fetch('core',   'docroot', 'public'),
+	$app['engine']->fetch('server', 'host',    'localhost'),
+	$app['engine']->fetch('server', 'port',    '8080'),
+	$app['engine']->fetch('core',   'docroot', 'public')
+);
+
+passthru($cmd);
