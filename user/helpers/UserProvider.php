@@ -5,6 +5,10 @@
 
 	class UserProvider implements Security\UserProviderInterface
 	{
+		const MSG_USER_EXISTS      = 'A user with that e-mail address already exists.';
+		const MSG_PROBLEM_CREATING = 'There was a problem creating your account at this time, please try again later.';
+
+
 		/**
 		 *
 		 */
@@ -23,12 +27,22 @@
 			$person = $this->people->filterByEmail($data['email'])->findOneOrCreate();
 			$user   = $this->users->filterByPersonId($person->getId())->findOneOrCreate();
 
-			$person->setName($data['name']);
-			$person->setFullName($data['full_name']);
+			if ($user->getPersonId()) {
+				throw new Exception(self::MSG_USER_EXISTS);
+			}
+
 			$user->setPassword($data['password']);
 
-			$person->save();
-			$user->save();
+			$person->setName($data['name']);
+			$person->setFullName($data['full_name']);
+			$person->setUser($user);
+
+			try {
+				$person->save();
+
+			} catch (Exception $e) {
+				throw new Exception(self::MSG_PROBLEM_CREATING);
+			}
 
 			return $user;
 		}

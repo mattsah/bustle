@@ -190,9 +190,15 @@
 
 					$data             = array_merge($data, $this->request->params->get());
 					$data['password'] = password_hash($data['password'], PASSWORD_BCRYPT);
-					$user             = $this->userProvider->createUser($data);
 
-					$this->completeLogin($user);
+					try {
+						$user = $this->userProvider->createUser($data);
+
+						$this->completeLogin($user);
+
+					} catch (Exception $e) {
+						$this->message->create('error', $e->getMessage());
+					}
 				}
 
 				$this->view->set($data);
