@@ -57,7 +57,7 @@
 			//
 
 			'links' => [
-				'/' => 'MainController::home'
+
 			],
 
 			//

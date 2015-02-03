@@ -20,10 +20,10 @@ use Propel\Runtime\Exception\PropelException;
  *
  *
  *
- * @method     ChildUserQuery orderById($order = Criteria::ASC) Order by the person column
+ * @method     ChildUserQuery orderByPersonId($order = Criteria::ASC) Order by the person column
  * @method     ChildUserQuery orderByPassword($order = Criteria::ASC) Order by the password column
  *
- * @method     ChildUserQuery groupById() Group by the person column
+ * @method     ChildUserQuery groupByPersonId() Group by the person column
  * @method     ChildUserQuery groupByPassword() Group by the password column
  *
  * @method     ChildUserQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
@@ -34,30 +34,38 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery rightJoinPerson($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Person relation
  * @method     ChildUserQuery innerJoinPerson($relationAlias = null) Adds a INNER JOIN clause to the query using the Person relation
  *
- * @method     ChildUserQuery leftJoinTaskRelatedByAssignee($relationAlias = null) Adds a LEFT JOIN clause to the query using the TaskRelatedByAssignee relation
- * @method     ChildUserQuery rightJoinTaskRelatedByAssignee($relationAlias = null) Adds a RIGHT JOIN clause to the query using the TaskRelatedByAssignee relation
- * @method     ChildUserQuery innerJoinTaskRelatedByAssignee($relationAlias = null) Adds a INNER JOIN clause to the query using the TaskRelatedByAssignee relation
+ * @method     ChildUserQuery leftJoinTaskComment($relationAlias = null) Adds a LEFT JOIN clause to the query using the TaskComment relation
+ * @method     ChildUserQuery rightJoinTaskComment($relationAlias = null) Adds a RIGHT JOIN clause to the query using the TaskComment relation
+ * @method     ChildUserQuery innerJoinTaskComment($relationAlias = null) Adds a INNER JOIN clause to the query using the TaskComment relation
  *
- * @method     ChildUserQuery leftJoinTaskRelatedByOwner($relationAlias = null) Adds a LEFT JOIN clause to the query using the TaskRelatedByOwner relation
- * @method     ChildUserQuery rightJoinTaskRelatedByOwner($relationAlias = null) Adds a RIGHT JOIN clause to the query using the TaskRelatedByOwner relation
- * @method     ChildUserQuery innerJoinTaskRelatedByOwner($relationAlias = null) Adds a INNER JOIN clause to the query using the TaskRelatedByOwner relation
+ * @method     ChildUserQuery leftJoinTaskTimeRecord($relationAlias = null) Adds a LEFT JOIN clause to the query using the TaskTimeRecord relation
+ * @method     ChildUserQuery rightJoinTaskTimeRecord($relationAlias = null) Adds a RIGHT JOIN clause to the query using the TaskTimeRecord relation
+ * @method     ChildUserQuery innerJoinTaskTimeRecord($relationAlias = null) Adds a INNER JOIN clause to the query using the TaskTimeRecord relation
  *
- * @method     \PersonQuery|\TaskQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     ChildUserQuery leftJoinTaskRelatedByAssigneeId($relationAlias = null) Adds a LEFT JOIN clause to the query using the TaskRelatedByAssigneeId relation
+ * @method     ChildUserQuery rightJoinTaskRelatedByAssigneeId($relationAlias = null) Adds a RIGHT JOIN clause to the query using the TaskRelatedByAssigneeId relation
+ * @method     ChildUserQuery innerJoinTaskRelatedByAssigneeId($relationAlias = null) Adds a INNER JOIN clause to the query using the TaskRelatedByAssigneeId relation
+ *
+ * @method     ChildUserQuery leftJoinTaskRelatedByOwnerId($relationAlias = null) Adds a LEFT JOIN clause to the query using the TaskRelatedByOwnerId relation
+ * @method     ChildUserQuery rightJoinTaskRelatedByOwnerId($relationAlias = null) Adds a RIGHT JOIN clause to the query using the TaskRelatedByOwnerId relation
+ * @method     ChildUserQuery innerJoinTaskRelatedByOwnerId($relationAlias = null) Adds a INNER JOIN clause to the query using the TaskRelatedByOwnerId relation
+ *
+ * @method     \PersonQuery|\TaskCommentQuery|\TaskTimeRecordQuery|\TaskQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildUser findOne(ConnectionInterface $con = null) Return the first ChildUser matching the query
  * @method     ChildUser findOneOrCreate(ConnectionInterface $con = null) Return the first ChildUser matching the query, or a new ChildUser object populated from the query conditions when no match is found
  *
- * @method     ChildUser findOneById(int $person) Return the first ChildUser filtered by the person column
+ * @method     ChildUser findOneByPersonId(int $person) Return the first ChildUser filtered by the person column
  * @method     ChildUser findOneByPassword(string $password) Return the first ChildUser filtered by the password column *
 
  * @method     ChildUser requirePk($key, ConnectionInterface $con = null) Return the ChildUser by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOne(ConnectionInterface $con = null) Return the first ChildUser matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildUser requireOneById(int $person) Return the first ChildUser filtered by the person column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildUser requireOneByPersonId(int $person) Return the first ChildUser filtered by the person column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByPassword(string $password) Return the first ChildUser filtered by the password column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildUser[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildUser objects based on current ModelCriteria
- * @method     ChildUser[]|ObjectCollection findById(int $person) Return ChildUser objects filtered by the person column
+ * @method     ChildUser[]|ObjectCollection findByPersonId(int $person) Return ChildUser objects filtered by the person column
  * @method     ChildUser[]|ObjectCollection findByPassword(string $password) Return ChildUser objects filtered by the password column
  * @method     ChildUser[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -246,14 +254,14 @@ abstract class UserQuery extends ModelCriteria
      *
      * Example usage:
      * <code>
-     * $query->filterById(1234); // WHERE person = 1234
-     * $query->filterById(array(12, 34)); // WHERE person IN (12, 34)
-     * $query->filterById(array('min' => 12)); // WHERE person > 12
+     * $query->filterByPersonId(1234); // WHERE person = 1234
+     * $query->filterByPersonId(array(12, 34)); // WHERE person IN (12, 34)
+     * $query->filterByPersonId(array('min' => 12)); // WHERE person > 12
      * </code>
      *
      * @see       filterByPerson()
      *
-     * @param     mixed $id The value to use as filter.
+     * @param     mixed $personId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -261,16 +269,16 @@ abstract class UserQuery extends ModelCriteria
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterByPersonId($personId = null, $comparison = null)
     {
-        if (is_array($id)) {
+        if (is_array($personId)) {
             $useMinMax = false;
-            if (isset($id['min'])) {
-                $this->addUsingAlias(UserTableMap::COL_PERSON, $id['min'], Criteria::GREATER_EQUAL);
+            if (isset($personId['min'])) {
+                $this->addUsingAlias(UserTableMap::COL_PERSON, $personId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($id['max'])) {
-                $this->addUsingAlias(UserTableMap::COL_PERSON, $id['max'], Criteria::LESS_EQUAL);
+            if (isset($personId['max'])) {
+                $this->addUsingAlias(UserTableMap::COL_PERSON, $personId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -281,7 +289,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_PERSON, $id, $comparison);
+        return $this->addUsingAlias(UserTableMap::COL_PERSON, $personId, $comparison);
     }
 
     /**
@@ -391,40 +399,40 @@ abstract class UserQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \Task object
+     * Filter the query by a related \TaskComment object
      *
-     * @param \Task|ObjectCollection $task the related object to use as filter
+     * @param \TaskComment|ObjectCollection $taskComment the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildUserQuery The current query, for fluid interface
      */
-    public function filterByTaskRelatedByAssignee($task, $comparison = null)
+    public function filterByTaskComment($taskComment, $comparison = null)
     {
-        if ($task instanceof \Task) {
+        if ($taskComment instanceof \TaskComment) {
             return $this
-                ->addUsingAlias(UserTableMap::COL_PERSON, $task->getAssignee(), $comparison);
-        } elseif ($task instanceof ObjectCollection) {
+                ->addUsingAlias(UserTableMap::COL_PERSON, $taskComment->getOwner(), $comparison);
+        } elseif ($taskComment instanceof ObjectCollection) {
             return $this
-                ->useTaskRelatedByAssigneeQuery()
-                ->filterByPrimaryKeys($task->getPrimaryKeys())
+                ->useTaskCommentQuery()
+                ->filterByPrimaryKeys($taskComment->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByTaskRelatedByAssignee() only accepts arguments of type \Task or Collection');
+            throw new PropelException('filterByTaskComment() only accepts arguments of type \TaskComment or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the TaskRelatedByAssignee relation
+     * Adds a JOIN clause to the query using the TaskComment relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
-    public function joinTaskRelatedByAssignee($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinTaskComment($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('TaskRelatedByAssignee');
+        $relationMap = $tableMap->getRelation('TaskComment');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -439,14 +447,14 @@ abstract class UserQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'TaskRelatedByAssignee');
+            $this->addJoinObject($join, 'TaskComment');
         }
 
         return $this;
     }
 
     /**
-     * Use the TaskRelatedByAssignee relation Task object
+     * Use the TaskComment relation TaskComment object
      *
      * @see useQuery()
      *
@@ -454,50 +462,50 @@ abstract class UserQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \TaskQuery A secondary query class using the current class as primary query
+     * @return \TaskCommentQuery A secondary query class using the current class as primary query
      */
-    public function useTaskRelatedByAssigneeQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useTaskCommentQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinTaskRelatedByAssignee($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'TaskRelatedByAssignee', '\TaskQuery');
+            ->joinTaskComment($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'TaskComment', '\TaskCommentQuery');
     }
 
     /**
-     * Filter the query by a related \Task object
+     * Filter the query by a related \TaskTimeRecord object
      *
-     * @param \Task|ObjectCollection $task the related object to use as filter
+     * @param \TaskTimeRecord|ObjectCollection $taskTimeRecord the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildUserQuery The current query, for fluid interface
      */
-    public function filterByTaskRelatedByOwner($task, $comparison = null)
+    public function filterByTaskTimeRecord($taskTimeRecord, $comparison = null)
     {
-        if ($task instanceof \Task) {
+        if ($taskTimeRecord instanceof \TaskTimeRecord) {
             return $this
-                ->addUsingAlias(UserTableMap::COL_PERSON, $task->getOwner(), $comparison);
-        } elseif ($task instanceof ObjectCollection) {
+                ->addUsingAlias(UserTableMap::COL_PERSON, $taskTimeRecord->getAssignee(), $comparison);
+        } elseif ($taskTimeRecord instanceof ObjectCollection) {
             return $this
-                ->useTaskRelatedByOwnerQuery()
-                ->filterByPrimaryKeys($task->getPrimaryKeys())
+                ->useTaskTimeRecordQuery()
+                ->filterByPrimaryKeys($taskTimeRecord->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByTaskRelatedByOwner() only accepts arguments of type \Task or Collection');
+            throw new PropelException('filterByTaskTimeRecord() only accepts arguments of type \TaskTimeRecord or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the TaskRelatedByOwner relation
+     * Adds a JOIN clause to the query using the TaskTimeRecord relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
-    public function joinTaskRelatedByOwner($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinTaskTimeRecord($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('TaskRelatedByOwner');
+        $relationMap = $tableMap->getRelation('TaskTimeRecord');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -512,14 +520,87 @@ abstract class UserQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'TaskRelatedByOwner');
+            $this->addJoinObject($join, 'TaskTimeRecord');
         }
 
         return $this;
     }
 
     /**
-     * Use the TaskRelatedByOwner relation Task object
+     * Use the TaskTimeRecord relation TaskTimeRecord object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \TaskTimeRecordQuery A secondary query class using the current class as primary query
+     */
+    public function useTaskTimeRecordQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinTaskTimeRecord($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'TaskTimeRecord', '\TaskTimeRecordQuery');
+    }
+
+    /**
+     * Filter the query by a related \Task object
+     *
+     * @param \Task|ObjectCollection $task the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildUserQuery The current query, for fluid interface
+     */
+    public function filterByTaskRelatedByAssigneeId($task, $comparison = null)
+    {
+        if ($task instanceof \Task) {
+            return $this
+                ->addUsingAlias(UserTableMap::COL_PERSON, $task->getAssigneeId(), $comparison);
+        } elseif ($task instanceof ObjectCollection) {
+            return $this
+                ->useTaskRelatedByAssigneeIdQuery()
+                ->filterByPrimaryKeys($task->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByTaskRelatedByAssigneeId() only accepts arguments of type \Task or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the TaskRelatedByAssigneeId relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildUserQuery The current query, for fluid interface
+     */
+    public function joinTaskRelatedByAssigneeId($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('TaskRelatedByAssigneeId');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'TaskRelatedByAssigneeId');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the TaskRelatedByAssigneeId relation Task object
      *
      * @see useQuery()
      *
@@ -529,11 +610,84 @@ abstract class UserQuery extends ModelCriteria
      *
      * @return \TaskQuery A secondary query class using the current class as primary query
      */
-    public function useTaskRelatedByOwnerQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useTaskRelatedByAssigneeIdQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinTaskRelatedByOwner($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'TaskRelatedByOwner', '\TaskQuery');
+            ->joinTaskRelatedByAssigneeId($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'TaskRelatedByAssigneeId', '\TaskQuery');
+    }
+
+    /**
+     * Filter the query by a related \Task object
+     *
+     * @param \Task|ObjectCollection $task the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildUserQuery The current query, for fluid interface
+     */
+    public function filterByTaskRelatedByOwnerId($task, $comparison = null)
+    {
+        if ($task instanceof \Task) {
+            return $this
+                ->addUsingAlias(UserTableMap::COL_PERSON, $task->getOwnerId(), $comparison);
+        } elseif ($task instanceof ObjectCollection) {
+            return $this
+                ->useTaskRelatedByOwnerIdQuery()
+                ->filterByPrimaryKeys($task->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByTaskRelatedByOwnerId() only accepts arguments of type \Task or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the TaskRelatedByOwnerId relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildUserQuery The current query, for fluid interface
+     */
+    public function joinTaskRelatedByOwnerId($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('TaskRelatedByOwnerId');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'TaskRelatedByOwnerId');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the TaskRelatedByOwnerId relation Task object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \TaskQuery A secondary query class using the current class as primary query
+     */
+    public function useTaskRelatedByOwnerIdQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinTaskRelatedByOwnerId($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'TaskRelatedByOwnerId', '\TaskQuery');
     }
 
     /**
@@ -546,7 +700,7 @@ abstract class UserQuery extends ModelCriteria
     public function prune($user = null)
     {
         if ($user) {
-            $this->addUsingAlias(UserTableMap::COL_PERSON, $user->getId(), Criteria::NOT_EQUAL);
+            $this->addUsingAlias(UserTableMap::COL_PERSON, $user->getPersonId(), Criteria::NOT_EQUAL);
         }
 
         return $this;

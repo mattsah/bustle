@@ -2,7 +2,14 @@
 
 namespace Base;
 
+use \Project as ChildProject;
+use \ProjectQuery as ChildProjectQuery;
+use \Task as ChildTask;
+use \TaskComment as ChildTaskComment;
+use \TaskCommentQuery as ChildTaskCommentQuery;
 use \TaskQuery as ChildTaskQuery;
+use \TaskTimeRecord as ChildTaskTimeRecord;
+use \TaskTimeRecordQuery as ChildTaskTimeRecordQuery;
 use \User as ChildUser;
 use \UserQuery as ChildUserQuery;
 use \DateTime;
@@ -14,6 +21,7 @@ use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveRecord\ActiveRecordInterface;
 use Propel\Runtime\Collection\Collection;
+use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\BadMethodCallException;
 use Propel\Runtime\Exception\LogicException;
@@ -88,33 +96,76 @@ abstract class Task implements ActiveRecordInterface
     protected $assignee;
 
     /**
+     * The value for the project field.
+     * @var        int
+     */
+    protected $project;
+
+    /**
+     * The value for the start_date field.
+     * Note: this column has a database default value of: (expression) now()
+     * @var        \DateTime
+     */
+    protected $start_date;
+
+    /**
+     * The value for the estimated_time field.
+     * Note: this column has a database default value of: 0
+     * @var        double
+     */
+    protected $estimated_time;
+
+    /**
+     * The value for the priority field.
+     * @var        int
+     */
+    protected $priority;
+
+    /**
+     * The value for the time_created field.
+     * Note: this column has a database default value of: (expression) now()
+     * @var        \DateTime
+     */
+    protected $time_created;
+
+    /**
+     * The value for the time_completed field.
+     * @var        \DateTime
+     */
+    protected $time_completed;
+
+    /**
      * The value for the description field.
      * @var        string
      */
     protected $description;
 
     /**
-     * The value for the creation_date field.
-     * Note: this column has a database default value of: (expression) now()
-     * @var        \DateTime
+     * @var        ChildUser
      */
-    protected $creation_date;
-
-    /**
-     * The value for the start_date field.
-     * @var        \DateTime
-     */
-    protected $start_date;
+    protected $aUserRelatedByAssigneeId;
 
     /**
      * @var        ChildUser
      */
-    protected $aUserRelatedByAssignee;
+    protected $aUserRelatedByOwnerId;
 
     /**
-     * @var        ChildUser
+     * @var        ChildProject
      */
-    protected $aUserRelatedByOwner;
+    protected $aProject;
+
+    /**
+     * @var        ObjectCollection|ChildTaskComment[] Collection to store aggregation of ChildTaskComment objects.
+     */
+    protected $collTaskComments;
+    protected $collTaskCommentsPartial;
+
+    /**
+     * @var        ObjectCollection|ChildTaskTimeRecord[] Collection to store aggregation of ChildTaskTimeRecord objects.
+     */
+    protected $collTaskTimeRecords;
+    protected $collTaskTimeRecordsPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -125,6 +176,18 @@ abstract class Task implements ActiveRecordInterface
     protected $alreadyInSave = false;
 
     /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildTaskComment[]
+     */
+    protected $taskCommentsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildTaskTimeRecord[]
+     */
+    protected $taskTimeRecordsScheduledForDeletion = null;
+
+    /**
      * Applies default values to this object.
      * This method should be called from the object's constructor (or
      * equivalent initialization method).
@@ -132,6 +195,7 @@ abstract class Task implements ActiveRecordInterface
      */
     public function applyDefaultValues()
     {
+        $this->estimated_time = 0;
     }
 
     /**
@@ -378,7 +442,7 @@ abstract class Task implements ActiveRecordInterface
      *
      * @return int
      */
-    public function getOwner()
+    public function getOwnerId()
     {
         return $this->owner;
     }
@@ -388,39 +452,19 @@ abstract class Task implements ActiveRecordInterface
      *
      * @return int
      */
-    public function getAssignee()
+    public function getAssigneeId()
     {
         return $this->assignee;
     }
 
     /**
-     * Get the [description] column value.
+     * Get the [project] column value.
      *
-     * @return string
+     * @return int
      */
-    public function getDescription()
+    public function getProjectId()
     {
-        return $this->description;
-    }
-
-    /**
-     * Get the [optionally formatted] temporal [creation_date] column value.
-     *
-     *
-     * @param      string $format The date/time format string (either date()-style or strftime()-style).
-     *                            If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL
-     *
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     */
-    public function getCreationDate($format = NULL)
-    {
-        if ($format === null) {
-            return $this->creation_date;
-        } else {
-            return $this->creation_date instanceof \DateTime ? $this->creation_date->format($format) : null;
-        }
+        return $this->project;
     }
 
     /**
@@ -441,6 +485,76 @@ abstract class Task implements ActiveRecordInterface
         } else {
             return $this->start_date instanceof \DateTime ? $this->start_date->format($format) : null;
         }
+    }
+
+    /**
+     * Get the [estimated_time] column value.
+     *
+     * @return double
+     */
+    public function getEstimatedTime()
+    {
+        return $this->estimated_time;
+    }
+
+    /**
+     * Get the [priority] column value.
+     *
+     * @return int
+     */
+    public function getPriority()
+    {
+        return $this->priority;
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [time_created] column value.
+     *
+     *
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getTimeCreated($format = NULL)
+    {
+        if ($format === null) {
+            return $this->time_created;
+        } else {
+            return $this->time_created instanceof \DateTime ? $this->time_created->format($format) : null;
+        }
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [time_completed] column value.
+     *
+     *
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getTimeCompleted($format = NULL)
+    {
+        if ($format === null) {
+            return $this->time_completed;
+        } else {
+            return $this->time_completed instanceof \DateTime ? $this->time_completed->format($format) : null;
+        }
+    }
+
+    /**
+     * Get the [description] column value.
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 
     /**
@@ -489,7 +603,7 @@ abstract class Task implements ActiveRecordInterface
      * @param  int $v new value
      * @return $this|\Task The current object (for fluent API support)
      */
-    public function setOwner($v)
+    public function setOwnerId($v)
     {
         if ($v !== null) {
             $v = (int) $v;
@@ -500,12 +614,12 @@ abstract class Task implements ActiveRecordInterface
             $this->modifiedColumns[TaskTableMap::COL_OWNER] = true;
         }
 
-        if ($this->aUserRelatedByOwner !== null && $this->aUserRelatedByOwner->getId() !== $v) {
-            $this->aUserRelatedByOwner = null;
+        if ($this->aUserRelatedByOwnerId !== null && $this->aUserRelatedByOwnerId->getPersonId() !== $v) {
+            $this->aUserRelatedByOwnerId = null;
         }
 
         return $this;
-    } // setOwner()
+    } // setOwnerId()
 
     /**
      * Set the value of [assignee] column.
@@ -513,7 +627,7 @@ abstract class Task implements ActiveRecordInterface
      * @param  int $v new value
      * @return $this|\Task The current object (for fluent API support)
      */
-    public function setAssignee($v)
+    public function setAssigneeId($v)
     {
         if ($v !== null) {
             $v = (int) $v;
@@ -524,52 +638,36 @@ abstract class Task implements ActiveRecordInterface
             $this->modifiedColumns[TaskTableMap::COL_ASSIGNEE] = true;
         }
 
-        if ($this->aUserRelatedByAssignee !== null && $this->aUserRelatedByAssignee->getId() !== $v) {
-            $this->aUserRelatedByAssignee = null;
+        if ($this->aUserRelatedByAssigneeId !== null && $this->aUserRelatedByAssigneeId->getPersonId() !== $v) {
+            $this->aUserRelatedByAssigneeId = null;
         }
 
         return $this;
-    } // setAssignee()
+    } // setAssigneeId()
 
     /**
-     * Set the value of [description] column.
+     * Set the value of [project] column.
      *
-     * @param  string $v new value
+     * @param  int $v new value
      * @return $this|\Task The current object (for fluent API support)
      */
-    public function setDescription($v)
+    public function setProjectId($v)
     {
         if ($v !== null) {
-            $v = (string) $v;
+            $v = (int) $v;
         }
 
-        if ($this->description !== $v) {
-            $this->description = $v;
-            $this->modifiedColumns[TaskTableMap::COL_DESCRIPTION] = true;
+        if ($this->project !== $v) {
+            $this->project = $v;
+            $this->modifiedColumns[TaskTableMap::COL_PROJECT] = true;
+        }
+
+        if ($this->aProject !== null && $this->aProject->getId() !== $v) {
+            $this->aProject = null;
         }
 
         return $this;
-    } // setDescription()
-
-    /**
-     * Sets the value of [creation_date] column to a normalized version of the date/time value specified.
-     *
-     * @param  mixed $v string, integer (timestamp), or \DateTime value.
-     *               Empty strings are treated as NULL.
-     * @return $this|\Task The current object (for fluent API support)
-     */
-    public function setCreationDate($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->creation_date !== null || $dt !== null) {
-            if ($dt !== $this->creation_date) {
-                $this->creation_date = $dt;
-                $this->modifiedColumns[TaskTableMap::COL_CREATION_DATE] = true;
-            }
-        } // if either are not null
-
-        return $this;
-    } // setCreationDate()
+    } // setProjectId()
 
     /**
      * Sets the value of [start_date] column to a normalized version of the date/time value specified.
@@ -592,6 +690,106 @@ abstract class Task implements ActiveRecordInterface
     } // setStartDate()
 
     /**
+     * Set the value of [estimated_time] column.
+     *
+     * @param  double $v new value
+     * @return $this|\Task The current object (for fluent API support)
+     */
+    public function setEstimatedTime($v)
+    {
+        if ($v !== null) {
+            $v = (double) $v;
+        }
+
+        if ($this->estimated_time !== $v) {
+            $this->estimated_time = $v;
+            $this->modifiedColumns[TaskTableMap::COL_ESTIMATED_TIME] = true;
+        }
+
+        return $this;
+    } // setEstimatedTime()
+
+    /**
+     * Set the value of [priority] column.
+     *
+     * @param  int $v new value
+     * @return $this|\Task The current object (for fluent API support)
+     */
+    public function setPriority($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->priority !== $v) {
+            $this->priority = $v;
+            $this->modifiedColumns[TaskTableMap::COL_PRIORITY] = true;
+        }
+
+        return $this;
+    } // setPriority()
+
+    /**
+     * Sets the value of [time_created] column to a normalized version of the date/time value specified.
+     *
+     * @param  mixed $v string, integer (timestamp), or \DateTime value.
+     *               Empty strings are treated as NULL.
+     * @return $this|\Task The current object (for fluent API support)
+     */
+    public function setTimeCreated($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->time_created !== null || $dt !== null) {
+            if ($dt !== $this->time_created) {
+                $this->time_created = $dt;
+                $this->modifiedColumns[TaskTableMap::COL_TIME_CREATED] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    } // setTimeCreated()
+
+    /**
+     * Sets the value of [time_completed] column to a normalized version of the date/time value specified.
+     *
+     * @param  mixed $v string, integer (timestamp), or \DateTime value.
+     *               Empty strings are treated as NULL.
+     * @return $this|\Task The current object (for fluent API support)
+     */
+    public function setTimeCompleted($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->time_completed !== null || $dt !== null) {
+            if ($dt !== $this->time_completed) {
+                $this->time_completed = $dt;
+                $this->modifiedColumns[TaskTableMap::COL_TIME_COMPLETED] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    } // setTimeCompleted()
+
+    /**
+     * Set the value of [description] column.
+     *
+     * @param  string $v new value
+     * @return $this|\Task The current object (for fluent API support)
+     */
+    public function setDescription($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->description !== $v) {
+            $this->description = $v;
+            $this->modifiedColumns[TaskTableMap::COL_DESCRIPTION] = true;
+        }
+
+        return $this;
+    } // setDescription()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -601,6 +799,10 @@ abstract class Task implements ActiveRecordInterface
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->estimated_time !== 0) {
+                return false;
+            }
+
         // otherwise, everything was equal, so return TRUE
         return true;
     } // hasOnlyDefaultValues()
@@ -633,20 +835,32 @@ abstract class Task implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : TaskTableMap::translateFieldName('Title', TableMap::TYPE_PHPNAME, $indexType)];
             $this->title = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : TaskTableMap::translateFieldName('Owner', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : TaskTableMap::translateFieldName('OwnerId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->owner = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : TaskTableMap::translateFieldName('Assignee', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : TaskTableMap::translateFieldName('AssigneeId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->assignee = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : TaskTableMap::translateFieldName('Description', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->description = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : TaskTableMap::translateFieldName('ProjectId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->project = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : TaskTableMap::translateFieldName('CreationDate', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->creation_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : TaskTableMap::translateFieldName('StartDate', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : TaskTableMap::translateFieldName('StartDate', TableMap::TYPE_PHPNAME, $indexType)];
             $this->start_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : TaskTableMap::translateFieldName('EstimatedTime', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->estimated_time = (null !== $col) ? (double) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : TaskTableMap::translateFieldName('Priority', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->priority = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : TaskTableMap::translateFieldName('TimeCreated', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->time_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : TaskTableMap::translateFieldName('TimeCompleted', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->time_completed = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : TaskTableMap::translateFieldName('Description', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->description = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -655,7 +869,7 @@ abstract class Task implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 7; // 7 = TaskTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 11; // 11 = TaskTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Task'), 0, $e);
@@ -677,11 +891,14 @@ abstract class Task implements ActiveRecordInterface
      */
     public function ensureConsistency()
     {
-        if ($this->aUserRelatedByOwner !== null && $this->owner !== $this->aUserRelatedByOwner->getId()) {
-            $this->aUserRelatedByOwner = null;
+        if ($this->aUserRelatedByOwnerId !== null && $this->owner !== $this->aUserRelatedByOwnerId->getPersonId()) {
+            $this->aUserRelatedByOwnerId = null;
         }
-        if ($this->aUserRelatedByAssignee !== null && $this->assignee !== $this->aUserRelatedByAssignee->getId()) {
-            $this->aUserRelatedByAssignee = null;
+        if ($this->aUserRelatedByAssigneeId !== null && $this->assignee !== $this->aUserRelatedByAssigneeId->getPersonId()) {
+            $this->aUserRelatedByAssigneeId = null;
+        }
+        if ($this->aProject !== null && $this->project !== $this->aProject->getId()) {
+            $this->aProject = null;
         }
     } // ensureConsistency
 
@@ -722,8 +939,13 @@ abstract class Task implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aUserRelatedByAssignee = null;
-            $this->aUserRelatedByOwner = null;
+            $this->aUserRelatedByAssigneeId = null;
+            $this->aUserRelatedByOwnerId = null;
+            $this->aProject = null;
+            $this->collTaskComments = null;
+
+            $this->collTaskTimeRecords = null;
+
         } // if (deep)
     }
 
@@ -828,18 +1050,25 @@ abstract class Task implements ActiveRecordInterface
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aUserRelatedByAssignee !== null) {
-                if ($this->aUserRelatedByAssignee->isModified() || $this->aUserRelatedByAssignee->isNew()) {
-                    $affectedRows += $this->aUserRelatedByAssignee->save($con);
+            if ($this->aUserRelatedByAssigneeId !== null) {
+                if ($this->aUserRelatedByAssigneeId->isModified() || $this->aUserRelatedByAssigneeId->isNew()) {
+                    $affectedRows += $this->aUserRelatedByAssigneeId->save($con);
                 }
-                $this->setUserRelatedByAssignee($this->aUserRelatedByAssignee);
+                $this->setUserRelatedByAssigneeId($this->aUserRelatedByAssigneeId);
             }
 
-            if ($this->aUserRelatedByOwner !== null) {
-                if ($this->aUserRelatedByOwner->isModified() || $this->aUserRelatedByOwner->isNew()) {
-                    $affectedRows += $this->aUserRelatedByOwner->save($con);
+            if ($this->aUserRelatedByOwnerId !== null) {
+                if ($this->aUserRelatedByOwnerId->isModified() || $this->aUserRelatedByOwnerId->isNew()) {
+                    $affectedRows += $this->aUserRelatedByOwnerId->save($con);
                 }
-                $this->setUserRelatedByOwner($this->aUserRelatedByOwner);
+                $this->setUserRelatedByOwnerId($this->aUserRelatedByOwnerId);
+            }
+
+            if ($this->aProject !== null) {
+                if ($this->aProject->isModified() || $this->aProject->isNew()) {
+                    $affectedRows += $this->aProject->save($con);
+                }
+                $this->setProject($this->aProject);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -851,6 +1080,40 @@ abstract class Task implements ActiveRecordInterface
                     $affectedRows += $this->doUpdate($con);
                 }
                 $this->resetModified();
+            }
+
+            if ($this->taskCommentsScheduledForDeletion !== null) {
+                if (!$this->taskCommentsScheduledForDeletion->isEmpty()) {
+                    \TaskCommentQuery::create()
+                        ->filterByPrimaryKeys($this->taskCommentsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->taskCommentsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collTaskComments !== null) {
+                foreach ($this->collTaskComments as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->taskTimeRecordsScheduledForDeletion !== null) {
+                if (!$this->taskTimeRecordsScheduledForDeletion->isEmpty()) {
+                    \TaskTimeRecordQuery::create()
+                        ->filterByPrimaryKeys($this->taskTimeRecordsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->taskTimeRecordsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collTaskTimeRecords !== null) {
+                foreach ($this->collTaskTimeRecords as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             $this->alreadyInSave = false;
@@ -900,14 +1163,26 @@ abstract class Task implements ActiveRecordInterface
         if ($this->isColumnModified(TaskTableMap::COL_ASSIGNEE)) {
             $modifiedColumns[':p' . $index++]  = 'assignee';
         }
-        if ($this->isColumnModified(TaskTableMap::COL_DESCRIPTION)) {
-            $modifiedColumns[':p' . $index++]  = 'description';
-        }
-        if ($this->isColumnModified(TaskTableMap::COL_CREATION_DATE)) {
-            $modifiedColumns[':p' . $index++]  = 'creation_date';
+        if ($this->isColumnModified(TaskTableMap::COL_PROJECT)) {
+            $modifiedColumns[':p' . $index++]  = 'project';
         }
         if ($this->isColumnModified(TaskTableMap::COL_START_DATE)) {
             $modifiedColumns[':p' . $index++]  = 'start_date';
+        }
+        if ($this->isColumnModified(TaskTableMap::COL_ESTIMATED_TIME)) {
+            $modifiedColumns[':p' . $index++]  = 'estimated_time';
+        }
+        if ($this->isColumnModified(TaskTableMap::COL_PRIORITY)) {
+            $modifiedColumns[':p' . $index++]  = 'priority';
+        }
+        if ($this->isColumnModified(TaskTableMap::COL_TIME_CREATED)) {
+            $modifiedColumns[':p' . $index++]  = 'time_created';
+        }
+        if ($this->isColumnModified(TaskTableMap::COL_TIME_COMPLETED)) {
+            $modifiedColumns[':p' . $index++]  = 'time_completed';
+        }
+        if ($this->isColumnModified(TaskTableMap::COL_DESCRIPTION)) {
+            $modifiedColumns[':p' . $index++]  = 'description';
         }
 
         $sql = sprintf(
@@ -932,14 +1207,26 @@ abstract class Task implements ActiveRecordInterface
                     case 'assignee':
                         $stmt->bindValue($identifier, $this->assignee, PDO::PARAM_INT);
                         break;
-                    case 'description':
-                        $stmt->bindValue($identifier, $this->description, PDO::PARAM_STR);
-                        break;
-                    case 'creation_date':
-                        $stmt->bindValue($identifier, $this->creation_date ? $this->creation_date->format("Y-m-d H:i:s") : null, PDO::PARAM_STR);
+                    case 'project':
+                        $stmt->bindValue($identifier, $this->project, PDO::PARAM_INT);
                         break;
                     case 'start_date':
                         $stmt->bindValue($identifier, $this->start_date ? $this->start_date->format("Y-m-d H:i:s") : null, PDO::PARAM_STR);
+                        break;
+                    case 'estimated_time':
+                        $stmt->bindValue($identifier, $this->estimated_time, PDO::PARAM_STR);
+                        break;
+                    case 'priority':
+                        $stmt->bindValue($identifier, $this->priority, PDO::PARAM_INT);
+                        break;
+                    case 'time_created':
+                        $stmt->bindValue($identifier, $this->time_created ? $this->time_created->format("Y-m-d H:i:s") : null, PDO::PARAM_STR);
+                        break;
+                    case 'time_completed':
+                        $stmt->bindValue($identifier, $this->time_completed ? $this->time_completed->format("Y-m-d H:i:s") : null, PDO::PARAM_STR);
+                        break;
+                    case 'description':
+                        $stmt->bindValue($identifier, $this->description, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1003,19 +1290,31 @@ abstract class Task implements ActiveRecordInterface
                 return $this->getTitle();
                 break;
             case 2:
-                return $this->getOwner();
+                return $this->getOwnerId();
                 break;
             case 3:
-                return $this->getAssignee();
+                return $this->getAssigneeId();
                 break;
             case 4:
-                return $this->getDescription();
+                return $this->getProjectId();
                 break;
             case 5:
-                return $this->getCreationDate();
+                return $this->getStartDate();
                 break;
             case 6:
-                return $this->getStartDate();
+                return $this->getEstimatedTime();
+                break;
+            case 7:
+                return $this->getPriority();
+                break;
+            case 8:
+                return $this->getTimeCreated();
+                break;
+            case 9:
+                return $this->getTimeCompleted();
+                break;
+            case 10:
+                return $this->getDescription();
                 break;
             default:
                 return null;
@@ -1049,11 +1348,15 @@ abstract class Task implements ActiveRecordInterface
         $result = array(
             $keys[0] => $this->getId(),
             $keys[1] => $this->getTitle(),
-            $keys[2] => $this->getOwner(),
-            $keys[3] => $this->getAssignee(),
-            $keys[4] => $this->getDescription(),
-            $keys[5] => $this->getCreationDate(),
-            $keys[6] => $this->getStartDate(),
+            $keys[2] => $this->getOwnerId(),
+            $keys[3] => $this->getAssigneeId(),
+            $keys[4] => $this->getProjectId(),
+            $keys[5] => $this->getStartDate(),
+            $keys[6] => $this->getEstimatedTime(),
+            $keys[7] => $this->getPriority(),
+            $keys[8] => $this->getTimeCreated(),
+            $keys[9] => $this->getTimeCompleted(),
+            $keys[10] => $this->getDescription(),
         );
 
         $utc = new \DateTimeZone('utc');
@@ -1063,10 +1366,16 @@ abstract class Task implements ActiveRecordInterface
             $result[$keys[5]] = $dateTime->setTimezone($utc)->format('Y-m-d\TH:i:s\Z');
         }
 
-        if ($result[$keys[6]] instanceof \DateTime) {
+        if ($result[$keys[8]] instanceof \DateTime) {
             // When changing timezone we don't want to change existing instances
-            $dateTime = clone $result[$keys[6]];
-            $result[$keys[6]] = $dateTime->setTimezone($utc)->format('Y-m-d\TH:i:s\Z');
+            $dateTime = clone $result[$keys[8]];
+            $result[$keys[8]] = $dateTime->setTimezone($utc)->format('Y-m-d\TH:i:s\Z');
+        }
+
+        if ($result[$keys[9]] instanceof \DateTime) {
+            // When changing timezone we don't want to change existing instances
+            $dateTime = clone $result[$keys[9]];
+            $result[$keys[9]] = $dateTime->setTimezone($utc)->format('Y-m-d\TH:i:s\Z');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1075,7 +1384,7 @@ abstract class Task implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->aUserRelatedByAssignee) {
+            if (null !== $this->aUserRelatedByAssigneeId) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
@@ -1088,9 +1397,9 @@ abstract class Task implements ActiveRecordInterface
                         $key = 'User';
                 }
 
-                $result[$key] = $this->aUserRelatedByAssignee->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+                $result[$key] = $this->aUserRelatedByAssigneeId->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
-            if (null !== $this->aUserRelatedByOwner) {
+            if (null !== $this->aUserRelatedByOwnerId) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
@@ -1103,7 +1412,52 @@ abstract class Task implements ActiveRecordInterface
                         $key = 'User';
                 }
 
-                $result[$key] = $this->aUserRelatedByOwner->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+                $result[$key] = $this->aUserRelatedByOwnerId->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aProject) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'project';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'projects';
+                        break;
+                    default:
+                        $key = 'Project';
+                }
+
+                $result[$key] = $this->aProject->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->collTaskComments) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'taskComments';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'task_commentss';
+                        break;
+                    default:
+                        $key = 'TaskComments';
+                }
+
+                $result[$key] = $this->collTaskComments->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collTaskTimeRecords) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'taskTimeRecords';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'task_time_recordss';
+                        break;
+                    default:
+                        $key = 'TaskTimeRecords';
+                }
+
+                $result[$key] = $this->collTaskTimeRecords->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1146,19 +1500,31 @@ abstract class Task implements ActiveRecordInterface
                 $this->setTitle($value);
                 break;
             case 2:
-                $this->setOwner($value);
+                $this->setOwnerId($value);
                 break;
             case 3:
-                $this->setAssignee($value);
+                $this->setAssigneeId($value);
                 break;
             case 4:
-                $this->setDescription($value);
+                $this->setProjectId($value);
                 break;
             case 5:
-                $this->setCreationDate($value);
+                $this->setStartDate($value);
                 break;
             case 6:
-                $this->setStartDate($value);
+                $this->setEstimatedTime($value);
+                break;
+            case 7:
+                $this->setPriority($value);
+                break;
+            case 8:
+                $this->setTimeCreated($value);
+                break;
+            case 9:
+                $this->setTimeCompleted($value);
+                break;
+            case 10:
+                $this->setDescription($value);
                 break;
         } // switch()
 
@@ -1193,19 +1559,31 @@ abstract class Task implements ActiveRecordInterface
             $this->setTitle($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setOwner($arr[$keys[2]]);
+            $this->setOwnerId($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setAssignee($arr[$keys[3]]);
+            $this->setAssigneeId($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setDescription($arr[$keys[4]]);
+            $this->setProjectId($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setCreationDate($arr[$keys[5]]);
+            $this->setStartDate($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setStartDate($arr[$keys[6]]);
+            $this->setEstimatedTime($arr[$keys[6]]);
+        }
+        if (array_key_exists($keys[7], $arr)) {
+            $this->setPriority($arr[$keys[7]]);
+        }
+        if (array_key_exists($keys[8], $arr)) {
+            $this->setTimeCreated($arr[$keys[8]]);
+        }
+        if (array_key_exists($keys[9], $arr)) {
+            $this->setTimeCompleted($arr[$keys[9]]);
+        }
+        if (array_key_exists($keys[10], $arr)) {
+            $this->setDescription($arr[$keys[10]]);
         }
     }
 
@@ -1260,14 +1638,26 @@ abstract class Task implements ActiveRecordInterface
         if ($this->isColumnModified(TaskTableMap::COL_ASSIGNEE)) {
             $criteria->add(TaskTableMap::COL_ASSIGNEE, $this->assignee);
         }
-        if ($this->isColumnModified(TaskTableMap::COL_DESCRIPTION)) {
-            $criteria->add(TaskTableMap::COL_DESCRIPTION, $this->description);
-        }
-        if ($this->isColumnModified(TaskTableMap::COL_CREATION_DATE)) {
-            $criteria->add(TaskTableMap::COL_CREATION_DATE, $this->creation_date);
+        if ($this->isColumnModified(TaskTableMap::COL_PROJECT)) {
+            $criteria->add(TaskTableMap::COL_PROJECT, $this->project);
         }
         if ($this->isColumnModified(TaskTableMap::COL_START_DATE)) {
             $criteria->add(TaskTableMap::COL_START_DATE, $this->start_date);
+        }
+        if ($this->isColumnModified(TaskTableMap::COL_ESTIMATED_TIME)) {
+            $criteria->add(TaskTableMap::COL_ESTIMATED_TIME, $this->estimated_time);
+        }
+        if ($this->isColumnModified(TaskTableMap::COL_PRIORITY)) {
+            $criteria->add(TaskTableMap::COL_PRIORITY, $this->priority);
+        }
+        if ($this->isColumnModified(TaskTableMap::COL_TIME_CREATED)) {
+            $criteria->add(TaskTableMap::COL_TIME_CREATED, $this->time_created);
+        }
+        if ($this->isColumnModified(TaskTableMap::COL_TIME_COMPLETED)) {
+            $criteria->add(TaskTableMap::COL_TIME_COMPLETED, $this->time_completed);
+        }
+        if ($this->isColumnModified(TaskTableMap::COL_DESCRIPTION)) {
+            $criteria->add(TaskTableMap::COL_DESCRIPTION, $this->description);
         }
 
         return $criteria;
@@ -1356,11 +1746,35 @@ abstract class Task implements ActiveRecordInterface
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setTitle($this->getTitle());
-        $copyObj->setOwner($this->getOwner());
-        $copyObj->setAssignee($this->getAssignee());
-        $copyObj->setDescription($this->getDescription());
-        $copyObj->setCreationDate($this->getCreationDate());
+        $copyObj->setOwnerId($this->getOwnerId());
+        $copyObj->setAssigneeId($this->getAssigneeId());
+        $copyObj->setProjectId($this->getProjectId());
         $copyObj->setStartDate($this->getStartDate());
+        $copyObj->setEstimatedTime($this->getEstimatedTime());
+        $copyObj->setPriority($this->getPriority());
+        $copyObj->setTimeCreated($this->getTimeCreated());
+        $copyObj->setTimeCompleted($this->getTimeCompleted());
+        $copyObj->setDescription($this->getDescription());
+
+        if ($deepCopy) {
+            // important: temporarily setNew(false) because this affects the behavior of
+            // the getter/setter methods for fkey referrer objects.
+            $copyObj->setNew(false);
+
+            foreach ($this->getTaskComments() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addTaskComment($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getTaskTimeRecords() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addTaskTimeRecord($relObj->copy($deepCopy));
+                }
+            }
+
+        } // if ($deepCopy)
+
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1396,20 +1810,20 @@ abstract class Task implements ActiveRecordInterface
      * @return $this|\Task The current object (for fluent API support)
      * @throws PropelException
      */
-    public function setUserRelatedByAssignee(ChildUser $v = null)
+    public function setUserRelatedByAssigneeId(ChildUser $v = null)
     {
         if ($v === null) {
-            $this->setAssignee(NULL);
+            $this->setAssigneeId(NULL);
         } else {
-            $this->setAssignee($v->getId());
+            $this->setAssigneeId($v->getPersonId());
         }
 
-        $this->aUserRelatedByAssignee = $v;
+        $this->aUserRelatedByAssigneeId = $v;
 
         // Add binding for other direction of this n:n relationship.
         // If this object has already been added to the ChildUser object, it will not be re-added.
         if ($v !== null) {
-            $v->addTaskRelatedByAssignee($this);
+            $v->addTaskRelatedByAssigneeId($this);
         }
 
 
@@ -1424,20 +1838,20 @@ abstract class Task implements ActiveRecordInterface
      * @return ChildUser The associated ChildUser object.
      * @throws PropelException
      */
-    public function getUserRelatedByAssignee(ConnectionInterface $con = null)
+    public function getUserRelatedByAssigneeId(ConnectionInterface $con = null)
     {
-        if ($this->aUserRelatedByAssignee === null && ($this->assignee !== null)) {
-            $this->aUserRelatedByAssignee = ChildUserQuery::create()->findPk($this->assignee, $con);
+        if ($this->aUserRelatedByAssigneeId === null && ($this->assignee !== null)) {
+            $this->aUserRelatedByAssigneeId = ChildUserQuery::create()->findPk($this->assignee, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aUserRelatedByAssignee->addTasksRelatedByAssignee($this);
+                $this->aUserRelatedByAssigneeId->addTasksRelatedByAssigneeId($this);
              */
         }
 
-        return $this->aUserRelatedByAssignee;
+        return $this->aUserRelatedByAssigneeId;
     }
 
     /**
@@ -1447,20 +1861,20 @@ abstract class Task implements ActiveRecordInterface
      * @return $this|\Task The current object (for fluent API support)
      * @throws PropelException
      */
-    public function setUserRelatedByOwner(ChildUser $v = null)
+    public function setUserRelatedByOwnerId(ChildUser $v = null)
     {
         if ($v === null) {
-            $this->setOwner(NULL);
+            $this->setOwnerId(NULL);
         } else {
-            $this->setOwner($v->getId());
+            $this->setOwnerId($v->getPersonId());
         }
 
-        $this->aUserRelatedByOwner = $v;
+        $this->aUserRelatedByOwnerId = $v;
 
         // Add binding for other direction of this n:n relationship.
         // If this object has already been added to the ChildUser object, it will not be re-added.
         if ($v !== null) {
-            $v->addTaskRelatedByOwner($this);
+            $v->addTaskRelatedByOwnerId($this);
         }
 
 
@@ -1475,20 +1889,579 @@ abstract class Task implements ActiveRecordInterface
      * @return ChildUser The associated ChildUser object.
      * @throws PropelException
      */
-    public function getUserRelatedByOwner(ConnectionInterface $con = null)
+    public function getUserRelatedByOwnerId(ConnectionInterface $con = null)
     {
-        if ($this->aUserRelatedByOwner === null && ($this->owner !== null)) {
-            $this->aUserRelatedByOwner = ChildUserQuery::create()->findPk($this->owner, $con);
+        if ($this->aUserRelatedByOwnerId === null && ($this->owner !== null)) {
+            $this->aUserRelatedByOwnerId = ChildUserQuery::create()->findPk($this->owner, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aUserRelatedByOwner->addTasksRelatedByOwner($this);
+                $this->aUserRelatedByOwnerId->addTasksRelatedByOwnerId($this);
              */
         }
 
-        return $this->aUserRelatedByOwner;
+        return $this->aUserRelatedByOwnerId;
+    }
+
+    /**
+     * Declares an association between this object and a ChildProject object.
+     *
+     * @param  ChildProject $v
+     * @return $this|\Task The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setProject(ChildProject $v = null)
+    {
+        if ($v === null) {
+            $this->setProjectId(NULL);
+        } else {
+            $this->setProjectId($v->getId());
+        }
+
+        $this->aProject = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildProject object, it will not be re-added.
+        if ($v !== null) {
+            $v->addTask($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildProject object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildProject The associated ChildProject object.
+     * @throws PropelException
+     */
+    public function getProject(ConnectionInterface $con = null)
+    {
+        if ($this->aProject === null && ($this->project !== null)) {
+            $this->aProject = ChildProjectQuery::create()->findPk($this->project, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aProject->addTasks($this);
+             */
+        }
+
+        return $this->aProject;
+    }
+
+
+    /**
+     * Initializes a collection based on the name of a relation.
+     * Avoids crafting an 'init[$relationName]s' method name
+     * that wouldn't work when StandardEnglishPluralizer is used.
+     *
+     * @param      string $relationName The name of the relation to initialize
+     * @return void
+     */
+    public function initRelation($relationName)
+    {
+        if ('TaskComment' == $relationName) {
+            return $this->initTaskComments();
+        }
+        if ('TaskTimeRecord' == $relationName) {
+            return $this->initTaskTimeRecords();
+        }
+    }
+
+    /**
+     * Clears out the collTaskComments collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addTaskComments()
+     */
+    public function clearTaskComments()
+    {
+        $this->collTaskComments = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collTaskComments collection loaded partially.
+     */
+    public function resetPartialTaskComments($v = true)
+    {
+        $this->collTaskCommentsPartial = $v;
+    }
+
+    /**
+     * Initializes the collTaskComments collection.
+     *
+     * By default this just sets the collTaskComments collection to an empty array (like clearcollTaskComments());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initTaskComments($overrideExisting = true)
+    {
+        if (null !== $this->collTaskComments && !$overrideExisting) {
+            return;
+        }
+        $this->collTaskComments = new ObjectCollection();
+        $this->collTaskComments->setModel('\TaskComment');
+    }
+
+    /**
+     * Gets an array of ChildTaskComment objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildTask is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildTaskComment[] List of ChildTaskComment objects
+     * @throws PropelException
+     */
+    public function getTaskComments(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collTaskCommentsPartial && !$this->isNew();
+        if (null === $this->collTaskComments || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collTaskComments) {
+                // return empty collection
+                $this->initTaskComments();
+            } else {
+                $collTaskComments = ChildTaskCommentQuery::create(null, $criteria)
+                    ->filterByTask($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collTaskCommentsPartial && count($collTaskComments)) {
+                        $this->initTaskComments(false);
+
+                        foreach ($collTaskComments as $obj) {
+                            if (false == $this->collTaskComments->contains($obj)) {
+                                $this->collTaskComments->append($obj);
+                            }
+                        }
+
+                        $this->collTaskCommentsPartial = true;
+                    }
+
+                    return $collTaskComments;
+                }
+
+                if ($partial && $this->collTaskComments) {
+                    foreach ($this->collTaskComments as $obj) {
+                        if ($obj->isNew()) {
+                            $collTaskComments[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collTaskComments = $collTaskComments;
+                $this->collTaskCommentsPartial = false;
+            }
+        }
+
+        return $this->collTaskComments;
+    }
+
+    /**
+     * Sets a collection of ChildTaskComment objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $taskComments A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildTask The current object (for fluent API support)
+     */
+    public function setTaskComments(Collection $taskComments, ConnectionInterface $con = null)
+    {
+        /** @var ChildTaskComment[] $taskCommentsToDelete */
+        $taskCommentsToDelete = $this->getTaskComments(new Criteria(), $con)->diff($taskComments);
+
+
+        $this->taskCommentsScheduledForDeletion = $taskCommentsToDelete;
+
+        foreach ($taskCommentsToDelete as $taskCommentRemoved) {
+            $taskCommentRemoved->setTask(null);
+        }
+
+        $this->collTaskComments = null;
+        foreach ($taskComments as $taskComment) {
+            $this->addTaskComment($taskComment);
+        }
+
+        $this->collTaskComments = $taskComments;
+        $this->collTaskCommentsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related TaskComment objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related TaskComment objects.
+     * @throws PropelException
+     */
+    public function countTaskComments(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collTaskCommentsPartial && !$this->isNew();
+        if (null === $this->collTaskComments || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collTaskComments) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getTaskComments());
+            }
+
+            $query = ChildTaskCommentQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByTask($this)
+                ->count($con);
+        }
+
+        return count($this->collTaskComments);
+    }
+
+    /**
+     * Method called to associate a ChildTaskComment object to this object
+     * through the ChildTaskComment foreign key attribute.
+     *
+     * @param  ChildTaskComment $l ChildTaskComment
+     * @return $this|\Task The current object (for fluent API support)
+     */
+    public function addTaskComment(ChildTaskComment $l)
+    {
+        if ($this->collTaskComments === null) {
+            $this->initTaskComments();
+            $this->collTaskCommentsPartial = true;
+        }
+
+        if (!$this->collTaskComments->contains($l)) {
+            $this->doAddTaskComment($l);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildTaskComment $taskComment The ChildTaskComment object to add.
+     */
+    protected function doAddTaskComment(ChildTaskComment $taskComment)
+    {
+        $this->collTaskComments[]= $taskComment;
+        $taskComment->setTask($this);
+    }
+
+    /**
+     * @param  ChildTaskComment $taskComment The ChildTaskComment object to remove.
+     * @return $this|ChildTask The current object (for fluent API support)
+     */
+    public function removeTaskComment(ChildTaskComment $taskComment)
+    {
+        if ($this->getTaskComments()->contains($taskComment)) {
+            $pos = $this->collTaskComments->search($taskComment);
+            $this->collTaskComments->remove($pos);
+            if (null === $this->taskCommentsScheduledForDeletion) {
+                $this->taskCommentsScheduledForDeletion = clone $this->collTaskComments;
+                $this->taskCommentsScheduledForDeletion->clear();
+            }
+            $this->taskCommentsScheduledForDeletion[]= clone $taskComment;
+            $taskComment->setTask(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Task is new, it will return
+     * an empty collection; or if this Task has previously
+     * been saved, it will retrieve related TaskComments from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Task.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildTaskComment[] List of ChildTaskComment objects
+     */
+    public function getTaskCommentsJoinUser(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildTaskCommentQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getTaskComments($query, $con);
+    }
+
+    /**
+     * Clears out the collTaskTimeRecords collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addTaskTimeRecords()
+     */
+    public function clearTaskTimeRecords()
+    {
+        $this->collTaskTimeRecords = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collTaskTimeRecords collection loaded partially.
+     */
+    public function resetPartialTaskTimeRecords($v = true)
+    {
+        $this->collTaskTimeRecordsPartial = $v;
+    }
+
+    /**
+     * Initializes the collTaskTimeRecords collection.
+     *
+     * By default this just sets the collTaskTimeRecords collection to an empty array (like clearcollTaskTimeRecords());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initTaskTimeRecords($overrideExisting = true)
+    {
+        if (null !== $this->collTaskTimeRecords && !$overrideExisting) {
+            return;
+        }
+        $this->collTaskTimeRecords = new ObjectCollection();
+        $this->collTaskTimeRecords->setModel('\TaskTimeRecord');
+    }
+
+    /**
+     * Gets an array of ChildTaskTimeRecord objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildTask is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildTaskTimeRecord[] List of ChildTaskTimeRecord objects
+     * @throws PropelException
+     */
+    public function getTaskTimeRecords(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collTaskTimeRecordsPartial && !$this->isNew();
+        if (null === $this->collTaskTimeRecords || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collTaskTimeRecords) {
+                // return empty collection
+                $this->initTaskTimeRecords();
+            } else {
+                $collTaskTimeRecords = ChildTaskTimeRecordQuery::create(null, $criteria)
+                    ->filterByTask($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collTaskTimeRecordsPartial && count($collTaskTimeRecords)) {
+                        $this->initTaskTimeRecords(false);
+
+                        foreach ($collTaskTimeRecords as $obj) {
+                            if (false == $this->collTaskTimeRecords->contains($obj)) {
+                                $this->collTaskTimeRecords->append($obj);
+                            }
+                        }
+
+                        $this->collTaskTimeRecordsPartial = true;
+                    }
+
+                    return $collTaskTimeRecords;
+                }
+
+                if ($partial && $this->collTaskTimeRecords) {
+                    foreach ($this->collTaskTimeRecords as $obj) {
+                        if ($obj->isNew()) {
+                            $collTaskTimeRecords[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collTaskTimeRecords = $collTaskTimeRecords;
+                $this->collTaskTimeRecordsPartial = false;
+            }
+        }
+
+        return $this->collTaskTimeRecords;
+    }
+
+    /**
+     * Sets a collection of ChildTaskTimeRecord objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $taskTimeRecords A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildTask The current object (for fluent API support)
+     */
+    public function setTaskTimeRecords(Collection $taskTimeRecords, ConnectionInterface $con = null)
+    {
+        /** @var ChildTaskTimeRecord[] $taskTimeRecordsToDelete */
+        $taskTimeRecordsToDelete = $this->getTaskTimeRecords(new Criteria(), $con)->diff($taskTimeRecords);
+
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->taskTimeRecordsScheduledForDeletion = clone $taskTimeRecordsToDelete;
+
+        foreach ($taskTimeRecordsToDelete as $taskTimeRecordRemoved) {
+            $taskTimeRecordRemoved->setTask(null);
+        }
+
+        $this->collTaskTimeRecords = null;
+        foreach ($taskTimeRecords as $taskTimeRecord) {
+            $this->addTaskTimeRecord($taskTimeRecord);
+        }
+
+        $this->collTaskTimeRecords = $taskTimeRecords;
+        $this->collTaskTimeRecordsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related TaskTimeRecord objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related TaskTimeRecord objects.
+     * @throws PropelException
+     */
+    public function countTaskTimeRecords(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collTaskTimeRecordsPartial && !$this->isNew();
+        if (null === $this->collTaskTimeRecords || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collTaskTimeRecords) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getTaskTimeRecords());
+            }
+
+            $query = ChildTaskTimeRecordQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByTask($this)
+                ->count($con);
+        }
+
+        return count($this->collTaskTimeRecords);
+    }
+
+    /**
+     * Method called to associate a ChildTaskTimeRecord object to this object
+     * through the ChildTaskTimeRecord foreign key attribute.
+     *
+     * @param  ChildTaskTimeRecord $l ChildTaskTimeRecord
+     * @return $this|\Task The current object (for fluent API support)
+     */
+    public function addTaskTimeRecord(ChildTaskTimeRecord $l)
+    {
+        if ($this->collTaskTimeRecords === null) {
+            $this->initTaskTimeRecords();
+            $this->collTaskTimeRecordsPartial = true;
+        }
+
+        if (!$this->collTaskTimeRecords->contains($l)) {
+            $this->doAddTaskTimeRecord($l);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildTaskTimeRecord $taskTimeRecord The ChildTaskTimeRecord object to add.
+     */
+    protected function doAddTaskTimeRecord(ChildTaskTimeRecord $taskTimeRecord)
+    {
+        $this->collTaskTimeRecords[]= $taskTimeRecord;
+        $taskTimeRecord->setTask($this);
+    }
+
+    /**
+     * @param  ChildTaskTimeRecord $taskTimeRecord The ChildTaskTimeRecord object to remove.
+     * @return $this|ChildTask The current object (for fluent API support)
+     */
+    public function removeTaskTimeRecord(ChildTaskTimeRecord $taskTimeRecord)
+    {
+        if ($this->getTaskTimeRecords()->contains($taskTimeRecord)) {
+            $pos = $this->collTaskTimeRecords->search($taskTimeRecord);
+            $this->collTaskTimeRecords->remove($pos);
+            if (null === $this->taskTimeRecordsScheduledForDeletion) {
+                $this->taskTimeRecordsScheduledForDeletion = clone $this->collTaskTimeRecords;
+                $this->taskTimeRecordsScheduledForDeletion->clear();
+            }
+            $this->taskTimeRecordsScheduledForDeletion[]= clone $taskTimeRecord;
+            $taskTimeRecord->setTask(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Task is new, it will return
+     * an empty collection; or if this Task has previously
+     * been saved, it will retrieve related TaskTimeRecords from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Task.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildTaskTimeRecord[] List of ChildTaskTimeRecord objects
+     */
+    public function getTaskTimeRecordsJoinUser(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildTaskTimeRecordQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getTaskTimeRecords($query, $con);
     }
 
     /**
@@ -1498,19 +2471,26 @@ abstract class Task implements ActiveRecordInterface
      */
     public function clear()
     {
-        if (null !== $this->aUserRelatedByAssignee) {
-            $this->aUserRelatedByAssignee->removeTaskRelatedByAssignee($this);
+        if (null !== $this->aUserRelatedByAssigneeId) {
+            $this->aUserRelatedByAssigneeId->removeTaskRelatedByAssigneeId($this);
         }
-        if (null !== $this->aUserRelatedByOwner) {
-            $this->aUserRelatedByOwner->removeTaskRelatedByOwner($this);
+        if (null !== $this->aUserRelatedByOwnerId) {
+            $this->aUserRelatedByOwnerId->removeTaskRelatedByOwnerId($this);
+        }
+        if (null !== $this->aProject) {
+            $this->aProject->removeTask($this);
         }
         $this->id = null;
         $this->title = null;
         $this->owner = null;
         $this->assignee = null;
-        $this->description = null;
-        $this->creation_date = null;
+        $this->project = null;
         $this->start_date = null;
+        $this->estimated_time = null;
+        $this->priority = null;
+        $this->time_created = null;
+        $this->time_completed = null;
+        $this->description = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->applyDefaultValues();
@@ -1530,10 +2510,23 @@ abstract class Task implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
+            if ($this->collTaskComments) {
+                foreach ($this->collTaskComments as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collTaskTimeRecords) {
+                foreach ($this->collTaskTimeRecords as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
         } // if ($deep)
 
-        $this->aUserRelatedByAssignee = null;
-        $this->aUserRelatedByOwner = null;
+        $this->collTaskComments = null;
+        $this->collTaskTimeRecords = null;
+        $this->aUserRelatedByAssigneeId = null;
+        $this->aUserRelatedByOwnerId = null;
+        $this->aProject = null;
     }
 
     /**

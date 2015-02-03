@@ -59,10 +59,10 @@ html {
 	padding: 5%;
 }
 
-input[type=text] {
+input[type=text],
+input[type=password] {
 	box-sizing: border-box;
 	border: none;
-	width: 100%;
 	padding: .5em 1em;
 }
 

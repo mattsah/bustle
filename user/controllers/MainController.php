@@ -2,13 +2,16 @@
 
 	use IW\HTTP;
 	use Inkwell\Controller;
+	use Inkwell\Auth;
 	use Dotink\Flourish;
 
 	/**
 	 *
 	 */
-	class MainController extends Controller\BaseController
+	class MainController extends Controller\BaseController implements Auth\ConsumerInterface
 	{
+		use Auth\Controller;
+
 		/**
 		 *
 		 */
@@ -37,6 +40,8 @@
 		public function __prepare($action, $context = array())
 		{
 			parent::__prepare($action, $context);
+
+			$this->view->load('main/' . $action . '.html');
 		}
 
 
@@ -45,16 +50,28 @@
 		 */
 		public function home()
 		{
+
+			return $this->view;
+		}
+
+
+		/**
+		 *
+		 */
+		public function dashboard()
+		{
+			$this->requireAuth('read', 'tasks');
+
 			$date = $this->date->adjust('-1 day');
 
 			for ($days = array(); count($days) != 5; $date = $date->adjust('+1 day')) {
 				$days[] = $date;
 			}
 
-			return $this['view']
-				->load('main/home.html')
-				->set([
-					'days' => $days
-				]);
+			$this->view->set([
+				'days' => $days
+			]);
+
+			return $this->view;
 		}
 	}

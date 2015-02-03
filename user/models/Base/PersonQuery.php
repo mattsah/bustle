@@ -23,27 +23,38 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPersonQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildPersonQuery orderByName($order = Criteria::ASC) Order by the name column
  * @method     ChildPersonQuery orderByFullName($order = Criteria::ASC) Order by the full_name column
+ * @method     ChildPersonQuery orderByEmail($order = Criteria::ASC) Order by the email column
  *
  * @method     ChildPersonQuery groupById() Group by the id column
  * @method     ChildPersonQuery groupByName() Group by the name column
  * @method     ChildPersonQuery groupByFullName() Group by the full_name column
+ * @method     ChildPersonQuery groupByEmail() Group by the email column
  *
  * @method     ChildPersonQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildPersonQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method     ChildPersonQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
+ * @method     ChildPersonQuery leftJoinEmployee($relationAlias = null) Adds a LEFT JOIN clause to the query using the Employee relation
+ * @method     ChildPersonQuery rightJoinEmployee($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Employee relation
+ * @method     ChildPersonQuery innerJoinEmployee($relationAlias = null) Adds a INNER JOIN clause to the query using the Employee relation
+ *
+ * @method     ChildPersonQuery leftJoinProjectMember($relationAlias = null) Adds a LEFT JOIN clause to the query using the ProjectMember relation
+ * @method     ChildPersonQuery rightJoinProjectMember($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ProjectMember relation
+ * @method     ChildPersonQuery innerJoinProjectMember($relationAlias = null) Adds a INNER JOIN clause to the query using the ProjectMember relation
+ *
  * @method     ChildPersonQuery leftJoinUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the User relation
  * @method     ChildPersonQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
  * @method     ChildPersonQuery innerJoinUser($relationAlias = null) Adds a INNER JOIN clause to the query using the User relation
  *
- * @method     \UserQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \EmployeeQuery|\ProjectMemberQuery|\UserQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildPerson findOne(ConnectionInterface $con = null) Return the first ChildPerson matching the query
  * @method     ChildPerson findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPerson matching the query, or a new ChildPerson object populated from the query conditions when no match is found
  *
  * @method     ChildPerson findOneById(int $id) Return the first ChildPerson filtered by the id column
  * @method     ChildPerson findOneByName(string $name) Return the first ChildPerson filtered by the name column
- * @method     ChildPerson findOneByFullName(string $full_name) Return the first ChildPerson filtered by the full_name column *
+ * @method     ChildPerson findOneByFullName(string $full_name) Return the first ChildPerson filtered by the full_name column
+ * @method     ChildPerson findOneByEmail(string $email) Return the first ChildPerson filtered by the email column *
 
  * @method     ChildPerson requirePk($key, ConnectionInterface $con = null) Return the ChildPerson by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPerson requireOne(ConnectionInterface $con = null) Return the first ChildPerson matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -51,11 +62,13 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPerson requireOneById(int $id) Return the first ChildPerson filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPerson requireOneByName(string $name) Return the first ChildPerson filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPerson requireOneByFullName(string $full_name) Return the first ChildPerson filtered by the full_name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPerson requireOneByEmail(string $email) Return the first ChildPerson filtered by the email column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildPerson[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildPerson objects based on current ModelCriteria
  * @method     ChildPerson[]|ObjectCollection findById(int $id) Return ChildPerson objects filtered by the id column
  * @method     ChildPerson[]|ObjectCollection findByName(string $name) Return ChildPerson objects filtered by the name column
  * @method     ChildPerson[]|ObjectCollection findByFullName(string $full_name) Return ChildPerson objects filtered by the full_name column
+ * @method     ChildPerson[]|ObjectCollection findByEmail(string $email) Return ChildPerson objects filtered by the email column
  * @method     ChildPerson[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -148,7 +161,7 @@ abstract class PersonQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, name, full_name FROM people WHERE id = :p0';
+        $sql = 'SELECT id, name, full_name, email FROM people WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -338,6 +351,181 @@ abstract class PersonQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the email column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByEmail('fooValue');   // WHERE email = 'fooValue'
+     * $query->filterByEmail('%fooValue%'); // WHERE email LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $email The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildPersonQuery The current query, for fluid interface
+     */
+    public function filterByEmail($email = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($email)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $email)) {
+                $email = str_replace('*', '%', $email);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(PersonTableMap::COL_EMAIL, $email, $comparison);
+    }
+
+    /**
+     * Filter the query by a related \Employee object
+     *
+     * @param \Employee|ObjectCollection $employee the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildPersonQuery The current query, for fluid interface
+     */
+    public function filterByEmployee($employee, $comparison = null)
+    {
+        if ($employee instanceof \Employee) {
+            return $this
+                ->addUsingAlias(PersonTableMap::COL_ID, $employee->getPersonId(), $comparison);
+        } elseif ($employee instanceof ObjectCollection) {
+            return $this
+                ->useEmployeeQuery()
+                ->filterByPrimaryKeys($employee->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByEmployee() only accepts arguments of type \Employee or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Employee relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildPersonQuery The current query, for fluid interface
+     */
+    public function joinEmployee($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Employee');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Employee');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Employee relation Employee object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \EmployeeQuery A secondary query class using the current class as primary query
+     */
+    public function useEmployeeQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinEmployee($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Employee', '\EmployeeQuery');
+    }
+
+    /**
+     * Filter the query by a related \ProjectMember object
+     *
+     * @param \ProjectMember|ObjectCollection $projectMember the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildPersonQuery The current query, for fluid interface
+     */
+    public function filterByProjectMember($projectMember, $comparison = null)
+    {
+        if ($projectMember instanceof \ProjectMember) {
+            return $this
+                ->addUsingAlias(PersonTableMap::COL_ID, $projectMember->getPersonId(), $comparison);
+        } elseif ($projectMember instanceof ObjectCollection) {
+            return $this
+                ->useProjectMemberQuery()
+                ->filterByPrimaryKeys($projectMember->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByProjectMember() only accepts arguments of type \ProjectMember or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the ProjectMember relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildPersonQuery The current query, for fluid interface
+     */
+    public function joinProjectMember($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('ProjectMember');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'ProjectMember');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the ProjectMember relation ProjectMember object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \ProjectMemberQuery A secondary query class using the current class as primary query
+     */
+    public function useProjectMemberQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinProjectMember($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'ProjectMember', '\ProjectMemberQuery');
+    }
+
+    /**
      * Filter the query by a related \User object
      *
      * @param \User|ObjectCollection $user the related object to use as filter
@@ -349,7 +537,7 @@ abstract class PersonQuery extends ModelCriteria
     {
         if ($user instanceof \User) {
             return $this
-                ->addUsingAlias(PersonTableMap::COL_ID, $user->getId(), $comparison);
+                ->addUsingAlias(PersonTableMap::COL_ID, $user->getPersonId(), $comparison);
         } elseif ($user instanceof ObjectCollection) {
             return $this
                 ->useUserQuery()

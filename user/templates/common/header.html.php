@@ -1,7 +1,4 @@
-<?php namespace Inkwell\HTML
-{
-	?>
-		<header>
-		</header>
-	<?php
-}
+<?php namespace Inkwell\HTML ?>
+
+<header>
+</header>

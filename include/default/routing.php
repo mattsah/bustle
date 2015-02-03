@@ -1,9 +1,11 @@
 <?php
 
 	return Affinity\Action::create(['core', 'http'], function($app, $broker) {
-
-		$router     = $broker->make('Inkwell\Routing\Engine');
-		$collection = $router->getCollection();
+		$collection = $broker->make('Inkwell\Routing\Collection');
+		$router     = $broker->make('Inkwell\Routing\Engine', [
+			':collection' => $collection,
+			':response'   => $app['response']
+		]);
 
 		$router->setMutable($app['engine']->fetch('routing',  'mutable',  TRUE));
 		$router->setRestless($app['engine']->fetch('routing', 'restless', TRUE));
@@ -22,23 +24,26 @@
 				$collection->link($base_url, $route, $action);
 			}
 
-			//
-			// Handlers
-			//
-
-			foreach ($handlers as $status => $action) {
-				$collection->handle($base_url, $status, $action);
-			}
 
 			//
 			// Redirects
 			//
 
-			foreach ($redirects as $type => $redirects) {
-				foreach ($redirects as $route => $target) {
+			foreach ($redirects as $type => $type_redirects) {
+				foreach ($type_redirects as $route => $target) {
 					$collection->redirect($base_url, $route, $target, $type);
 				}
 			}
+
+
+			//
+			// Handlers
+			//
+
+			foreach ($handlers as $status => $action) {
+				$router->handle($base_url, $status, $action);
+			}
+
 		}
 
 		$app['router']            = $router;

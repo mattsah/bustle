@@ -49,7 +49,27 @@
 		$app->setExecutionMode($execution_mode);
 		$app->setWriteDirectory($app['engine']->fetch('core', 'write_directory', 'writable'));
 
-		date_default_timezone_set($app['engine']->fetch('core', 'timezone', 'GMT'));
+		//
+		// Setup some standard PHP requirements
+		//
+
+		$default_timezone = $app['engine']->fetch('core', 'timezone', 'GMT');
+		$session_path     = $app['engine']->fetch('core', 'session.path', sys_get_temp_dir());
+		$session_name     = $app['engine']->fetch('core', 'session.name', 'IWSESSID');
+
+		date_default_timezone_set($default_timezone);
+		session_save_path($app->getDirectory($session_path));
+		session_name($session_name);
+
+		if (session_status() == PHP_SESSION_NONE) {
+			session_start();
+
+			if (!isset($_SESSION['IWSESSINIT'])) {
+				$_SESSION['IWSESSINIT'] = TRUE;
+
+				session_regenerate_id();
+			}
+		}
 
 		foreach ($app['engine']->fetch('@providers') as $id) {
 			$provider_mapping = $app['engine']->fetch($id, '@providers.mapping', []);

@@ -1,5 +1,6 @@
 <?php
 
+use iMarc\Auth;
 use Base\User as BaseUser;
 
 /**
@@ -12,7 +13,13 @@ use Base\User as BaseUser;
  * long as it does not already exist in the output directory.
  *
  */
-class User extends BaseUser
+class User extends BaseUser implements Auth\EntityInterface
 {
+    public function getRoles() {
+        return ['Admin'];
+    }
 
+    public function getPermissions() {
+        return [];
+    }
 }

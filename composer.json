@@ -30,7 +30,11 @@
 		"dotink/inkwell-html": "dev-master",
 		"dotink/inkwell-orm": "dev-master",
 		"dotink/flourish-text": "dev-master",
-		"dotink/flourish-datetime": "dev-master"
+		"dotink/flourish-datetime": "dev-master",
+		"dotink/inkwell-auth": "dev-master",
+		"firebase/php-jwt": "dev-master",
+		"dotink/flourish-message": "dev-master",
+		"ircmaxell/password-compat": "dev-master"
 	},
 	"autoload": {
 		"classmap": ["user/"]

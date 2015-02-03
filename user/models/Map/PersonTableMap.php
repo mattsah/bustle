@@ -59,7 +59,7 @@ class PersonTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 3;
+    const NUM_COLUMNS = 4;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class PersonTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 3;
+    const NUM_HYDRATE_COLUMNS = 4;
 
     /**
      * the column name for the id field
@@ -87,6 +87,11 @@ class PersonTableMap extends TableMap
     const COL_FULL_NAME = 'people.full_name';
 
     /**
+     * the column name for the email field
+     */
+    const COL_EMAIL = 'people.email';
+
+    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -98,11 +103,11 @@ class PersonTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Name', 'FullName', ),
-        self::TYPE_CAMELNAME     => array('id', 'name', 'fullName', ),
-        self::TYPE_COLNAME       => array(PersonTableMap::COL_ID, PersonTableMap::COL_NAME, PersonTableMap::COL_FULL_NAME, ),
-        self::TYPE_FIELDNAME     => array('id', 'name', 'full_name', ),
-        self::TYPE_NUM           => array(0, 1, 2, )
+        self::TYPE_PHPNAME       => array('Id', 'Name', 'FullName', 'Email', ),
+        self::TYPE_CAMELNAME     => array('id', 'name', 'fullName', 'email', ),
+        self::TYPE_COLNAME       => array(PersonTableMap::COL_ID, PersonTableMap::COL_NAME, PersonTableMap::COL_FULL_NAME, PersonTableMap::COL_EMAIL, ),
+        self::TYPE_FIELDNAME     => array('id', 'name', 'full_name', 'email', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
     /**
@@ -112,11 +117,11 @@ class PersonTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'FullName' => 2, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'fullName' => 2, ),
-        self::TYPE_COLNAME       => array(PersonTableMap::COL_ID => 0, PersonTableMap::COL_NAME => 1, PersonTableMap::COL_FULL_NAME => 2, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'name' => 1, 'full_name' => 2, ),
-        self::TYPE_NUM           => array(0, 1, 2, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'FullName' => 2, 'Email' => 3, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'fullName' => 2, 'email' => 3, ),
+        self::TYPE_COLNAME       => array(PersonTableMap::COL_ID => 0, PersonTableMap::COL_NAME => 1, PersonTableMap::COL_FULL_NAME => 2, PersonTableMap::COL_EMAIL => 3, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'name' => 1, 'full_name' => 2, 'email' => 3, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
     /**
@@ -139,7 +144,8 @@ class PersonTableMap extends TableMap
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('name', 'Name', 'VARCHAR', true, 64, null);
-        $this->addColumn('full_name', 'FullName', 'VARCHAR', false, 128, null);
+        $this->addColumn('full_name', 'FullName', 'VARCHAR', false, 96, null);
+        $this->addColumn('email', 'Email', 'VARCHAR', false, 128, null);
     } // initialize()
 
     /**
@@ -147,6 +153,20 @@ class PersonTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Employee', '\\Employee', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':person',
+    1 => ':id',
+  ),
+), 'CASCADE', 'CASCADE', 'Employees', false);
+        $this->addRelation('ProjectMember', '\\ProjectMember', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':person',
+    1 => ':id',
+  ),
+), 'CASCADE', 'CASCADE', 'ProjectMembers', false);
         $this->addRelation('User', '\\User', RelationMap::ONE_TO_ONE, array (
   0 =>
   array (
@@ -155,6 +175,16 @@ class PersonTableMap extends TableMap
   ),
 ), 'RESTRICT', 'CASCADE', null, false);
     } // buildRelations()
+    /**
+     * Method to invalidate the instance pool of all tables related to people     * by a foreign key with ON DELETE CASCADE
+     */
+    public static function clearRelatedInstancePool()
+    {
+        // Invalidate objects in related instance pools,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        EmployeeTableMap::clearInstancePool();
+        ProjectMemberTableMap::clearInstancePool();
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -300,10 +330,12 @@ class PersonTableMap extends TableMap
             $criteria->addSelectColumn(PersonTableMap::COL_ID);
             $criteria->addSelectColumn(PersonTableMap::COL_NAME);
             $criteria->addSelectColumn(PersonTableMap::COL_FULL_NAME);
+            $criteria->addSelectColumn(PersonTableMap::COL_EMAIL);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.name');
             $criteria->addSelectColumn($alias . '.full_name');
+            $criteria->addSelectColumn($alias . '.email');
         }
     }
 

@@ -2,7 +2,12 @@
 
 namespace Base;
 
+use \Employee as ChildEmployee;
+use \EmployeeQuery as ChildEmployeeQuery;
+use \Person as ChildPerson;
 use \PersonQuery as ChildPersonQuery;
+use \ProjectMember as ChildProjectMember;
+use \ProjectMemberQuery as ChildProjectMemberQuery;
 use \User as ChildUser;
 use \UserQuery as ChildUserQuery;
 use \Exception;
@@ -13,6 +18,7 @@ use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveRecord\ActiveRecordInterface;
 use Propel\Runtime\Collection\Collection;
+use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\BadMethodCallException;
 use Propel\Runtime\Exception\LogicException;
@@ -80,6 +86,24 @@ abstract class Person implements ActiveRecordInterface
     protected $full_name;
 
     /**
+     * The value for the email field.
+     * @var        string
+     */
+    protected $email;
+
+    /**
+     * @var        ObjectCollection|ChildEmployee[] Collection to store aggregation of ChildEmployee objects.
+     */
+    protected $collEmployees;
+    protected $collEmployeesPartial;
+
+    /**
+     * @var        ObjectCollection|ChildProjectMember[] Collection to store aggregation of ChildProjectMember objects.
+     */
+    protected $collProjectMembers;
+    protected $collProjectMembersPartial;
+
+    /**
      * @var        ChildUser one-to-one related ChildUser object
      */
     protected $singleUser;
@@ -91,6 +115,18 @@ abstract class Person implements ActiveRecordInterface
      * @var boolean
      */
     protected $alreadyInSave = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildEmployee[]
+     */
+    protected $employeesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildProjectMember[]
+     */
+    protected $projectMembersScheduledForDeletion = null;
 
     /**
      * Initializes internal state of Base\Person object.
@@ -340,6 +376,16 @@ abstract class Person implements ActiveRecordInterface
     }
 
     /**
+     * Get the [email] column value.
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
      * Set the value of [id] column.
      *
      * @param  int $v new value
@@ -400,6 +446,26 @@ abstract class Person implements ActiveRecordInterface
     } // setFullName()
 
     /**
+     * Set the value of [email] column.
+     *
+     * @param  string $v new value
+     * @return $this|\Person The current object (for fluent API support)
+     */
+    public function setEmail($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->email !== $v) {
+            $this->email = $v;
+            $this->modifiedColumns[PersonTableMap::COL_EMAIL] = true;
+        }
+
+        return $this;
+    } // setEmail()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -443,6 +509,9 @@ abstract class Person implements ActiveRecordInterface
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : PersonTableMap::translateFieldName('FullName', TableMap::TYPE_PHPNAME, $indexType)];
             $this->full_name = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : PersonTableMap::translateFieldName('Email', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->email = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -451,7 +520,7 @@ abstract class Person implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 3; // 3 = PersonTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 4; // 4 = PersonTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Person'), 0, $e);
@@ -511,6 +580,10 @@ abstract class Person implements ActiveRecordInterface
         $this->hydrate($row, 0, true, $dataFetcher->getIndexType()); // rehydrate
 
         if ($deep) {  // also de-associate any related objects?
+
+            $this->collEmployees = null;
+
+            $this->collProjectMembers = null;
 
             $this->singleUser = null;
 
@@ -624,6 +697,40 @@ abstract class Person implements ActiveRecordInterface
                 $this->resetModified();
             }
 
+            if ($this->employeesScheduledForDeletion !== null) {
+                if (!$this->employeesScheduledForDeletion->isEmpty()) {
+                    \EmployeeQuery::create()
+                        ->filterByPrimaryKeys($this->employeesScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->employeesScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collEmployees !== null) {
+                foreach ($this->collEmployees as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->projectMembersScheduledForDeletion !== null) {
+                if (!$this->projectMembersScheduledForDeletion->isEmpty()) {
+                    \ProjectMemberQuery::create()
+                        ->filterByPrimaryKeys($this->projectMembersScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->projectMembersScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collProjectMembers !== null) {
+                foreach ($this->collProjectMembers as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             if ($this->singleUser !== null) {
                 if (!$this->singleUser->isDeleted() && ($this->singleUser->isNew() || $this->singleUser->isModified())) {
                     $affectedRows += $this->singleUser->save($con);
@@ -674,6 +781,9 @@ abstract class Person implements ActiveRecordInterface
         if ($this->isColumnModified(PersonTableMap::COL_FULL_NAME)) {
             $modifiedColumns[':p' . $index++]  = 'full_name';
         }
+        if ($this->isColumnModified(PersonTableMap::COL_EMAIL)) {
+            $modifiedColumns[':p' . $index++]  = 'email';
+        }
 
         $sql = sprintf(
             'INSERT INTO people (%s) VALUES (%s)',
@@ -693,6 +803,9 @@ abstract class Person implements ActiveRecordInterface
                         break;
                     case 'full_name':
                         $stmt->bindValue($identifier, $this->full_name, PDO::PARAM_STR);
+                        break;
+                    case 'email':
+                        $stmt->bindValue($identifier, $this->email, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -758,6 +871,9 @@ abstract class Person implements ActiveRecordInterface
             case 2:
                 return $this->getFullName();
                 break;
+            case 3:
+                return $this->getEmail();
+                break;
             default:
                 return null;
                 break;
@@ -791,6 +907,7 @@ abstract class Person implements ActiveRecordInterface
             $keys[0] => $this->getId(),
             $keys[1] => $this->getName(),
             $keys[2] => $this->getFullName(),
+            $keys[3] => $this->getEmail(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -798,6 +915,36 @@ abstract class Person implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->collEmployees) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'employees';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'employeess';
+                        break;
+                    default:
+                        $key = 'Employees';
+                }
+
+                $result[$key] = $this->collEmployees->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collProjectMembers) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'projectMembers';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'project_memberss';
+                        break;
+                    default:
+                        $key = 'ProjectMembers';
+                }
+
+                $result[$key] = $this->collProjectMembers->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->singleUser) {
 
                 switch ($keyType) {
@@ -856,6 +1003,9 @@ abstract class Person implements ActiveRecordInterface
             case 2:
                 $this->setFullName($value);
                 break;
+            case 3:
+                $this->setEmail($value);
+                break;
         } // switch()
 
         return $this;
@@ -890,6 +1040,9 @@ abstract class Person implements ActiveRecordInterface
         }
         if (array_key_exists($keys[2], $arr)) {
             $this->setFullName($arr[$keys[2]]);
+        }
+        if (array_key_exists($keys[3], $arr)) {
+            $this->setEmail($arr[$keys[3]]);
         }
     }
 
@@ -940,6 +1093,9 @@ abstract class Person implements ActiveRecordInterface
         }
         if ($this->isColumnModified(PersonTableMap::COL_FULL_NAME)) {
             $criteria->add(PersonTableMap::COL_FULL_NAME, $this->full_name);
+        }
+        if ($this->isColumnModified(PersonTableMap::COL_EMAIL)) {
+            $criteria->add(PersonTableMap::COL_EMAIL, $this->email);
         }
 
         return $criteria;
@@ -1029,11 +1185,24 @@ abstract class Person implements ActiveRecordInterface
     {
         $copyObj->setName($this->getName());
         $copyObj->setFullName($this->getFullName());
+        $copyObj->setEmail($this->getEmail());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
+
+            foreach ($this->getEmployees() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addEmployee($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getProjectMembers() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addProjectMember($relObj->copy($deepCopy));
+                }
+            }
 
             $relObj = $this->getUser();
             if ($relObj) {
@@ -1081,6 +1250,504 @@ abstract class Person implements ActiveRecordInterface
      */
     public function initRelation($relationName)
     {
+        if ('Employee' == $relationName) {
+            return $this->initEmployees();
+        }
+        if ('ProjectMember' == $relationName) {
+            return $this->initProjectMembers();
+        }
+    }
+
+    /**
+     * Clears out the collEmployees collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addEmployees()
+     */
+    public function clearEmployees()
+    {
+        $this->collEmployees = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collEmployees collection loaded partially.
+     */
+    public function resetPartialEmployees($v = true)
+    {
+        $this->collEmployeesPartial = $v;
+    }
+
+    /**
+     * Initializes the collEmployees collection.
+     *
+     * By default this just sets the collEmployees collection to an empty array (like clearcollEmployees());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initEmployees($overrideExisting = true)
+    {
+        if (null !== $this->collEmployees && !$overrideExisting) {
+            return;
+        }
+        $this->collEmployees = new ObjectCollection();
+        $this->collEmployees->setModel('\Employee');
+    }
+
+    /**
+     * Gets an array of ChildEmployee objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildPerson is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildEmployee[] List of ChildEmployee objects
+     * @throws PropelException
+     */
+    public function getEmployees(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collEmployeesPartial && !$this->isNew();
+        if (null === $this->collEmployees || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collEmployees) {
+                // return empty collection
+                $this->initEmployees();
+            } else {
+                $collEmployees = ChildEmployeeQuery::create(null, $criteria)
+                    ->filterByPerson($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collEmployeesPartial && count($collEmployees)) {
+                        $this->initEmployees(false);
+
+                        foreach ($collEmployees as $obj) {
+                            if (false == $this->collEmployees->contains($obj)) {
+                                $this->collEmployees->append($obj);
+                            }
+                        }
+
+                        $this->collEmployeesPartial = true;
+                    }
+
+                    return $collEmployees;
+                }
+
+                if ($partial && $this->collEmployees) {
+                    foreach ($this->collEmployees as $obj) {
+                        if ($obj->isNew()) {
+                            $collEmployees[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collEmployees = $collEmployees;
+                $this->collEmployeesPartial = false;
+            }
+        }
+
+        return $this->collEmployees;
+    }
+
+    /**
+     * Sets a collection of ChildEmployee objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $employees A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildPerson The current object (for fluent API support)
+     */
+    public function setEmployees(Collection $employees, ConnectionInterface $con = null)
+    {
+        /** @var ChildEmployee[] $employeesToDelete */
+        $employeesToDelete = $this->getEmployees(new Criteria(), $con)->diff($employees);
+
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->employeesScheduledForDeletion = clone $employeesToDelete;
+
+        foreach ($employeesToDelete as $employeeRemoved) {
+            $employeeRemoved->setPerson(null);
+        }
+
+        $this->collEmployees = null;
+        foreach ($employees as $employee) {
+            $this->addEmployee($employee);
+        }
+
+        $this->collEmployees = $employees;
+        $this->collEmployeesPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Employee objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related Employee objects.
+     * @throws PropelException
+     */
+    public function countEmployees(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collEmployeesPartial && !$this->isNew();
+        if (null === $this->collEmployees || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collEmployees) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getEmployees());
+            }
+
+            $query = ChildEmployeeQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByPerson($this)
+                ->count($con);
+        }
+
+        return count($this->collEmployees);
+    }
+
+    /**
+     * Method called to associate a ChildEmployee object to this object
+     * through the ChildEmployee foreign key attribute.
+     *
+     * @param  ChildEmployee $l ChildEmployee
+     * @return $this|\Person The current object (for fluent API support)
+     */
+    public function addEmployee(ChildEmployee $l)
+    {
+        if ($this->collEmployees === null) {
+            $this->initEmployees();
+            $this->collEmployeesPartial = true;
+        }
+
+        if (!$this->collEmployees->contains($l)) {
+            $this->doAddEmployee($l);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildEmployee $employee The ChildEmployee object to add.
+     */
+    protected function doAddEmployee(ChildEmployee $employee)
+    {
+        $this->collEmployees[]= $employee;
+        $employee->setPerson($this);
+    }
+
+    /**
+     * @param  ChildEmployee $employee The ChildEmployee object to remove.
+     * @return $this|ChildPerson The current object (for fluent API support)
+     */
+    public function removeEmployee(ChildEmployee $employee)
+    {
+        if ($this->getEmployees()->contains($employee)) {
+            $pos = $this->collEmployees->search($employee);
+            $this->collEmployees->remove($pos);
+            if (null === $this->employeesScheduledForDeletion) {
+                $this->employeesScheduledForDeletion = clone $this->collEmployees;
+                $this->employeesScheduledForDeletion->clear();
+            }
+            $this->employeesScheduledForDeletion[]= clone $employee;
+            $employee->setPerson(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Person is new, it will return
+     * an empty collection; or if this Person has previously
+     * been saved, it will retrieve related Employees from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Person.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildEmployee[] List of ChildEmployee objects
+     */
+    public function getEmployeesJoinCompany(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildEmployeeQuery::create(null, $criteria);
+        $query->joinWith('Company', $joinBehavior);
+
+        return $this->getEmployees($query, $con);
+    }
+
+    /**
+     * Clears out the collProjectMembers collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addProjectMembers()
+     */
+    public function clearProjectMembers()
+    {
+        $this->collProjectMembers = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collProjectMembers collection loaded partially.
+     */
+    public function resetPartialProjectMembers($v = true)
+    {
+        $this->collProjectMembersPartial = $v;
+    }
+
+    /**
+     * Initializes the collProjectMembers collection.
+     *
+     * By default this just sets the collProjectMembers collection to an empty array (like clearcollProjectMembers());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initProjectMembers($overrideExisting = true)
+    {
+        if (null !== $this->collProjectMembers && !$overrideExisting) {
+            return;
+        }
+        $this->collProjectMembers = new ObjectCollection();
+        $this->collProjectMembers->setModel('\ProjectMember');
+    }
+
+    /**
+     * Gets an array of ChildProjectMember objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildPerson is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildProjectMember[] List of ChildProjectMember objects
+     * @throws PropelException
+     */
+    public function getProjectMembers(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collProjectMembersPartial && !$this->isNew();
+        if (null === $this->collProjectMembers || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collProjectMembers) {
+                // return empty collection
+                $this->initProjectMembers();
+            } else {
+                $collProjectMembers = ChildProjectMemberQuery::create(null, $criteria)
+                    ->filterByPerson($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collProjectMembersPartial && count($collProjectMembers)) {
+                        $this->initProjectMembers(false);
+
+                        foreach ($collProjectMembers as $obj) {
+                            if (false == $this->collProjectMembers->contains($obj)) {
+                                $this->collProjectMembers->append($obj);
+                            }
+                        }
+
+                        $this->collProjectMembersPartial = true;
+                    }
+
+                    return $collProjectMembers;
+                }
+
+                if ($partial && $this->collProjectMembers) {
+                    foreach ($this->collProjectMembers as $obj) {
+                        if ($obj->isNew()) {
+                            $collProjectMembers[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collProjectMembers = $collProjectMembers;
+                $this->collProjectMembersPartial = false;
+            }
+        }
+
+        return $this->collProjectMembers;
+    }
+
+    /**
+     * Sets a collection of ChildProjectMember objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $projectMembers A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildPerson The current object (for fluent API support)
+     */
+    public function setProjectMembers(Collection $projectMembers, ConnectionInterface $con = null)
+    {
+        /** @var ChildProjectMember[] $projectMembersToDelete */
+        $projectMembersToDelete = $this->getProjectMembers(new Criteria(), $con)->diff($projectMembers);
+
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->projectMembersScheduledForDeletion = clone $projectMembersToDelete;
+
+        foreach ($projectMembersToDelete as $projectMemberRemoved) {
+            $projectMemberRemoved->setPerson(null);
+        }
+
+        $this->collProjectMembers = null;
+        foreach ($projectMembers as $projectMember) {
+            $this->addProjectMember($projectMember);
+        }
+
+        $this->collProjectMembers = $projectMembers;
+        $this->collProjectMembersPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related ProjectMember objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related ProjectMember objects.
+     * @throws PropelException
+     */
+    public function countProjectMembers(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collProjectMembersPartial && !$this->isNew();
+        if (null === $this->collProjectMembers || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collProjectMembers) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getProjectMembers());
+            }
+
+            $query = ChildProjectMemberQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByPerson($this)
+                ->count($con);
+        }
+
+        return count($this->collProjectMembers);
+    }
+
+    /**
+     * Method called to associate a ChildProjectMember object to this object
+     * through the ChildProjectMember foreign key attribute.
+     *
+     * @param  ChildProjectMember $l ChildProjectMember
+     * @return $this|\Person The current object (for fluent API support)
+     */
+    public function addProjectMember(ChildProjectMember $l)
+    {
+        if ($this->collProjectMembers === null) {
+            $this->initProjectMembers();
+            $this->collProjectMembersPartial = true;
+        }
+
+        if (!$this->collProjectMembers->contains($l)) {
+            $this->doAddProjectMember($l);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildProjectMember $projectMember The ChildProjectMember object to add.
+     */
+    protected function doAddProjectMember(ChildProjectMember $projectMember)
+    {
+        $this->collProjectMembers[]= $projectMember;
+        $projectMember->setPerson($this);
+    }
+
+    /**
+     * @param  ChildProjectMember $projectMember The ChildProjectMember object to remove.
+     * @return $this|ChildPerson The current object (for fluent API support)
+     */
+    public function removeProjectMember(ChildProjectMember $projectMember)
+    {
+        if ($this->getProjectMembers()->contains($projectMember)) {
+            $pos = $this->collProjectMembers->search($projectMember);
+            $this->collProjectMembers->remove($pos);
+            if (null === $this->projectMembersScheduledForDeletion) {
+                $this->projectMembersScheduledForDeletion = clone $this->collProjectMembers;
+                $this->projectMembersScheduledForDeletion->clear();
+            }
+            $this->projectMembersScheduledForDeletion[]= clone $projectMember;
+            $projectMember->setPerson(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Person is new, it will return
+     * an empty collection; or if this Person has previously
+     * been saved, it will retrieve related ProjectMembers from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Person.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildProjectMember[] List of ChildProjectMember objects
+     */
+    public function getProjectMembersJoinProject(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildProjectMemberQuery::create(null, $criteria);
+        $query->joinWith('Project', $joinBehavior);
+
+        return $this->getProjectMembers($query, $con);
     }
 
     /**
@@ -1129,6 +1796,7 @@ abstract class Person implements ActiveRecordInterface
         $this->id = null;
         $this->name = null;
         $this->full_name = null;
+        $this->email = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
@@ -1147,11 +1815,23 @@ abstract class Person implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
+            if ($this->collEmployees) {
+                foreach ($this->collEmployees as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collProjectMembers) {
+                foreach ($this->collProjectMembers as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->singleUser) {
                 $this->singleUser->clearAllReferences($deep);
             }
         } // if ($deep)
 
+        $this->collEmployees = null;
+        $this->collProjectMembers = null;
         $this->singleUser = null;
     }
 

@@ -59,7 +59,7 @@ class TaskTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 7;
+    const NUM_COLUMNS = 11;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class TaskTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 7;
+    const NUM_HYDRATE_COLUMNS = 11;
 
     /**
      * the column name for the id field
@@ -92,19 +92,39 @@ class TaskTableMap extends TableMap
     const COL_ASSIGNEE = 'tasks.assignee';
 
     /**
-     * the column name for the description field
+     * the column name for the project field
      */
-    const COL_DESCRIPTION = 'tasks.description';
-
-    /**
-     * the column name for the creation_date field
-     */
-    const COL_CREATION_DATE = 'tasks.creation_date';
+    const COL_PROJECT = 'tasks.project';
 
     /**
      * the column name for the start_date field
      */
     const COL_START_DATE = 'tasks.start_date';
+
+    /**
+     * the column name for the estimated_time field
+     */
+    const COL_ESTIMATED_TIME = 'tasks.estimated_time';
+
+    /**
+     * the column name for the priority field
+     */
+    const COL_PRIORITY = 'tasks.priority';
+
+    /**
+     * the column name for the time_created field
+     */
+    const COL_TIME_CREATED = 'tasks.time_created';
+
+    /**
+     * the column name for the time_completed field
+     */
+    const COL_TIME_COMPLETED = 'tasks.time_completed';
+
+    /**
+     * the column name for the description field
+     */
+    const COL_DESCRIPTION = 'tasks.description';
 
     /**
      * The default string format for model objects of the related table
@@ -118,11 +138,11 @@ class TaskTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Title', 'Owner', 'Assignee', 'Description', 'CreationDate', 'StartDate', ),
-        self::TYPE_CAMELNAME     => array('id', 'title', 'owner', 'assignee', 'description', 'creationDate', 'startDate', ),
-        self::TYPE_COLNAME       => array(TaskTableMap::COL_ID, TaskTableMap::COL_TITLE, TaskTableMap::COL_OWNER, TaskTableMap::COL_ASSIGNEE, TaskTableMap::COL_DESCRIPTION, TaskTableMap::COL_CREATION_DATE, TaskTableMap::COL_START_DATE, ),
-        self::TYPE_FIELDNAME     => array('id', 'title', 'owner', 'assignee', 'description', 'creation_date', 'start_date', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('Id', 'Title', 'OwnerId', 'AssigneeId', 'ProjectId', 'StartDate', 'EstimatedTime', 'Priority', 'TimeCreated', 'TimeCompleted', 'Description', ),
+        self::TYPE_CAMELNAME     => array('id', 'title', 'ownerId', 'assigneeId', 'projectId', 'startDate', 'estimatedTime', 'priority', 'timeCreated', 'timeCompleted', 'description', ),
+        self::TYPE_COLNAME       => array(TaskTableMap::COL_ID, TaskTableMap::COL_TITLE, TaskTableMap::COL_OWNER, TaskTableMap::COL_ASSIGNEE, TaskTableMap::COL_PROJECT, TaskTableMap::COL_START_DATE, TaskTableMap::COL_ESTIMATED_TIME, TaskTableMap::COL_PRIORITY, TaskTableMap::COL_TIME_CREATED, TaskTableMap::COL_TIME_COMPLETED, TaskTableMap::COL_DESCRIPTION, ),
+        self::TYPE_FIELDNAME     => array('id', 'title', 'owner', 'assignee', 'project', 'start_date', 'estimated_time', 'priority', 'time_created', 'time_completed', 'description', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
     );
 
     /**
@@ -132,11 +152,11 @@ class TaskTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Title' => 1, 'Owner' => 2, 'Assignee' => 3, 'Description' => 4, 'CreationDate' => 5, 'StartDate' => 6, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'title' => 1, 'owner' => 2, 'assignee' => 3, 'description' => 4, 'creationDate' => 5, 'startDate' => 6, ),
-        self::TYPE_COLNAME       => array(TaskTableMap::COL_ID => 0, TaskTableMap::COL_TITLE => 1, TaskTableMap::COL_OWNER => 2, TaskTableMap::COL_ASSIGNEE => 3, TaskTableMap::COL_DESCRIPTION => 4, TaskTableMap::COL_CREATION_DATE => 5, TaskTableMap::COL_START_DATE => 6, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'title' => 1, 'owner' => 2, 'assignee' => 3, 'description' => 4, 'creation_date' => 5, 'start_date' => 6, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Title' => 1, 'OwnerId' => 2, 'AssigneeId' => 3, 'ProjectId' => 4, 'StartDate' => 5, 'EstimatedTime' => 6, 'Priority' => 7, 'TimeCreated' => 8, 'TimeCompleted' => 9, 'Description' => 10, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'title' => 1, 'ownerId' => 2, 'assigneeId' => 3, 'projectId' => 4, 'startDate' => 5, 'estimatedTime' => 6, 'priority' => 7, 'timeCreated' => 8, 'timeCompleted' => 9, 'description' => 10, ),
+        self::TYPE_COLNAME       => array(TaskTableMap::COL_ID => 0, TaskTableMap::COL_TITLE => 1, TaskTableMap::COL_OWNER => 2, TaskTableMap::COL_ASSIGNEE => 3, TaskTableMap::COL_PROJECT => 4, TaskTableMap::COL_START_DATE => 5, TaskTableMap::COL_ESTIMATED_TIME => 6, TaskTableMap::COL_PRIORITY => 7, TaskTableMap::COL_TIME_CREATED => 8, TaskTableMap::COL_TIME_COMPLETED => 9, TaskTableMap::COL_DESCRIPTION => 10, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'title' => 1, 'owner' => 2, 'assignee' => 3, 'project' => 4, 'start_date' => 5, 'estimated_time' => 6, 'priority' => 7, 'time_created' => 8, 'time_completed' => 9, 'description' => 10, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
     );
 
     /**
@@ -158,12 +178,16 @@ class TaskTableMap extends TableMap
         $this->setPrimaryKeyMethodInfo('tasks_id_seq');
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('title', 'Title', 'VARCHAR', true, null, null);
-        $this->addForeignKey('owner', 'Owner', 'INTEGER', 'users', 'person', true, null, null);
-        $this->addForeignKey('assignee', 'Assignee', 'INTEGER', 'users', 'person', true, null, null);
+        $this->addColumn('title', 'Title', 'VARCHAR', true, 128, null);
+        $this->addForeignKey('owner', 'OwnerId', 'INTEGER', 'users', 'person', true, null, null);
+        $this->addForeignKey('assignee', 'AssigneeId', 'INTEGER', 'users', 'person', true, null, null);
+        $this->addForeignKey('project', 'ProjectId', 'INTEGER', 'projects', 'id', false, null, null);
+        $this->addColumn('start_date', 'StartDate', 'DATE', true, null, 'now()');
+        $this->addColumn('estimated_time', 'EstimatedTime', 'DOUBLE', false, 53, 0);
+        $this->addColumn('priority', 'Priority', 'INTEGER', true, null, null);
+        $this->addColumn('time_created', 'TimeCreated', 'TIMESTAMP', true, null, 'now()');
+        $this->addColumn('time_completed', 'TimeCompleted', 'TIMESTAMP', false, null, null);
         $this->addColumn('description', 'Description', 'LONGVARCHAR', false, null, null);
-        $this->addColumn('creation_date', 'CreationDate', 'DATE', true, null, 'now()');
-        $this->addColumn('start_date', 'StartDate', 'DATE', false, null, null);
     } // initialize()
 
     /**
@@ -171,21 +195,52 @@ class TaskTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('UserRelatedByAssignee', '\\User', RelationMap::MANY_TO_ONE, array (
+        $this->addRelation('UserRelatedByAssigneeId', '\\User', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':assignee',
     1 => ':person',
   ),
-), 'RESTRICT', 'CASCADE', null, false);
-        $this->addRelation('UserRelatedByOwner', '\\User', RelationMap::MANY_TO_ONE, array (
+), 'CASCADE', 'CASCADE', null, false);
+        $this->addRelation('UserRelatedByOwnerId', '\\User', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':owner',
     1 => ':person',
   ),
 ), 'RESTRICT', 'CASCADE', null, false);
+        $this->addRelation('Project', '\\Project', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':project',
+    1 => ':id',
+  ),
+), 'CASCADE', 'CASCADE', null, false);
+        $this->addRelation('TaskComment', '\\TaskComment', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':task',
+    1 => ':id',
+  ),
+), 'CASCADE', 'CASCADE', 'TaskComments', false);
+        $this->addRelation('TaskTimeRecord', '\\TaskTimeRecord', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':task',
+    1 => ':id',
+  ),
+), 'CASCADE', 'CASCADE', 'TaskTimeRecords', false);
     } // buildRelations()
+    /**
+     * Method to invalidate the instance pool of all tables related to tasks     * by a foreign key with ON DELETE CASCADE
+     */
+    public static function clearRelatedInstancePool()
+    {
+        // Invalidate objects in related instance pools,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        TaskCommentTableMap::clearInstancePool();
+        TaskTimeRecordTableMap::clearInstancePool();
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -332,17 +387,25 @@ class TaskTableMap extends TableMap
             $criteria->addSelectColumn(TaskTableMap::COL_TITLE);
             $criteria->addSelectColumn(TaskTableMap::COL_OWNER);
             $criteria->addSelectColumn(TaskTableMap::COL_ASSIGNEE);
-            $criteria->addSelectColumn(TaskTableMap::COL_DESCRIPTION);
-            $criteria->addSelectColumn(TaskTableMap::COL_CREATION_DATE);
+            $criteria->addSelectColumn(TaskTableMap::COL_PROJECT);
             $criteria->addSelectColumn(TaskTableMap::COL_START_DATE);
+            $criteria->addSelectColumn(TaskTableMap::COL_ESTIMATED_TIME);
+            $criteria->addSelectColumn(TaskTableMap::COL_PRIORITY);
+            $criteria->addSelectColumn(TaskTableMap::COL_TIME_CREATED);
+            $criteria->addSelectColumn(TaskTableMap::COL_TIME_COMPLETED);
+            $criteria->addSelectColumn(TaskTableMap::COL_DESCRIPTION);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.title');
             $criteria->addSelectColumn($alias . '.owner');
             $criteria->addSelectColumn($alias . '.assignee');
-            $criteria->addSelectColumn($alias . '.description');
-            $criteria->addSelectColumn($alias . '.creation_date');
+            $criteria->addSelectColumn($alias . '.project');
             $criteria->addSelectColumn($alias . '.start_date');
+            $criteria->addSelectColumn($alias . '.estimated_time');
+            $criteria->addSelectColumn($alias . '.priority');
+            $criteria->addSelectColumn($alias . '.time_created');
+            $criteria->addSelectColumn($alias . '.time_completed');
+            $criteria->addSelectColumn($alias . '.description');
         }
     }
 

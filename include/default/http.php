@@ -25,38 +25,32 @@
 		// Handle JSON Encoding Output
 		//
 
-		$app['events']->on('Router::actionComplete', function($action, $context) {
-			$response = $context['response'];
+		$app['events']->on('Router::end', function($action, $data) {
+			$response = $data['response'];
 
 			if ($response->headers->get('Content-Type') == 'application/json') {
 					$response->set(json_encode($response->get()));
 			}
 		});
 
-
-		//
-		// Return before gateway and request setup if we're CLI
-		//
-
-		if ($app->checkSAPI(['cli', 'embed'])) {
-			return;
-		}
-
-
 		//
 		// Spin up our gateway and populate the request
 		//
 
-		$request = $broker->make('Inkwell\HTTP\Resource\Request');
-		$gateway = $broker->make('Inkwell\HTTP\Gateway\Server');
+		$response = $broker->make('Inkwell\HTTP\Resource\Response');
+		$request  = $broker->make('Inkwell\HTTP\Resource\Request');
+		$gateway  = $broker->make('Inkwell\HTTP\Gateway\Server');
 
-		$gateway->populate($request);
+		if (!$app->checkSAPI('cli', 'embed')) {
+			$gateway->populate($request);
+		}
 
 
 		//
 		// Set up providers
 		//
 
-		$app['gateway'] = $gateway;
-		$app['request'] = $request;
+		$app['gateway']  = $gateway;
+		$app['request']  = $request;
+		$app['response'] = $response;
 	});

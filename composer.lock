@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1863017c304b901bc2cd827e965679df",
+    "hash": "42374c345761e740f5d4e78eaf3fd4b1",
     "packages": [
         {
             "name": "aura/accept",
@@ -272,6 +272,64 @@
             "time": "2015-01-21 05:57:39"
         },
         {
+            "name": "dotink/flourish-message",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dotink/flourish-message.git",
+                "reference": "0f063e1ffbae98d489987905202896b994f068f1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dotink/flourish-message/zipball/0f063e1ffbae98d489987905202896b994f068f1",
+                "reference": "0f063e1ffbae98d489987905202896b994f068f1",
+                "shasum": ""
+            },
+            "require": {
+                "imarc/opus": "dev-master",
+                "php": ">=5.4.0"
+            },
+            "type": "opus-package",
+            "extra": {
+                "opus": {
+                    "dotink/inkwell-2.0": {
+                        "src": "library/flourish"
+                    }
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "license": [
+                "AGPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Will Bond",
+                    "email": "will@wbond.net",
+                    "role": "Original Author"
+                },
+                {
+                    "name": "Matthew J. Sahagian",
+                    "email": "msahagian@dotink.org",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Session based messaging for alerts and notifications",
+            "keywords": [
+                "alert",
+                "message",
+                "notification"
+            ],
+            "support": {
+                "source": "https://github.com/dotink/flourish-message/tree/master",
+                "issues": "https://github.com/dotink/flourish-message/issues"
+            },
+            "time": "2015-01-30 20:10:25"
+        },
+        {
             "name": "dotink/flourish-text",
             "version": "dev-master",
             "source": {
@@ -384,6 +442,60 @@
             "time": "2015-01-21 05:57:47"
         },
         {
+            "name": "dotink/inkwell-auth",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dotink/inkwell-auth.git",
+                "reference": "d768e52a7915acca2f6454ae495b3471020e87f9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dotink/inkwell-auth/zipball/d768e52a7915acca2f6454ae495b3471020e87f9",
+                "reference": "d768e52a7915acca2f6454ae495b3471020e87f9",
+                "shasum": ""
+            },
+            "require": {
+                "imarc/auth": "dev-master",
+                "php": ">=5.4.0"
+            },
+            "type": "opus-package",
+            "extra": {
+                "opus": {
+                    "inkwell/framework": {
+                        "plugin/config": "config",
+                        "plugin/include": "include"
+                    }
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "license": [
+                "AGPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Matthew J. Sahagian",
+                    "email": "matt@imarc.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "RBAC/ACLs for inKWell",
+            "keywords": [
+                "acl",
+                "auth",
+                "rbac"
+            ],
+            "support": {
+                "source": "https://github.com/dotink/inkwell-auth/tree/master",
+                "issues": "https://github.com/dotink/inkwell-auth/issues"
+            },
+            "time": "2015-01-31 01:44:20"
+        },
+        {
             "name": "dotink/inkwell-controller",
             "version": "dev-master",
             "source": {
@@ -444,12 +556,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-core.git",
-                "reference": "b6890da90d7aa1bbaf708bff28349442a066a0e8"
+                "reference": "2422d684b41568b9b4a09cf8d0138c50d93074af"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-core/zipball/b6890da90d7aa1bbaf708bff28349442a066a0e8",
-                "reference": "b6890da90d7aa1bbaf708bff28349442a066a0e8",
+                "url": "https://api.github.com/repos/dotink/inkwell-core/zipball/2422d684b41568b9b4a09cf8d0138c50d93074af",
+                "reference": "2422d684b41568b9b4a09cf8d0138c50d93074af",
                 "shasum": ""
             },
             "require": {
@@ -490,7 +602,7 @@
                 "source": "https://github.com/dotink/inkwell-core/tree/master",
                 "issues": "https://github.com/dotink/inkwell-core/issues"
             },
-            "time": "2015-01-25 02:14:16"
+            "time": "2015-01-31 01:42:17"
         },
         {
             "name": "dotink/inkwell-events",
@@ -551,12 +663,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-html.git",
-                "reference": "4714b4783d3c3c094995e411d01cdda9825648e9"
+                "reference": "533be4a17d4a947c7ed00aa4c88f6e5395a645c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-html/zipball/4714b4783d3c3c094995e411d01cdda9825648e9",
-                "reference": "4714b4783d3c3c094995e411d01cdda9825648e9",
+                "url": "https://api.github.com/repos/dotink/inkwell-html/zipball/533be4a17d4a947c7ed00aa4c88f6e5395a645c3",
+                "reference": "533be4a17d4a947c7ed00aa4c88f6e5395a645c3",
                 "shasum": ""
             },
             "require": {
@@ -596,7 +708,7 @@
                 "source": "https://github.com/dotink/inkwell-html/tree/master",
                 "issues": "https://github.com/dotink/inkwell-html/issues"
             },
-            "time": "2015-01-24 11:46:18"
+            "time": "2015-01-30 04:31:43"
         },
         {
             "name": "dotink/inkwell-http",
@@ -604,12 +716,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-http.git",
-                "reference": "026717146ba3814b953951b6232dad42a0f6dedf"
+                "reference": "e5e77b9de6b96a9e4ecca70553660b87cce36fc4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-http/zipball/026717146ba3814b953951b6232dad42a0f6dedf",
-                "reference": "026717146ba3814b953951b6232dad42a0f6dedf",
+                "url": "https://api.github.com/repos/dotink/inkwell-http/zipball/e5e77b9de6b96a9e4ecca70553660b87cce36fc4",
+                "reference": "e5e77b9de6b96a9e4ecca70553660b87cce36fc4",
                 "shasum": ""
             },
             "require": {
@@ -652,7 +764,7 @@
                 "source": "https://github.com/dotink/inkwell-http/tree/master",
                 "issues": "https://github.com/dotink/inkwell-http/issues"
             },
-            "time": "2015-01-23 06:41:03"
+            "time": "2015-02-01 02:52:39"
         },
         {
             "name": "dotink/inkwell-orm",
@@ -714,12 +826,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-routing.git",
-                "reference": "ab89be0200d17ad68f302ddbd250dd29211d43b5"
+                "reference": "6bf9d7044a4880ba8f5c3dc0687ce9de35357cab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-routing/zipball/ab89be0200d17ad68f302ddbd250dd29211d43b5",
-                "reference": "ab89be0200d17ad68f302ddbd250dd29211d43b5",
+                "url": "https://api.github.com/repos/dotink/inkwell-routing/zipball/6bf9d7044a4880ba8f5c3dc0687ce9de35357cab",
+                "reference": "6bf9d7044a4880ba8f5c3dc0687ce9de35357cab",
                 "shasum": ""
             },
             "require": {
@@ -762,7 +874,7 @@
                 "source": "https://github.com/dotink/inkwell-routing/tree/master",
                 "issues": "https://github.com/dotink/inkwell-routing/issues"
             },
-            "time": "2015-01-23 04:47:24"
+            "time": "2015-02-01 02:52:12"
         },
         {
             "name": "dotink/inkwell-transport",
@@ -820,12 +932,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-view.git",
-                "reference": "92a334d94ac608e4b556c580382b0ae363f9081a"
+                "reference": "fe948464910336e3bc15d8a2c04c8cc2d9dad6b5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-view/zipball/92a334d94ac608e4b556c580382b0ae363f9081a",
-                "reference": "92a334d94ac608e4b556c580382b0ae363f9081a",
+                "url": "https://api.github.com/repos/dotink/inkwell-view/zipball/fe948464910336e3bc15d8a2c04c8cc2d9dad6b5",
+                "reference": "fe948464910336e3bc15d8a2c04c8cc2d9dad6b5",
                 "shasum": ""
             },
             "require": {
@@ -838,7 +950,8 @@
                 "opus": {
                     "inkwell/framework": {
                         "plugin/config": "config",
-                        "plugin/include": "include"
+                        "plugin/include": "include",
+                        "plugin/user": "user"
                     }
                 }
             },
@@ -866,7 +979,7 @@
                 "source": "https://github.com/dotink/inkwell-view/tree/master",
                 "issues": "https://github.com/dotink/inkwell-view/issues"
             },
-            "time": "2015-01-23 20:44:30"
+            "time": "2015-02-01 06:21:48"
         },
         {
             "name": "filp/whoops",
@@ -927,17 +1040,114 @@
             "time": "2015-01-22 15:11:11"
         },
         {
+            "name": "firebase/php-jwt",
+            "version": "dev-master",
+            "target-dir": "Firebase/PHP-JWT",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/firebase/php-jwt.git",
+                "reference": "83b8899cb73d85d648af93f37ec0ac89f4a5bbae"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/83b8899cb73d85d648af93f37ec0ac89f4a5bbae",
+                "reference": "83b8899cb73d85d648af93f37ec0ac89f4a5bbae",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "Authentication/",
+                    "Exceptions/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Neuman Vong",
+                    "email": "neuman+pear@twilio.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Anant Narayanan",
+                    "email": "anant@php.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",
+            "homepage": "https://github.com/firebase/php-jwt",
+            "time": "2014-11-18 17:58:25"
+        },
+        {
+            "name": "imarc/auth",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/imarc/auth.git",
+                "reference": "eef3a81e7705e97dd0b068aa9d12251bfef8ea90"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/imarc/auth/zipball/eef3a81e7705e97dd0b068aa9d12251bfef8ea90",
+                "reference": "eef3a81e7705e97dd0b068aa9d12251bfef8ea90",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jeff Turcotte",
+                    "email": "jeff@imarc.net",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Matthew J. Sahagian",
+                    "email": "matt@imarc.net",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Brian Tam",
+                    "email": "brian@imarc.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "RBAC and ACLs",
+            "keywords": [
+                "acl",
+                "auth",
+                "rbac"
+            ],
+            "time": "2015-01-30 07:01:24"
+        },
+        {
             "name": "imarc/opus",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/imarc/opus.git",
-                "reference": "1417d16c5d47db5321ed5fe4098b32961034718c"
+                "reference": "ad0ec947db9798b3ad2f61062ec399062907aa94"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/imarc/opus/zipball/1417d16c5d47db5321ed5fe4098b32961034718c",
-                "reference": "1417d16c5d47db5321ed5fe4098b32961034718c",
+                "url": "https://api.github.com/repos/imarc/opus/zipball/ad0ec947db9798b3ad2f61062ec399062907aa94",
+                "reference": "ad0ec947db9798b3ad2f61062ec399062907aa94",
                 "shasum": ""
             },
             "require": {
@@ -968,7 +1178,49 @@
             "keywords": [
                 "package management"
             ],
-            "time": "2014-05-15 17:07:04"
+            "time": "2015-01-27 05:05:03"
+        },
+        {
+            "name": "ircmaxell/password-compat",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ircmaxell/password_compat.git",
+                "reference": "de01fa521702990ed066446f2931914272336444"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ircmaxell/password_compat/zipball/de01fa521702990ed066446f2931914272336444",
+                "reference": "de01fa521702990ed066446f2931914272336444",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.*"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "lib/password.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Anthony Ferrara",
+                    "email": "ircmaxell@php.net",
+                    "homepage": "http://blog.ircmaxell.com"
+                }
+            ],
+            "description": "A compatibility library for the proposed simplified password hashing algorithm: https://wiki.php.net/rfc/password_hash",
+            "homepage": "https://github.com/ircmaxell/password_compat",
+            "keywords": [
+                "hashing",
+                "password"
+            ],
+            "time": "2015-01-09 18:38:25"
         },
         {
             "name": "propel/propel",
@@ -976,12 +1228,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/propelorm/Propel2.git",
-                "reference": "0e05013166c6a7ecf7292a7fcb3504852a68f837"
+                "reference": "eba539966bafca4f2992307ad6364da40eb4a9ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/propelorm/Propel2/zipball/0e05013166c6a7ecf7292a7fcb3504852a68f837",
-                "reference": "0e05013166c6a7ecf7292a7fcb3504852a68f837",
+                "url": "https://api.github.com/repos/propelorm/Propel2/zipball/eba539966bafca4f2992307ad6364da40eb4a9ff",
+                "reference": "eba539966bafca4f2992307ad6364da40eb4a9ff",
                 "shasum": ""
             },
             "require": {
@@ -1033,7 +1285,7 @@
                 "orm",
                 "persistence"
             ],
-            "time": "2015-01-21 17:07:20"
+            "time": "2015-01-29 20:08:07"
         },
         {
             "name": "psr/log",
@@ -1400,12 +1652,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Validator.git",
-                "reference": "cf64561cb4d85a3ed68a81594a526ab8c3dad0d1"
+                "reference": "ec6acefefe36233f36fa60ebc86d1900d4315dca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Validator/zipball/cf64561cb4d85a3ed68a81594a526ab8c3dad0d1",
-                "reference": "cf64561cb4d85a3ed68a81594a526ab8c3dad0d1",
+                "url": "https://api.github.com/repos/symfony/Validator/zipball/ec6acefefe36233f36fa60ebc86d1900d4315dca",
+                "reference": "ec6acefefe36233f36fa60ebc86d1900d4315dca",
                 "shasum": ""
             },
             "require": {
@@ -1461,7 +1713,7 @@
             ],
             "description": "Symfony Validator Component",
             "homepage": "http://symfony.com",
-            "time": "2015-01-25 04:39:35"
+            "time": "2015-01-26 15:52:15"
         },
         {
             "name": "symfony/yaml",
@@ -1526,7 +1778,11 @@
         "dotink/inkwell-html": 20,
         "dotink/inkwell-orm": 20,
         "dotink/flourish-text": 20,
-        "dotink/flourish-datetime": 20
+        "dotink/flourish-datetime": 20,
+        "dotink/inkwell-auth": 20,
+        "firebase/php-jwt": 20,
+        "dotink/flourish-message": 20,
+        "ircmaxell/password-compat": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

@@ -22,64 +22,96 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildTaskQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildTaskQuery orderByTitle($order = Criteria::ASC) Order by the title column
- * @method     ChildTaskQuery orderByOwner($order = Criteria::ASC) Order by the owner column
- * @method     ChildTaskQuery orderByAssignee($order = Criteria::ASC) Order by the assignee column
- * @method     ChildTaskQuery orderByDescription($order = Criteria::ASC) Order by the description column
- * @method     ChildTaskQuery orderByCreationDate($order = Criteria::ASC) Order by the creation_date column
+ * @method     ChildTaskQuery orderByOwnerId($order = Criteria::ASC) Order by the owner column
+ * @method     ChildTaskQuery orderByAssigneeId($order = Criteria::ASC) Order by the assignee column
+ * @method     ChildTaskQuery orderByProjectId($order = Criteria::ASC) Order by the project column
  * @method     ChildTaskQuery orderByStartDate($order = Criteria::ASC) Order by the start_date column
+ * @method     ChildTaskQuery orderByEstimatedTime($order = Criteria::ASC) Order by the estimated_time column
+ * @method     ChildTaskQuery orderByPriority($order = Criteria::ASC) Order by the priority column
+ * @method     ChildTaskQuery orderByTimeCreated($order = Criteria::ASC) Order by the time_created column
+ * @method     ChildTaskQuery orderByTimeCompleted($order = Criteria::ASC) Order by the time_completed column
+ * @method     ChildTaskQuery orderByDescription($order = Criteria::ASC) Order by the description column
  *
  * @method     ChildTaskQuery groupById() Group by the id column
  * @method     ChildTaskQuery groupByTitle() Group by the title column
- * @method     ChildTaskQuery groupByOwner() Group by the owner column
- * @method     ChildTaskQuery groupByAssignee() Group by the assignee column
- * @method     ChildTaskQuery groupByDescription() Group by the description column
- * @method     ChildTaskQuery groupByCreationDate() Group by the creation_date column
+ * @method     ChildTaskQuery groupByOwnerId() Group by the owner column
+ * @method     ChildTaskQuery groupByAssigneeId() Group by the assignee column
+ * @method     ChildTaskQuery groupByProjectId() Group by the project column
  * @method     ChildTaskQuery groupByStartDate() Group by the start_date column
+ * @method     ChildTaskQuery groupByEstimatedTime() Group by the estimated_time column
+ * @method     ChildTaskQuery groupByPriority() Group by the priority column
+ * @method     ChildTaskQuery groupByTimeCreated() Group by the time_created column
+ * @method     ChildTaskQuery groupByTimeCompleted() Group by the time_completed column
+ * @method     ChildTaskQuery groupByDescription() Group by the description column
  *
  * @method     ChildTaskQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildTaskQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method     ChildTaskQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildTaskQuery leftJoinUserRelatedByAssignee($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserRelatedByAssignee relation
- * @method     ChildTaskQuery rightJoinUserRelatedByAssignee($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserRelatedByAssignee relation
- * @method     ChildTaskQuery innerJoinUserRelatedByAssignee($relationAlias = null) Adds a INNER JOIN clause to the query using the UserRelatedByAssignee relation
+ * @method     ChildTaskQuery leftJoinUserRelatedByAssigneeId($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserRelatedByAssigneeId relation
+ * @method     ChildTaskQuery rightJoinUserRelatedByAssigneeId($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserRelatedByAssigneeId relation
+ * @method     ChildTaskQuery innerJoinUserRelatedByAssigneeId($relationAlias = null) Adds a INNER JOIN clause to the query using the UserRelatedByAssigneeId relation
  *
- * @method     ChildTaskQuery leftJoinUserRelatedByOwner($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserRelatedByOwner relation
- * @method     ChildTaskQuery rightJoinUserRelatedByOwner($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserRelatedByOwner relation
- * @method     ChildTaskQuery innerJoinUserRelatedByOwner($relationAlias = null) Adds a INNER JOIN clause to the query using the UserRelatedByOwner relation
+ * @method     ChildTaskQuery leftJoinUserRelatedByOwnerId($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserRelatedByOwnerId relation
+ * @method     ChildTaskQuery rightJoinUserRelatedByOwnerId($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserRelatedByOwnerId relation
+ * @method     ChildTaskQuery innerJoinUserRelatedByOwnerId($relationAlias = null) Adds a INNER JOIN clause to the query using the UserRelatedByOwnerId relation
  *
- * @method     \UserQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     ChildTaskQuery leftJoinProject($relationAlias = null) Adds a LEFT JOIN clause to the query using the Project relation
+ * @method     ChildTaskQuery rightJoinProject($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Project relation
+ * @method     ChildTaskQuery innerJoinProject($relationAlias = null) Adds a INNER JOIN clause to the query using the Project relation
+ *
+ * @method     ChildTaskQuery leftJoinTaskComment($relationAlias = null) Adds a LEFT JOIN clause to the query using the TaskComment relation
+ * @method     ChildTaskQuery rightJoinTaskComment($relationAlias = null) Adds a RIGHT JOIN clause to the query using the TaskComment relation
+ * @method     ChildTaskQuery innerJoinTaskComment($relationAlias = null) Adds a INNER JOIN clause to the query using the TaskComment relation
+ *
+ * @method     ChildTaskQuery leftJoinTaskTimeRecord($relationAlias = null) Adds a LEFT JOIN clause to the query using the TaskTimeRecord relation
+ * @method     ChildTaskQuery rightJoinTaskTimeRecord($relationAlias = null) Adds a RIGHT JOIN clause to the query using the TaskTimeRecord relation
+ * @method     ChildTaskQuery innerJoinTaskTimeRecord($relationAlias = null) Adds a INNER JOIN clause to the query using the TaskTimeRecord relation
+ *
+ * @method     \UserQuery|\ProjectQuery|\TaskCommentQuery|\TaskTimeRecordQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildTask findOne(ConnectionInterface $con = null) Return the first ChildTask matching the query
  * @method     ChildTask findOneOrCreate(ConnectionInterface $con = null) Return the first ChildTask matching the query, or a new ChildTask object populated from the query conditions when no match is found
  *
  * @method     ChildTask findOneById(int $id) Return the first ChildTask filtered by the id column
  * @method     ChildTask findOneByTitle(string $title) Return the first ChildTask filtered by the title column
- * @method     ChildTask findOneByOwner(int $owner) Return the first ChildTask filtered by the owner column
- * @method     ChildTask findOneByAssignee(int $assignee) Return the first ChildTask filtered by the assignee column
- * @method     ChildTask findOneByDescription(string $description) Return the first ChildTask filtered by the description column
- * @method     ChildTask findOneByCreationDate(string $creation_date) Return the first ChildTask filtered by the creation_date column
- * @method     ChildTask findOneByStartDate(string $start_date) Return the first ChildTask filtered by the start_date column *
+ * @method     ChildTask findOneByOwnerId(int $owner) Return the first ChildTask filtered by the owner column
+ * @method     ChildTask findOneByAssigneeId(int $assignee) Return the first ChildTask filtered by the assignee column
+ * @method     ChildTask findOneByProjectId(int $project) Return the first ChildTask filtered by the project column
+ * @method     ChildTask findOneByStartDate(string $start_date) Return the first ChildTask filtered by the start_date column
+ * @method     ChildTask findOneByEstimatedTime(double $estimated_time) Return the first ChildTask filtered by the estimated_time column
+ * @method     ChildTask findOneByPriority(int $priority) Return the first ChildTask filtered by the priority column
+ * @method     ChildTask findOneByTimeCreated(string $time_created) Return the first ChildTask filtered by the time_created column
+ * @method     ChildTask findOneByTimeCompleted(string $time_completed) Return the first ChildTask filtered by the time_completed column
+ * @method     ChildTask findOneByDescription(string $description) Return the first ChildTask filtered by the description column *
 
  * @method     ChildTask requirePk($key, ConnectionInterface $con = null) Return the ChildTask by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildTask requireOne(ConnectionInterface $con = null) Return the first ChildTask matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildTask requireOneById(int $id) Return the first ChildTask filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildTask requireOneByTitle(string $title) Return the first ChildTask filtered by the title column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildTask requireOneByOwner(int $owner) Return the first ChildTask filtered by the owner column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildTask requireOneByAssignee(int $assignee) Return the first ChildTask filtered by the assignee column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildTask requireOneByDescription(string $description) Return the first ChildTask filtered by the description column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildTask requireOneByCreationDate(string $creation_date) Return the first ChildTask filtered by the creation_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildTask requireOneByOwnerId(int $owner) Return the first ChildTask filtered by the owner column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildTask requireOneByAssigneeId(int $assignee) Return the first ChildTask filtered by the assignee column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildTask requireOneByProjectId(int $project) Return the first ChildTask filtered by the project column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildTask requireOneByStartDate(string $start_date) Return the first ChildTask filtered by the start_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildTask requireOneByEstimatedTime(double $estimated_time) Return the first ChildTask filtered by the estimated_time column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildTask requireOneByPriority(int $priority) Return the first ChildTask filtered by the priority column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildTask requireOneByTimeCreated(string $time_created) Return the first ChildTask filtered by the time_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildTask requireOneByTimeCompleted(string $time_completed) Return the first ChildTask filtered by the time_completed column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildTask requireOneByDescription(string $description) Return the first ChildTask filtered by the description column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildTask[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildTask objects based on current ModelCriteria
  * @method     ChildTask[]|ObjectCollection findById(int $id) Return ChildTask objects filtered by the id column
  * @method     ChildTask[]|ObjectCollection findByTitle(string $title) Return ChildTask objects filtered by the title column
- * @method     ChildTask[]|ObjectCollection findByOwner(int $owner) Return ChildTask objects filtered by the owner column
- * @method     ChildTask[]|ObjectCollection findByAssignee(int $assignee) Return ChildTask objects filtered by the assignee column
- * @method     ChildTask[]|ObjectCollection findByDescription(string $description) Return ChildTask objects filtered by the description column
- * @method     ChildTask[]|ObjectCollection findByCreationDate(string $creation_date) Return ChildTask objects filtered by the creation_date column
+ * @method     ChildTask[]|ObjectCollection findByOwnerId(int $owner) Return ChildTask objects filtered by the owner column
+ * @method     ChildTask[]|ObjectCollection findByAssigneeId(int $assignee) Return ChildTask objects filtered by the assignee column
+ * @method     ChildTask[]|ObjectCollection findByProjectId(int $project) Return ChildTask objects filtered by the project column
  * @method     ChildTask[]|ObjectCollection findByStartDate(string $start_date) Return ChildTask objects filtered by the start_date column
+ * @method     ChildTask[]|ObjectCollection findByEstimatedTime(double $estimated_time) Return ChildTask objects filtered by the estimated_time column
+ * @method     ChildTask[]|ObjectCollection findByPriority(int $priority) Return ChildTask objects filtered by the priority column
+ * @method     ChildTask[]|ObjectCollection findByTimeCreated(string $time_created) Return ChildTask objects filtered by the time_created column
+ * @method     ChildTask[]|ObjectCollection findByTimeCompleted(string $time_completed) Return ChildTask objects filtered by the time_completed column
+ * @method     ChildTask[]|ObjectCollection findByDescription(string $description) Return ChildTask objects filtered by the description column
  * @method     ChildTask[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -172,7 +204,7 @@ abstract class TaskQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, title, owner, assignee, description, creation_date, start_date FROM tasks WHERE id = :p0';
+        $sql = 'SELECT id, title, owner, assignee, project, start_date, estimated_time, priority, time_created, time_completed, description FROM tasks WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -337,14 +369,14 @@ abstract class TaskQuery extends ModelCriteria
      *
      * Example usage:
      * <code>
-     * $query->filterByOwner(1234); // WHERE owner = 1234
-     * $query->filterByOwner(array(12, 34)); // WHERE owner IN (12, 34)
-     * $query->filterByOwner(array('min' => 12)); // WHERE owner > 12
+     * $query->filterByOwnerId(1234); // WHERE owner = 1234
+     * $query->filterByOwnerId(array(12, 34)); // WHERE owner IN (12, 34)
+     * $query->filterByOwnerId(array('min' => 12)); // WHERE owner > 12
      * </code>
      *
-     * @see       filterByUserRelatedByOwner()
+     * @see       filterByUserRelatedByOwnerId()
      *
-     * @param     mixed $owner The value to use as filter.
+     * @param     mixed $ownerId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -352,16 +384,16 @@ abstract class TaskQuery extends ModelCriteria
      *
      * @return $this|ChildTaskQuery The current query, for fluid interface
      */
-    public function filterByOwner($owner = null, $comparison = null)
+    public function filterByOwnerId($ownerId = null, $comparison = null)
     {
-        if (is_array($owner)) {
+        if (is_array($ownerId)) {
             $useMinMax = false;
-            if (isset($owner['min'])) {
-                $this->addUsingAlias(TaskTableMap::COL_OWNER, $owner['min'], Criteria::GREATER_EQUAL);
+            if (isset($ownerId['min'])) {
+                $this->addUsingAlias(TaskTableMap::COL_OWNER, $ownerId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($owner['max'])) {
-                $this->addUsingAlias(TaskTableMap::COL_OWNER, $owner['max'], Criteria::LESS_EQUAL);
+            if (isset($ownerId['max'])) {
+                $this->addUsingAlias(TaskTableMap::COL_OWNER, $ownerId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -372,7 +404,7 @@ abstract class TaskQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(TaskTableMap::COL_OWNER, $owner, $comparison);
+        return $this->addUsingAlias(TaskTableMap::COL_OWNER, $ownerId, $comparison);
     }
 
     /**
@@ -380,14 +412,14 @@ abstract class TaskQuery extends ModelCriteria
      *
      * Example usage:
      * <code>
-     * $query->filterByAssignee(1234); // WHERE assignee = 1234
-     * $query->filterByAssignee(array(12, 34)); // WHERE assignee IN (12, 34)
-     * $query->filterByAssignee(array('min' => 12)); // WHERE assignee > 12
+     * $query->filterByAssigneeId(1234); // WHERE assignee = 1234
+     * $query->filterByAssigneeId(array(12, 34)); // WHERE assignee IN (12, 34)
+     * $query->filterByAssigneeId(array('min' => 12)); // WHERE assignee > 12
      * </code>
      *
-     * @see       filterByUserRelatedByAssignee()
+     * @see       filterByUserRelatedByAssigneeId()
      *
-     * @param     mixed $assignee The value to use as filter.
+     * @param     mixed $assigneeId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -395,16 +427,16 @@ abstract class TaskQuery extends ModelCriteria
      *
      * @return $this|ChildTaskQuery The current query, for fluid interface
      */
-    public function filterByAssignee($assignee = null, $comparison = null)
+    public function filterByAssigneeId($assigneeId = null, $comparison = null)
     {
-        if (is_array($assignee)) {
+        if (is_array($assigneeId)) {
             $useMinMax = false;
-            if (isset($assignee['min'])) {
-                $this->addUsingAlias(TaskTableMap::COL_ASSIGNEE, $assignee['min'], Criteria::GREATER_EQUAL);
+            if (isset($assigneeId['min'])) {
+                $this->addUsingAlias(TaskTableMap::COL_ASSIGNEE, $assigneeId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($assignee['max'])) {
-                $this->addUsingAlias(TaskTableMap::COL_ASSIGNEE, $assignee['max'], Criteria::LESS_EQUAL);
+            if (isset($assigneeId['max'])) {
+                $this->addUsingAlias(TaskTableMap::COL_ASSIGNEE, $assigneeId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -415,51 +447,22 @@ abstract class TaskQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(TaskTableMap::COL_ASSIGNEE, $assignee, $comparison);
+        return $this->addUsingAlias(TaskTableMap::COL_ASSIGNEE, $assigneeId, $comparison);
     }
 
     /**
-     * Filter the query on the description column
+     * Filter the query on the project column
      *
      * Example usage:
      * <code>
-     * $query->filterByDescription('fooValue');   // WHERE description = 'fooValue'
-     * $query->filterByDescription('%fooValue%'); // WHERE description LIKE '%fooValue%'
+     * $query->filterByProjectId(1234); // WHERE project = 1234
+     * $query->filterByProjectId(array(12, 34)); // WHERE project IN (12, 34)
+     * $query->filterByProjectId(array('min' => 12)); // WHERE project > 12
      * </code>
      *
-     * @param     string $description The value to use as filter.
-     *              Accepts wildcards (* and % trigger a LIKE)
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @see       filterByProject()
      *
-     * @return $this|ChildTaskQuery The current query, for fluid interface
-     */
-    public function filterByDescription($description = null, $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($description)) {
-                $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $description)) {
-                $description = str_replace('*', '%', $description);
-                $comparison = Criteria::LIKE;
-            }
-        }
-
-        return $this->addUsingAlias(TaskTableMap::COL_DESCRIPTION, $description, $comparison);
-    }
-
-    /**
-     * Filter the query on the creation_date column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByCreationDate('2011-03-14'); // WHERE creation_date = '2011-03-14'
-     * $query->filterByCreationDate('now'); // WHERE creation_date = '2011-03-14'
-     * $query->filterByCreationDate(array('max' => 'yesterday')); // WHERE creation_date > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $creationDate The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
+     * @param     mixed $projectId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -467,16 +470,16 @@ abstract class TaskQuery extends ModelCriteria
      *
      * @return $this|ChildTaskQuery The current query, for fluid interface
      */
-    public function filterByCreationDate($creationDate = null, $comparison = null)
+    public function filterByProjectId($projectId = null, $comparison = null)
     {
-        if (is_array($creationDate)) {
+        if (is_array($projectId)) {
             $useMinMax = false;
-            if (isset($creationDate['min'])) {
-                $this->addUsingAlias(TaskTableMap::COL_CREATION_DATE, $creationDate['min'], Criteria::GREATER_EQUAL);
+            if (isset($projectId['min'])) {
+                $this->addUsingAlias(TaskTableMap::COL_PROJECT, $projectId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($creationDate['max'])) {
-                $this->addUsingAlias(TaskTableMap::COL_CREATION_DATE, $creationDate['max'], Criteria::LESS_EQUAL);
+            if (isset($projectId['max'])) {
+                $this->addUsingAlias(TaskTableMap::COL_PROJECT, $projectId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -487,7 +490,7 @@ abstract class TaskQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(TaskTableMap::COL_CREATION_DATE, $creationDate, $comparison);
+        return $this->addUsingAlias(TaskTableMap::COL_PROJECT, $projectId, $comparison);
     }
 
     /**
@@ -534,6 +537,203 @@ abstract class TaskQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the estimated_time column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByEstimatedTime(1234); // WHERE estimated_time = 1234
+     * $query->filterByEstimatedTime(array(12, 34)); // WHERE estimated_time IN (12, 34)
+     * $query->filterByEstimatedTime(array('min' => 12)); // WHERE estimated_time > 12
+     * </code>
+     *
+     * @param     mixed $estimatedTime The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildTaskQuery The current query, for fluid interface
+     */
+    public function filterByEstimatedTime($estimatedTime = null, $comparison = null)
+    {
+        if (is_array($estimatedTime)) {
+            $useMinMax = false;
+            if (isset($estimatedTime['min'])) {
+                $this->addUsingAlias(TaskTableMap::COL_ESTIMATED_TIME, $estimatedTime['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($estimatedTime['max'])) {
+                $this->addUsingAlias(TaskTableMap::COL_ESTIMATED_TIME, $estimatedTime['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(TaskTableMap::COL_ESTIMATED_TIME, $estimatedTime, $comparison);
+    }
+
+    /**
+     * Filter the query on the priority column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByPriority(1234); // WHERE priority = 1234
+     * $query->filterByPriority(array(12, 34)); // WHERE priority IN (12, 34)
+     * $query->filterByPriority(array('min' => 12)); // WHERE priority > 12
+     * </code>
+     *
+     * @param     mixed $priority The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildTaskQuery The current query, for fluid interface
+     */
+    public function filterByPriority($priority = null, $comparison = null)
+    {
+        if (is_array($priority)) {
+            $useMinMax = false;
+            if (isset($priority['min'])) {
+                $this->addUsingAlias(TaskTableMap::COL_PRIORITY, $priority['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($priority['max'])) {
+                $this->addUsingAlias(TaskTableMap::COL_PRIORITY, $priority['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(TaskTableMap::COL_PRIORITY, $priority, $comparison);
+    }
+
+    /**
+     * Filter the query on the time_created column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByTimeCreated('2011-03-14'); // WHERE time_created = '2011-03-14'
+     * $query->filterByTimeCreated('now'); // WHERE time_created = '2011-03-14'
+     * $query->filterByTimeCreated(array('max' => 'yesterday')); // WHERE time_created > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $timeCreated The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildTaskQuery The current query, for fluid interface
+     */
+    public function filterByTimeCreated($timeCreated = null, $comparison = null)
+    {
+        if (is_array($timeCreated)) {
+            $useMinMax = false;
+            if (isset($timeCreated['min'])) {
+                $this->addUsingAlias(TaskTableMap::COL_TIME_CREATED, $timeCreated['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($timeCreated['max'])) {
+                $this->addUsingAlias(TaskTableMap::COL_TIME_CREATED, $timeCreated['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(TaskTableMap::COL_TIME_CREATED, $timeCreated, $comparison);
+    }
+
+    /**
+     * Filter the query on the time_completed column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByTimeCompleted('2011-03-14'); // WHERE time_completed = '2011-03-14'
+     * $query->filterByTimeCompleted('now'); // WHERE time_completed = '2011-03-14'
+     * $query->filterByTimeCompleted(array('max' => 'yesterday')); // WHERE time_completed > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $timeCompleted The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildTaskQuery The current query, for fluid interface
+     */
+    public function filterByTimeCompleted($timeCompleted = null, $comparison = null)
+    {
+        if (is_array($timeCompleted)) {
+            $useMinMax = false;
+            if (isset($timeCompleted['min'])) {
+                $this->addUsingAlias(TaskTableMap::COL_TIME_COMPLETED, $timeCompleted['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($timeCompleted['max'])) {
+                $this->addUsingAlias(TaskTableMap::COL_TIME_COMPLETED, $timeCompleted['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(TaskTableMap::COL_TIME_COMPLETED, $timeCompleted, $comparison);
+    }
+
+    /**
+     * Filter the query on the description column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByDescription('fooValue');   // WHERE description = 'fooValue'
+     * $query->filterByDescription('%fooValue%'); // WHERE description LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $description The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildTaskQuery The current query, for fluid interface
+     */
+    public function filterByDescription($description = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($description)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $description)) {
+                $description = str_replace('*', '%', $description);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(TaskTableMap::COL_DESCRIPTION, $description, $comparison);
+    }
+
+    /**
      * Filter the query by a related \User object
      *
      * @param \User|ObjectCollection $user The related object(s) to use as filter
@@ -543,35 +743,35 @@ abstract class TaskQuery extends ModelCriteria
      *
      * @return ChildTaskQuery The current query, for fluid interface
      */
-    public function filterByUserRelatedByAssignee($user, $comparison = null)
+    public function filterByUserRelatedByAssigneeId($user, $comparison = null)
     {
         if ($user instanceof \User) {
             return $this
-                ->addUsingAlias(TaskTableMap::COL_ASSIGNEE, $user->getId(), $comparison);
+                ->addUsingAlias(TaskTableMap::COL_ASSIGNEE, $user->getPersonId(), $comparison);
         } elseif ($user instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(TaskTableMap::COL_ASSIGNEE, $user->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(TaskTableMap::COL_ASSIGNEE, $user->toKeyValue('PrimaryKey', 'PersonId'), $comparison);
         } else {
-            throw new PropelException('filterByUserRelatedByAssignee() only accepts arguments of type \User or Collection');
+            throw new PropelException('filterByUserRelatedByAssigneeId() only accepts arguments of type \User or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the UserRelatedByAssignee relation
+     * Adds a JOIN clause to the query using the UserRelatedByAssigneeId relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildTaskQuery The current query, for fluid interface
      */
-    public function joinUserRelatedByAssignee($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinUserRelatedByAssigneeId($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('UserRelatedByAssignee');
+        $relationMap = $tableMap->getRelation('UserRelatedByAssigneeId');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -586,14 +786,14 @@ abstract class TaskQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'UserRelatedByAssignee');
+            $this->addJoinObject($join, 'UserRelatedByAssigneeId');
         }
 
         return $this;
     }
 
     /**
-     * Use the UserRelatedByAssignee relation User object
+     * Use the UserRelatedByAssigneeId relation User object
      *
      * @see useQuery()
      *
@@ -603,11 +803,11 @@ abstract class TaskQuery extends ModelCriteria
      *
      * @return \UserQuery A secondary query class using the current class as primary query
      */
-    public function useUserRelatedByAssigneeQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useUserRelatedByAssigneeIdQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinUserRelatedByAssignee($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'UserRelatedByAssignee', '\UserQuery');
+            ->joinUserRelatedByAssigneeId($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'UserRelatedByAssigneeId', '\UserQuery');
     }
 
     /**
@@ -620,35 +820,35 @@ abstract class TaskQuery extends ModelCriteria
      *
      * @return ChildTaskQuery The current query, for fluid interface
      */
-    public function filterByUserRelatedByOwner($user, $comparison = null)
+    public function filterByUserRelatedByOwnerId($user, $comparison = null)
     {
         if ($user instanceof \User) {
             return $this
-                ->addUsingAlias(TaskTableMap::COL_OWNER, $user->getId(), $comparison);
+                ->addUsingAlias(TaskTableMap::COL_OWNER, $user->getPersonId(), $comparison);
         } elseif ($user instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(TaskTableMap::COL_OWNER, $user->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(TaskTableMap::COL_OWNER, $user->toKeyValue('PrimaryKey', 'PersonId'), $comparison);
         } else {
-            throw new PropelException('filterByUserRelatedByOwner() only accepts arguments of type \User or Collection');
+            throw new PropelException('filterByUserRelatedByOwnerId() only accepts arguments of type \User or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the UserRelatedByOwner relation
+     * Adds a JOIN clause to the query using the UserRelatedByOwnerId relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildTaskQuery The current query, for fluid interface
      */
-    public function joinUserRelatedByOwner($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinUserRelatedByOwnerId($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('UserRelatedByOwner');
+        $relationMap = $tableMap->getRelation('UserRelatedByOwnerId');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -663,14 +863,14 @@ abstract class TaskQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'UserRelatedByOwner');
+            $this->addJoinObject($join, 'UserRelatedByOwnerId');
         }
 
         return $this;
     }
 
     /**
-     * Use the UserRelatedByOwner relation User object
+     * Use the UserRelatedByOwnerId relation User object
      *
      * @see useQuery()
      *
@@ -680,11 +880,234 @@ abstract class TaskQuery extends ModelCriteria
      *
      * @return \UserQuery A secondary query class using the current class as primary query
      */
-    public function useUserRelatedByOwnerQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useUserRelatedByOwnerIdQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinUserRelatedByOwner($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'UserRelatedByOwner', '\UserQuery');
+            ->joinUserRelatedByOwnerId($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'UserRelatedByOwnerId', '\UserQuery');
+    }
+
+    /**
+     * Filter the query by a related \Project object
+     *
+     * @param \Project|ObjectCollection $project The related object(s) to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return ChildTaskQuery The current query, for fluid interface
+     */
+    public function filterByProject($project, $comparison = null)
+    {
+        if ($project instanceof \Project) {
+            return $this
+                ->addUsingAlias(TaskTableMap::COL_PROJECT, $project->getId(), $comparison);
+        } elseif ($project instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(TaskTableMap::COL_PROJECT, $project->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterByProject() only accepts arguments of type \Project or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Project relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildTaskQuery The current query, for fluid interface
+     */
+    public function joinProject($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Project');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Project');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Project relation Project object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \ProjectQuery A secondary query class using the current class as primary query
+     */
+    public function useProjectQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinProject($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Project', '\ProjectQuery');
+    }
+
+    /**
+     * Filter the query by a related \TaskComment object
+     *
+     * @param \TaskComment|ObjectCollection $taskComment the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildTaskQuery The current query, for fluid interface
+     */
+    public function filterByTaskComment($taskComment, $comparison = null)
+    {
+        if ($taskComment instanceof \TaskComment) {
+            return $this
+                ->addUsingAlias(TaskTableMap::COL_ID, $taskComment->getTaskId(), $comparison);
+        } elseif ($taskComment instanceof ObjectCollection) {
+            return $this
+                ->useTaskCommentQuery()
+                ->filterByPrimaryKeys($taskComment->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByTaskComment() only accepts arguments of type \TaskComment or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the TaskComment relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildTaskQuery The current query, for fluid interface
+     */
+    public function joinTaskComment($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('TaskComment');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'TaskComment');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the TaskComment relation TaskComment object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \TaskCommentQuery A secondary query class using the current class as primary query
+     */
+    public function useTaskCommentQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinTaskComment($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'TaskComment', '\TaskCommentQuery');
+    }
+
+    /**
+     * Filter the query by a related \TaskTimeRecord object
+     *
+     * @param \TaskTimeRecord|ObjectCollection $taskTimeRecord the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildTaskQuery The current query, for fluid interface
+     */
+    public function filterByTaskTimeRecord($taskTimeRecord, $comparison = null)
+    {
+        if ($taskTimeRecord instanceof \TaskTimeRecord) {
+            return $this
+                ->addUsingAlias(TaskTableMap::COL_ID, $taskTimeRecord->getTaskId(), $comparison);
+        } elseif ($taskTimeRecord instanceof ObjectCollection) {
+            return $this
+                ->useTaskTimeRecordQuery()
+                ->filterByPrimaryKeys($taskTimeRecord->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByTaskTimeRecord() only accepts arguments of type \TaskTimeRecord or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the TaskTimeRecord relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildTaskQuery The current query, for fluid interface
+     */
+    public function joinTaskTimeRecord($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('TaskTimeRecord');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'TaskTimeRecord');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the TaskTimeRecord relation TaskTimeRecord object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \TaskTimeRecordQuery A secondary query class using the current class as primary query
+     */
+    public function useTaskTimeRecordQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinTaskTimeRecord($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'TaskTimeRecord', '\TaskTimeRecordQuery');
     }
 
     /**

@@ -93,8 +93,8 @@ class UserTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Password', ),
-        self::TYPE_CAMELNAME     => array('id', 'password', ),
+        self::TYPE_PHPNAME       => array('PersonId', 'Password', ),
+        self::TYPE_CAMELNAME     => array('personId', 'password', ),
         self::TYPE_COLNAME       => array(UserTableMap::COL_PERSON, UserTableMap::COL_PASSWORD, ),
         self::TYPE_FIELDNAME     => array('person', 'password', ),
         self::TYPE_NUM           => array(0, 1, )
@@ -107,8 +107,8 @@ class UserTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Password' => 1, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'password' => 1, ),
+        self::TYPE_PHPNAME       => array('PersonId' => 0, 'Password' => 1, ),
+        self::TYPE_CAMELNAME     => array('personId' => 0, 'password' => 1, ),
         self::TYPE_COLNAME       => array(UserTableMap::COL_PERSON => 0, UserTableMap::COL_PASSWORD => 1, ),
         self::TYPE_FIELDNAME     => array('person' => 0, 'password' => 1, ),
         self::TYPE_NUM           => array(0, 1, )
@@ -131,7 +131,7 @@ class UserTableMap extends TableMap
         $this->setPackage('');
         $this->setUseIdGenerator(false);
         // columns
-        $this->addForeignPrimaryKey('person', 'Id', 'INTEGER' , 'people', 'id', true, null, null);
+        $this->addForeignPrimaryKey('person', 'PersonId', 'INTEGER' , 'people', 'id', true, null, null);
         $this->addColumn('password', 'Password', 'VARCHAR', false, null, null);
     } // initialize()
 
@@ -147,20 +147,34 @@ class UserTableMap extends TableMap
     1 => ':id',
   ),
 ), 'RESTRICT', 'CASCADE', null, false);
-        $this->addRelation('TaskRelatedByAssignee', '\\Task', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':assignee',
-    1 => ':person',
-  ),
-), 'RESTRICT', 'CASCADE', 'TasksRelatedByAssignee', false);
-        $this->addRelation('TaskRelatedByOwner', '\\Task', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('TaskComment', '\\TaskComment', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':owner',
     1 => ':person',
   ),
-), 'RESTRICT', 'CASCADE', 'TasksRelatedByOwner', false);
+), 'RESTRICT', 'CASCADE', 'TaskComments', false);
+        $this->addRelation('TaskTimeRecord', '\\TaskTimeRecord', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':assignee',
+    1 => ':person',
+  ),
+), 'CASCADE', 'CASCADE', 'TaskTimeRecords', false);
+        $this->addRelation('TaskRelatedByAssigneeId', '\\Task', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':assignee',
+    1 => ':person',
+  ),
+), 'CASCADE', 'CASCADE', 'TasksRelatedByAssigneeId', false);
+        $this->addRelation('TaskRelatedByOwnerId', '\\Task', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':owner',
+    1 => ':person',
+  ),
+), 'RESTRICT', 'CASCADE', 'TasksRelatedByOwnerId', false);
     } // buildRelations()
 
     /**
@@ -175,6 +189,16 @@ class UserTableMap extends TableMap
             'delegate' => array('to' => 'people', ),
         );
     } // getBehaviors()
+    /**
+     * Method to invalidate the instance pool of all tables related to users     * by a foreign key with ON DELETE CASCADE
+     */
+    public static function clearRelatedInstancePool()
+    {
+        // Invalidate objects in related instance pools,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        TaskTimeRecordTableMap::clearInstancePool();
+        TaskTableMap::clearInstancePool();
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -192,11 +216,11 @@ class UserTableMap extends TableMap
     public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
         // If the PK cannot be derived from the row, return NULL.
-        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
+        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('PersonId', TableMap::TYPE_PHPNAME, $indexType)] === null) {
             return null;
         }
 
-        return (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+        return (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('PersonId', TableMap::TYPE_PHPNAME, $indexType)];
     }
 
     /**
@@ -216,7 +240,7 @@ class UserTableMap extends TableMap
         return (int) $row[
             $indexType == TableMap::TYPE_NUM
                 ? 0 + $offset
-                : self::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)
+                : self::translateFieldName('PersonId', TableMap::TYPE_PHPNAME, $indexType)
         ];
     }
 

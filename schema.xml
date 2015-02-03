@@ -1,27 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
 <database name="default" defaultIdMethod="native" defaultPhpNamingMethod="underscore">
+  <table name="companies" idMethod="native" phpName="Company">
+    <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
+  </table>
+  <table name="employees" idMethod="native" phpName="Employee">
+    <column name="person" phpName="PersonId" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="company" phpName="CompanyId" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="position" phpName="Position" type="VARCHAR" size="48"/>
+    <foreign-key foreignTable="companies" name="employees_company_fkey" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="company" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="people" name="employees_person_fkey" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="person" foreign="id"/>
+    </foreign-key>
+  </table>
   <table name="people" idMethod="native" phpName="Person">
     <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
-    <column name="full_name" phpName="FullName" type="VARCHAR" size="128"/>
+    <column name="full_name" phpName="FullName" type="VARCHAR" size="96"/>
+    <column name="email" phpName="Email" type="VARCHAR" size="128"/>
+  </table>
+  <table name="project_members" idMethod="native" phpName="ProjectMember">
+    <column name="person" phpName="PersonId" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="project" phpName="ProjectId" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="role" phpName="Role" type="VARCHAR" size="48"/>
+    <foreign-key foreignTable="people" name="project_members_person_fkey" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="person" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="projects" name="project_members_project_fkey" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="project" foreign="id"/>
+    </foreign-key>
+  </table>
+  <table name="projects" idMethod="native" phpName="Project">
+    <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="title" phpName="Title" type="VARCHAR" size="64" required="true"/>
+    <column name="parent" phpName="Parent" type="INTEGER"/>
+    <column name="description" phpName="Description" type="LONGVARCHAR"/>
+    <foreign-key foreignTable="projects" name="projects_parent_fkey" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="parent" foreign="id"/>
+    </foreign-key>
+  </table>
+  <table name="task_comments" idMethod="native" phpName="TaskComment">
+    <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="task" phpName="TaskId" type="INTEGER" required="true"/>
+    <column name="owner" phpName="Owner" type="INTEGER" required="true"/>
+    <column name="time_created" phpName="TimeCreated" type="TIMESTAMP" required="true" defaultExpr="now()"/>
+    <column name="content" phpName="Content" type="LONGVARCHAR"/>
+    <foreign-key foreignTable="users" name="task_comments_owner_fkey" onDelete="RESTRICT" onUpdate="CASCADE">
+      <reference local="owner" foreign="person"/>
+    </foreign-key>
+    <foreign-key foreignTable="tasks" name="task_comments_task_fkey" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="task" foreign="id"/>
+    </foreign-key>
+  </table>
+  <table name="task_time_records" idMethod="native" phpName="TaskTimeRecord">
+    <column name="task" phpName="TaskId" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="assignee" phpName="Assignee" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="time_entered" phpName="TimeEntered" type="TIMESTAMP" required="true" defaultExpr="now()"/>
+    <column name="required_time" phpName="RequiredTime" type="DOUBLE" size="53" defaultValue="0"/>
+    <foreign-key foreignTable="users" name="task_time_records_assignee_fkey" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="assignee" foreign="person"/>
+    </foreign-key>
+    <foreign-key foreignTable="tasks" name="task_time_records_task_fkey" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="task" foreign="id"/>
+    </foreign-key>
   </table>
   <table name="tasks" idMethod="native" phpName="Task">
     <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="title" phpName="Title" type="VARCHAR" required="true"/>
-    <column name="owner" phpName="Owner" type="INTEGER" required="true"/>
-    <column name="assignee" phpName="Assignee" type="INTEGER" required="true"/>
+    <column name="title" phpName="Title" type="VARCHAR" size="128" required="true"/>
+    <column name="owner" phpName="OwnerId" type="INTEGER" required="true"/>
+    <column name="assignee" phpName="AssigneeId" type="INTEGER" required="true"/>
+    <column name="project" phpName="ProjectId" type="INTEGER"/>
+    <column name="start_date" phpName="StartDate" type="DATE" required="true" defaultExpr="now()"/>
+    <column name="estimated_time" phpName="EstimatedTime" type="DOUBLE" size="53" defaultValue="0"/>
+    <column name="priority" phpName="Priority" type="INTEGER" required="true"/>
+    <column name="time_created" phpName="TimeCreated" type="TIMESTAMP" required="true" defaultExpr="now()"/>
+    <column name="time_completed" phpName="TimeCompleted" type="TIMESTAMP"/>
     <column name="description" phpName="Description" type="LONGVARCHAR"/>
-    <column name="creation_date" phpName="CreationDate" type="DATE" required="true" defaultExpr="now()"/>
-    <column name="start_date" phpName="StartDate" type="DATE"/>
-    <foreign-key foreignTable="users" name="tasks_assignee_fkey" onDelete="RESTRICT" onUpdate="CASCADE">
+    <foreign-key foreignTable="users" name="tasks_assignee_fkey" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="assignee" foreign="person"/>
     </foreign-key>
     <foreign-key foreignTable="users" name="tasks_owner_fkey" onDelete="RESTRICT" onUpdate="CASCADE">
       <reference local="owner" foreign="person"/>
     </foreign-key>
+    <foreign-key foreignTable="projects" name="tasks_project_fkey" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="project" foreign="id"/>
+    </foreign-key>
   </table>
   <table name="users" idMethod="native" phpName="User">
-    <column name="person" phpName="Id" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="person" phpName="PersonId" type="INTEGER" primaryKey="true" required="true"/>
     <column name="password" phpName="Password" type="VARCHAR"/>
     <foreign-key foreignTable="people" name="users_person_fkey" onDelete="RESTRICT" onUpdate="CASCADE">
       <reference local="person" foreign="id"/>

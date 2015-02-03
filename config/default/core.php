@@ -1,6 +1,15 @@
 <?php
 
 	return Affinity\Config::create([
+		//
+		// The system php command
+		//
+		'php' => 'php',
+
+		//
+		// The document root
+		//
+		'docroot' => 'public',
 
 		//
 		// The execution mode determines default operation for some processes which should
@@ -25,6 +34,15 @@
 		'debugging' => [
 			'destination' => NULL,
 			'error_level' => E_ALL,
+		],
+
+		//
+		// Session settings
+		//
+
+		'session' => [
+			'name' => 'IWSESSID',
+			'path' => sys_get_temp_dir()
 		],
 
 		//
