@@ -7,64 +7,6 @@
     "hash": "42374c345761e740f5d4e78eaf3fd4b1",
     "packages": [
         {
-            "name": "aura/accept",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/auraphp/Aura.Accept.git",
-                "reference": "fc5f086784f8dd03cfddd66f6682dd2226a9747f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/auraphp/Aura.Accept/zipball/fc5f086784f8dd03cfddd66f6682dd2226a9747f",
-                "reference": "fc5f086784f8dd03cfddd66f6682dd2226a9747f",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "type": "library",
-            "extra": {
-                "aura": {
-                    "type": "library",
-                    "config": {
-                        "common": "Aura\\Accept\\_Config\\Common"
-                    }
-                },
-                "branch-alias": {
-                    "dev-develop-2": "2.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Aura\\Accept\\": "src/",
-                    "Aura\\Accept\\_Config\\": "config/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-2-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Aura.Accept Contributors",
-                    "homepage": "https://github.com/auraphp/Aura.Accept/contributors"
-                }
-            ],
-            "description": "Provides content-negotiation tools using Accept* headers.",
-            "homepage": "https://github.com/auraphp/Aura.Accept/releases",
-            "keywords": [
-                "accept",
-                "accept-charset",
-                "accept-encoding",
-                "accept-language",
-                "content negotiation",
-                "content type",
-                "media type"
-            ],
-            "time": "2014-10-04 16:52:22"
-        },
-        {
             "name": "dotink/affinity",
             "version": "dev-master",
             "source": {
@@ -501,19 +443,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-controller.git",
-                "reference": "7e69c3d5cb130de405f8db192fd832266148e679"
+                "reference": "092d3c0dbc62bbcc5b095f6a293ed5e073c28350"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-controller/zipball/7e69c3d5cb130de405f8db192fd832266148e679",
-                "reference": "7e69c3d5cb130de405f8db192fd832266148e679",
+                "url": "https://api.github.com/repos/dotink/inkwell-controller/zipball/092d3c0dbc62bbcc5b095f6a293ed5e073c28350",
+                "reference": "092d3c0dbc62bbcc5b095f6a293ed5e073c28350",
                 "shasum": ""
             },
             "require": {
-                "aura/accept": "dev-master",
                 "dotink/flourish-core": "dev-master",
                 "imarc/opus": "dev-master",
-                "php": ">=5.4.0"
+                "php": ">=5.4.0",
+                "willdurand/negotiation": "@stable"
             },
             "type": "opus-package",
             "extra": {
@@ -548,7 +490,7 @@
                 "source": "https://github.com/dotink/inkwell-controller/tree/master",
                 "issues": "https://github.com/dotink/inkwell-controller/issues"
             },
-            "time": "2015-02-04 04:05:54"
+            "time": "2015-02-04 06:31:46"
         },
         {
             "name": "dotink/inkwell-core",
@@ -716,12 +658,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-http.git",
-                "reference": "35ab98465e0de0b6d839e73f17b5b7d5d8c0e097"
+                "reference": "f5392d673c0bb5d5b31f2771c46f1df33c759d87"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-http/zipball/35ab98465e0de0b6d839e73f17b5b7d5d8c0e097",
-                "reference": "35ab98465e0de0b6d839e73f17b5b7d5d8c0e097",
+                "url": "https://api.github.com/repos/dotink/inkwell-http/zipball/f5392d673c0bb5d5b31f2771c46f1df33c759d87",
+                "reference": "f5392d673c0bb5d5b31f2771c46f1df33c759d87",
                 "shasum": ""
             },
             "require": {
@@ -764,7 +706,7 @@
                 "source": "https://github.com/dotink/inkwell-http/tree/master",
                 "issues": "https://github.com/dotink/inkwell-http/issues"
             },
-            "time": "2015-02-04 04:03:57"
+            "time": "2015-02-04 06:43:01"
         },
         {
             "name": "dotink/inkwell-orm",
@@ -1761,6 +1703,55 @@
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
             "time": "2015-01-25 04:39:35"
+        },
+        {
+            "name": "willdurand/negotiation",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/willdurand/Negotiation.git",
+                "reference": "17b357c97175840200699012c8c536b4f6d43034"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/willdurand/Negotiation/zipball/17b357c97175840200699012c8c536b4f6d43034",
+                "reference": "17b357c97175840200699012c8c536b4f6d43034",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Negotiation": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "William Durand",
+                    "email": "william.durand1@gmail.com"
+                }
+            ],
+            "description": "Content Negotiation tools for PHP provided as a standalone library.",
+            "homepage": "http://williamdurand.fr/Negotiation/",
+            "keywords": [
+                "accept",
+                "content",
+                "format",
+                "header",
+                "negotiation"
+            ],
+            "time": "2014-10-29 23:21:49"
         }
     ],
     "packages-dev": [],

@@ -116,21 +116,22 @@ button {
 	display: none;
 }
 
-.day {
+.days > div {
+	box-sizing: border-box;
 	background: #f2f2f2;
 	border: solid 1px #666;
 	box-shadow: 5px 5px 20px rgba(0,0,0,.15);
 }
 
-.day h3 {
+.days h3 {
 	background: #a8c3da;
 }
 
-.day > ul {
+.days ul {
 	padding-bottom: 2em;
 }
 
-.day .sortable-ghost {
+.days .sortable-ghost {
 	background: #f6f6f6;
 }
 

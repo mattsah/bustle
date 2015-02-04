@@ -54,6 +54,7 @@
 		 */
 		public function handleCollection()
 		{
+			$mime_type    = $this->acceptMimeTypes(['application/json', 'text/html']);
 			$entity_class = $this->entity->camelize(TRUE)->compose();
 			$query_class  = $entity_class . 'Query';
 
@@ -97,7 +98,11 @@
 					break;
 			}
 
-			$this->router->redirect($this->request->headers->get('Referer'));
+			if ($mime_type == 'text/html') {
+				if ($referer = $this->request->headers->get('Referer')) {
+					$this->router->redirect($referer);
+				}
+			}
 
 			return $data;
 		}

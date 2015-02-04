@@ -19,15 +19,17 @@ form.account {
 }
 
 
-
-.day {
-	box-sizing: border-box;
-	width: 18%;
-	float: left;
-	margin-left: 2%;
+.days {
+	width: 100.5%;
 }
 
-.day:first-child {
+.days > div {
+	width: 19.5%;
+	float: left;
+	margin-left: .5%;
+}
+
+.days > div:first-child {
 	margin-left: 0;
 }
 
