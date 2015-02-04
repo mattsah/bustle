@@ -54,6 +54,7 @@ table {
  *
  */
 html {
+	font-size: 20px;
 	background: #c5d7ff url('/images/tile.png');
 	font-family: "Source Sans pro";
 	padding: 5%;
@@ -64,6 +65,15 @@ input[type=password] {
 	box-sizing: border-box;
 	border: none;
 	padding: .5em 1em;
+}
+
+button {
+	background: #eee;
+	padding: .5em 1em;
+}
+
+.tasks {
+	font-size: 16px;
 }
 
 .tasks h2,

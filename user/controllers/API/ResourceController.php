@@ -4,7 +4,8 @@
 	use Inkwell;
 	use Inkwell\Controller;
 	use Propel\Runtime\Map\TableMap;
-	use Dotink\Flourish;
+	use Dotink\Flourish\Text;
+	use iMarc\Auth\Manager as Auth;
 
 	/**
 	 *
@@ -26,8 +27,9 @@
 		/**
 		 *
 		 */
-		public function __construct(Flourish\Text $inflector)
+		public function __construct(Text $inflector, Auth $auth)
 		{
+			$this->auth      = $auth;
 			$this->inflector = $inflector;
 		}
 
@@ -55,7 +57,7 @@
 			$entity_class = $this->entity->camelize(TRUE)->compose();
 			$query_class  = $entity_class . 'Query';
 
-			switch ($this->authorizeMethod([HTTP\GET, HTTP\POST])) {
+			switch ($method = $this->authorizeMethod([HTTP\GET, HTTP\POST])) {
 				case HTTP\GET:
 					$query    = new $query_class();
 					$page     = $this->request->params->get('page',     1);
@@ -82,11 +84,20 @@
 					$entity = new $entity_class();
 					$values = $this->request->params->get();
 
-					$entity->fromArray($values, TableMap::TYPE_CAMELNAME)->save();
+					if ($entity instanceof ResourceInterface) {
+						$entity->$method($values, $this->auth);
+
+					} else {
+						$entity->fromArray($values, TableMap::TYPE_CAMELNAME)->save();
+					}
+
+					$entity->save();
 
 					$data = $entity->toArray(TableMap::TYPE_CAMELNAME, TRUE, array(), TRUE);
 					break;
 			}
+
+			$this->router->redirect($this->request->headers->get('Referer'));
 
 			return $data;
 		}

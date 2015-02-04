@@ -175,6 +175,20 @@ abstract class Task implements ActiveRecordInterface
      */
     protected $alreadyInSave = false;
 
+    // sortable behavior
+
+    /**
+     * Queries to be executed in the save transaction
+     * @var        array
+     */
+    protected $sortableQueries = array();
+
+    /**
+     * The old scope value.
+     * @var        int
+     */
+    protected $oldScope;
+
     /**
      * An array of objects scheduled for deletion.
      * @var ObjectCollection|ChildTaskComment[]
@@ -634,6 +648,9 @@ abstract class Task implements ActiveRecordInterface
         }
 
         if ($this->assignee !== $v) {
+            // sortable behavior
+            $this->oldScope[0] = $this->assignee;
+
             $this->assignee = $v;
             $this->modifiedColumns[TaskTableMap::COL_ASSIGNEE] = true;
         }
@@ -972,6 +989,11 @@ abstract class Task implements ActiveRecordInterface
             $deleteQuery = ChildTaskQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
+            // sortable behavior
+
+            ChildTaskQuery::sortableShiftRank(-1, $this->getPriority() + 1, null, $this->getScopeValue(), $con);
+            TaskTableMap::clearInstancePool();
+
             if ($ret) {
                 $deleteQuery->delete($con);
                 $this->postDelete($con);
@@ -1006,10 +1028,24 @@ abstract class Task implements ActiveRecordInterface
         return $con->transaction(function () use ($con) {
             $isInsert = $this->isNew();
             $ret = $this->preSave($con);
+            // sortable behavior
+            $this->processSortableQueries($con);
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
+                // sortable behavior
+                if (!$this->isColumnModified(TaskTableMap::RANK_COL)) {
+                    $this->setPriority(ChildTaskQuery::create()->getMaxRankArray($this->getScopeValue(), $con) + 1);
+                }
+
             } else {
                 $ret = $ret && $this->preUpdate($con);
+                // sortable behavior
+                // if scope has changed and rank was not modified (if yes, assuming superior action)
+                // insert object to the end of new scope and cleanup old one
+                if (($this->isColumnModified(TaskTableMap::COL_ASSIGNEE) OR $this->isColumnModified(TaskTableMap::COL_START_DATE)) && !$this->isColumnModified(TaskTableMap::RANK_COL)) { ChildTaskQuery::sortableShiftRank(-1, $this->getPriority() + 1, null, $this->oldScope, $con);
+                    $this->insertAtBottom($con);
+                }
+
             }
             if ($ret) {
                 $affectedRows = $this->doSave($con);
@@ -2537,6 +2573,386 @@ abstract class Task implements ActiveRecordInterface
     public function __toString()
     {
         return (string) $this->exportTo(TaskTableMap::DEFAULT_STRING_FORMAT);
+    }
+
+    // sortable behavior
+
+    /**
+     * Wrap the getter for rank value
+     *
+     * @return    int
+     */
+    public function getRank()
+    {
+        return $this->priority;
+    }
+
+    /**
+     * Wrap the setter for rank value
+     *
+     * @param     int
+     * @return    $this|ChildTask
+     */
+    public function setRank($v)
+    {
+        return $this->setPriority($v);
+    }
+
+    /**
+     * Wrap the getter for scope value
+     *
+     * @param boolean $returnNulls If true and all scope values are null, this will return null instead of a array full with nulls
+     *
+     * @return    mixed A array or a native type
+     */
+    public function getScopeValue($returnNulls = true)
+    {
+
+        $result = array();
+        $onlyNulls = true;
+
+        $onlyNulls &= null === ($result[] = $this->getAssigneeId());
+
+        $onlyNulls &= null === ($result[] = $this->getStartDate());
+
+
+        return $onlyNulls && $returnNulls ? null : $result;
+
+    }
+
+    /**
+     * Wrap the setter for scope value
+     *
+     * @param     mixed A array or a native type
+     * @return    $this|ChildTask
+     */
+    public function setScopeValue($v)
+    {
+
+        $this->setAssigneeId($v === null ? null : $v[0]);
+
+        $this->setStartDate($v === null ? null : $v[1]);
+
+    }
+
+    /**
+     * Check if the object is first in the list, i.e. if it has 1 for rank
+     *
+     * @return    boolean
+     */
+    public function isFirst()
+    {
+        return $this->getPriority() == 1;
+    }
+
+    /**
+     * Check if the object is last in the list, i.e. if its rank is the highest rank
+     *
+     * @param     ConnectionInterface  $con      optional connection
+     *
+     * @return    boolean
+     */
+    public function isLast(ConnectionInterface $con = null)
+    {
+        return $this->getPriority() == ChildTaskQuery::create()->getMaxRankArray($this->getScopeValue(), $con);
+    }
+
+    /**
+     * Get the next item in the list, i.e. the one for which rank is immediately higher
+     *
+     * @param     ConnectionInterface  $con      optional connection
+     *
+     * @return    ChildTask
+     */
+    public function getNext(ConnectionInterface $con = null)
+    {
+
+        $query = ChildTaskQuery::create();
+
+        $scope = $this->getScopeValue();
+
+        $scopeAssigneeId = $scope[0];
+        $scopeStartDate = $scope[1];
+
+
+        $query->filterByRank($this->getPriority() + 1, $scopeAssigneeId, $scopeStartDate);
+
+
+        return $query->findOne($con);
+    }
+
+    /**
+     * Get the previous item in the list, i.e. the one for which rank is immediately lower
+     *
+     * @param     ConnectionInterface  $con      optional connection
+     *
+     * @return    ChildTask
+     */
+    public function getPrevious(ConnectionInterface $con = null)
+    {
+
+        $query = ChildTaskQuery::create();
+
+        $scope = $this->getScopeValue();
+
+        $scopeAssigneeId = $scope[0];
+        $scopeStartDate = $scope[1];
+
+
+        $query->filterByRank($this->getPriority() - 1, $scopeAssigneeId, $scopeStartDate);
+
+
+        return $query->findOne($con);
+    }
+
+    /**
+     * Insert at specified rank
+     * The modifications are not persisted until the object is saved.
+     *
+     * @param     integer    $rank rank value
+     * @param     ConnectionInterface  $con      optional connection
+     *
+     * @return    $this|ChildTask the current object
+     *
+     * @throws    PropelException
+     */
+    public function insertAtRank($rank, ConnectionInterface $con = null)
+    {
+        $maxRank = ChildTaskQuery::create()->getMaxRankArray($this->getScopeValue(), $con);
+        if ($rank < 1 || $rank > $maxRank + 1) {
+            throw new PropelException('Invalid rank ' . $rank);
+        }
+        // move the object in the list, at the given rank
+        $this->setPriority($rank);
+        if ($rank != $maxRank + 1) {
+            // Keep the list modification query for the save() transaction
+            $this->sortableQueries []= array(
+                'callable'  => array('\TaskQuery', 'sortableShiftRank'),
+                'arguments' => array(1, $rank, null, $this->getScopeValue())
+            );
+        }
+
+        return $this;
+    }
+
+    /**
+     * Insert in the last rank
+     * The modifications are not persisted until the object is saved.
+     *
+     * @param ConnectionInterface $con optional connection
+     *
+     * @return    $this|ChildTask the current object
+     *
+     * @throws    PropelException
+     */
+    public function insertAtBottom(ConnectionInterface $con = null)
+    {
+        $this->setPriority(ChildTaskQuery::create()->getMaxRankArray($this->getScopeValue(), $con) + 1);
+
+        return $this;
+    }
+
+    /**
+     * Insert in the first rank
+     * The modifications are not persisted until the object is saved.
+     *
+     * @return    $this|ChildTask the current object
+     */
+    public function insertAtTop()
+    {
+        return $this->insertAtRank(1);
+    }
+
+    /**
+     * Move the object to a new rank, and shifts the rank
+     * Of the objects inbetween the old and new rank accordingly
+     *
+     * @param     integer   $newRank rank value
+     * @param     ConnectionInterface $con optional connection
+     *
+     * @return    $this|ChildTask the current object
+     *
+     * @throws    PropelException
+     */
+    public function moveToRank($newRank, ConnectionInterface $con = null)
+    {
+        if ($this->isNew()) {
+            throw new PropelException('New objects cannot be moved. Please use insertAtRank() instead');
+        }
+        if (null === $con) {
+            $con = Propel::getServiceContainer()->getWriteConnection(TaskTableMap::DATABASE_NAME);
+        }
+        if ($newRank < 1 || $newRank > ChildTaskQuery::create()->getMaxRankArray($this->getScopeValue(), $con)) {
+            throw new PropelException('Invalid rank ' . $newRank);
+        }
+
+        $oldRank = $this->getPriority();
+        if ($oldRank == $newRank) {
+            return $this;
+        }
+
+        $con->transaction(function () use ($con, $oldRank, $newRank) {
+            // shift the objects between the old and the new rank
+            $delta = ($oldRank < $newRank) ? -1 : 1;
+            ChildTaskQuery::sortableShiftRank($delta, min($oldRank, $newRank), max($oldRank, $newRank), $this->getScopeValue(), $con);
+
+            // move the object to its new rank
+            $this->setPriority($newRank);
+            $this->save($con);
+        });
+
+        return $this;
+    }
+
+    /**
+     * Exchange the rank of the object with the one passed as argument, and saves both objects
+     *
+     * @param     ChildTask $object
+     * @param     ConnectionInterface $con optional connection
+     *
+     * @return    $this|ChildTask the current object
+     *
+     * @throws Exception if the database cannot execute the two updates
+     */
+    public function swapWith($object, ConnectionInterface $con = null)
+    {
+        if (null === $con) {
+            $con = Propel::getServiceContainer()->getWriteConnection(TaskTableMap::DATABASE_NAME);
+        }
+        $con->transaction(function () use ($con, $object) {
+            $oldScope = $this->getScopeValue();
+            $newScope = $object->getScopeValue();
+            if ($oldScope != $newScope) {
+                $this->setScopeValue($newScope);
+                $object->setScopeValue($oldScope);
+            }
+            $oldRank = $this->getPriority();
+            $newRank = $object->getPriority();
+
+            $this->setPriority($newRank);
+            $object->setPriority($oldRank);
+
+            $this->save($con);
+            $object->save($con);
+        });
+
+        return $this;
+    }
+
+    /**
+     * Move the object higher in the list, i.e. exchanges its rank with the one of the previous object
+     *
+     * @param     ConnectionInterface $con optional connection
+     *
+     * @return    $this|ChildTask the current object
+     */
+    public function moveUp(ConnectionInterface $con = null)
+    {
+        if ($this->isFirst()) {
+            return $this;
+        }
+        if (null === $con) {
+            $con = Propel::getServiceContainer()->getWriteConnection(TaskTableMap::DATABASE_NAME);
+        }
+        $con->transaction(function () use ($con) {
+            $prev = $this->getPrevious($con);
+            $this->swapWith($prev, $con);
+        });
+
+        return $this;
+    }
+
+    /**
+     * Move the object higher in the list, i.e. exchanges its rank with the one of the next object
+     *
+     * @param     ConnectionInterface $con optional connection
+     *
+     * @return    $this|ChildTask the current object
+     */
+    public function moveDown(ConnectionInterface $con = null)
+    {
+        if ($this->isLast($con)) {
+            return $this;
+        }
+        if (null === $con) {
+            $con = Propel::getServiceContainer()->getWriteConnection(TaskTableMap::DATABASE_NAME);
+        }
+        $con->transaction(function () use ($con) {
+            $next = $this->getNext($con);
+            $this->swapWith($next, $con);
+        });
+
+        return $this;
+    }
+
+    /**
+     * Move the object to the top of the list
+     *
+     * @param     ConnectionInterface $con optional connection
+     *
+     * @return    $this|ChildTask the current object
+     */
+    public function moveToTop(ConnectionInterface $con = null)
+    {
+        if ($this->isFirst()) {
+            return $this;
+        }
+
+        return $this->moveToRank(1, $con);
+    }
+
+    /**
+     * Move the object to the bottom of the list
+     *
+     * @param     ConnectionInterface $con optional connection
+     *
+     * @return integer the old object's rank
+     */
+    public function moveToBottom(ConnectionInterface $con = null)
+    {
+        if ($this->isLast($con)) {
+            return false;
+        }
+        if (null === $con) {
+            $con = Propel::getServiceContainer()->getWriteConnection(TaskTableMap::DATABASE_NAME);
+        }
+
+        return $con->transaction(function () use ($con) {
+            $bottom = ChildTaskQuery::create()->getMaxRankArray($this->getScopeValue(), $con);
+
+            return $this->moveToRank($bottom, $con);
+        });
+    }
+
+    /**
+     * Removes the current object from the list (moves it to the null scope).
+     * The modifications are not persisted until the object is saved.
+     *
+     * @return    $this|ChildTask the current object
+     */
+    public function removeFromList()
+    {
+        // check if object is already removed
+        if ($this->getScopeValue() === null) {
+            throw new PropelException('Object is already removed (has null scope)');
+        }
+
+        // move the object to the end of null scope
+        $this->setScopeValue(null);
+
+        return $this;
+    }
+
+    /**
+     * Execute queries that were saved to be run inside the save transaction
+     */
+    protected function processSortableQueries($con)
+    {
+        foreach ($this->sortableQueries as $query) {
+            $query['arguments'][]= $con;
+            call_user_func_array($query['callable'], $query['arguments']);
+        }
+        $this->sortableQueries = array();
     }
 
     /**

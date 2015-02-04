@@ -19,7 +19,7 @@
     <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
     <column name="full_name" phpName="FullName" type="VARCHAR" size="96"/>
-    <column name="email" phpName="Email" type="VARCHAR" size="128"/>
+    <column name="email" phpName="Email" type="VARCHAR" size="128"/> 
   </table>
   <table name="project_members" idMethod="native" phpName="ProjectMember">
     <column name="person" phpName="PersonId" type="INTEGER" primaryKey="true" required="true"/>
@@ -87,6 +87,12 @@
     <foreign-key foreignTable="projects" name="tasks_project_fkey" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="project" foreign="id"/>
     </foreign-key>
+    <behavior name="sortable">
+        <parameter name="rank_column" value="priority" />
+        <parameter name="use_scope" value="true" />
+        <parameter name="scope_column" value="assignee" />
+        <parameter name="scope_column" value="start_date" />
+    </behavior>
   </table>
   <table name="users" idMethod="native" phpName="User">
     <column name="person" phpName="PersonId" type="INTEGER" primaryKey="true" required="true"/>

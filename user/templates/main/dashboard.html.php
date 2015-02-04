@@ -8,7 +8,7 @@
 			<h2>
 				Available Tasks
 			</h2>
-			<form method="post">
+			<form method="post" action="/api/v1/tasks/">
 				<input type="text" name="title" />
 				<button type="submit">Go</button>
 			</form>
@@ -19,15 +19,22 @@
 		</div>
 
 		<div>
-			<?php html::per($this('days'), function($i, $day) { ?>
-				<div id="<?= html::lower($day->format('l')) ?>" class="day" data-date="<?= html::out($day->format('Y-m-d')) ?>">
-					<h3><?= html::out($day->format('l')) ?></h3>
-					<form method="post">
-						<input type="text" name="title" />
+			<?php html::per($this("days"), function($i, $day) { ?>
+				<div id="<?= html::lower($day->format('l')) ?>" class="day" data-date="<?= $day->format('Y-m-d') ?>">
+					<h3><?= $day->format('l') ?></h3>
+					<form method="post" action="/api/v1/tasks/">
+						<input type="text"   name="title" />
+						<input type="hidden" name="startDate" value="<?= $day->format('Y-m-d') ?>" />
+						<input type="hidden" name="assignee" value="0" />
 						<button type="submit">Go</button>
 					</form>
 					<ul>
-
+						<?php html::per($this("tasks.{$day->format('U')}") ?: array(), function($i, $task) { ?>
+							<li>
+								<?= html::out($task->getTitle()) ?>
+								<a class="close" href="/tasks/<?= html::out($task->getId()) ?>">✖</a>
+							</li>
+						<?php }) ?>
 					</ul>
 				</div>
 			<?php }) ?>

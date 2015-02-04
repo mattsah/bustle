@@ -1,9 +1,13 @@
 <?php
 
 	use IW\HTTP;
+
 	use Inkwell\Controller;
+	use Inkwell\View;
 	use Inkwell\Auth;
+
 	use Dotink\Flourish;
+	use Dotink\Flourish\Date;
 
 	/**
 	 *
@@ -27,10 +31,11 @@
 		/**
 		 *
 		 */
-		public function __construct(Inkwell\View $view, Flourish\Date $date)
+		public function __construct(View $view, Date $date, TaskQuery $tasks)
 		{
-			$this->view = $view;
-			$this->date = $date;
+			$this->view  = $view;
+			$this->date  = $date;
+			$this->tasks = $tasks;
 		}
 
 
@@ -50,7 +55,6 @@
 		 */
 		public function home()
 		{
-
 			return $this->view;
 		}
 
@@ -68,8 +72,15 @@
 				$days[] = $date;
 			}
 
+			$tasks = $this->tasks->buildInDateRange(
+				reset($days)->format('Y-m-d'),
+				end($days)->format('Y-m-d'),
+				$this->date->format('Y-m-d')
+			);
+
 			$this->view->set([
-				'days' => $days
+				'days'  => $days,
+				'tasks' => $tasks
 			]);
 
 			return $this->view;

@@ -25,14 +25,6 @@
 
 
 		/**
-		 * The user's auth token (their session id)
-		 *
-		 * @var string
-		 */
-		private $token = NULL;
-
-
-		/**
 		 * The user provider responsible for actually doing user work
 		 */
 		private $userProvider = NULL;
@@ -106,8 +98,6 @@
 			//
 
 			if (!$this->router->isEntryAction([$this, __FUNCTION__])) {
-				$this->refreshUserCookie();
-
 				return $user ?: $this->userProvider->getUser();
 			}
 
@@ -211,11 +201,30 @@
 		/**
 		 *
 		 */
+		public function refresh()
+		{
+			if (!$this->login || $this->response->cookies->has('security_user')) {
+				return;
+			}
+
+			session_regenerate_id(TRUE);
+
+			$this->response->cookies->set('security_user', [
+				'login' => $this->login,
+				'token' => session_id(),
+				'limit' => strtotime('+30 minutes')
+			]);
+		}
+
+
+		/**
+		 *
+		 */
 		private function completeLogin($user)
 		{
 			$this->login = $this->userProvider->getLogin($user);
 
-			$this->refreshUserCookie();
+			$this->refresh();
 
 			$this->response->setStatusCode(HTTP\REDIRECT_SEE_OTHER);
 			$this->response->headers->set('Location', $this->request->getURL()->modify(
@@ -235,32 +244,12 @@
 
 			if (!$user || $user->limit < time() || session_id() != $user->token) {
 				return NULL;
+
 			} else {
 				$this->login = $user->login;
 			}
 
 			return $this->userProvider->getUser($this->login);
-		}
-
-
-		/**
-		 *
-		 */
-		private function refreshUserCookie()
-		{
-			if (!$this->login) {
-				return;
-			}
-
-			session_regenerate_id(TRUE);
-
-			$this->token = session_id();
-
-			$this->response->cookies->set('security_user', [
-				'login' => $this->login,
-				'token' => $this->token,
-				'limit' => strtotime('+30 minutes')
-			]);
 		}
 
 

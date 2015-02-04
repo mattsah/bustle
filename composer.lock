@@ -70,12 +70,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/affinity.git",
-                "reference": "2c68e6e42bbe4c2e2459459e72cec8d349699622"
+                "reference": "b8a535782c29a56f06cef3ff785ffd0c88dc8331"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/affinity/zipball/2c68e6e42bbe4c2e2459459e72cec8d349699622",
-                "reference": "2c68e6e42bbe4c2e2459459e72cec8d349699622",
+                "url": "https://api.github.com/repos/dotink/affinity/zipball/b8a535782c29a56f06cef3ff785ffd0c88dc8331",
+                "reference": "b8a535782c29a56f06cef3ff785ffd0c88dc8331",
                 "shasum": ""
             },
             "require": {
@@ -106,7 +106,7 @@
                 "source": "https://github.com/dotink/affinity/tree/master",
                 "issues": "https://github.com/dotink/affinity/issues"
             },
-            "time": "2015-01-21 06:38:27"
+            "time": "2015-02-03 21:28:35"
         },
         {
             "name": "dotink/flourish-collection",
@@ -114,12 +114,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/flourish-collection.git",
-                "reference": "0825ff30a6c991bc526be8752057328b2fa5cd41"
+                "reference": "b16cb0b9a3b15e83bb6e75e5d40c44a91cc50c91"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/flourish-collection/zipball/0825ff30a6c991bc526be8752057328b2fa5cd41",
-                "reference": "0825ff30a6c991bc526be8752057328b2fa5cd41",
+                "url": "https://api.github.com/repos/dotink/flourish-collection/zipball/b16cb0b9a3b15e83bb6e75e5d40c44a91cc50c91",
+                "reference": "b16cb0b9a3b15e83bb6e75e5d40c44a91cc50c91",
                 "shasum": ""
             },
             "require": {
@@ -162,7 +162,7 @@
                 "source": "https://github.com/dotink/flourish-collection/tree/master",
                 "issues": "https://github.com/dotink/flourish-collection/issues"
             },
-            "time": "2015-01-21 05:47:40"
+            "time": "2015-02-04 04:03:13"
         },
         {
             "name": "dotink/flourish-core",
@@ -501,12 +501,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-controller.git",
-                "reference": "2b398586f37c13f4bc5432a75603d186047419f0"
+                "reference": "7e69c3d5cb130de405f8db192fd832266148e679"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-controller/zipball/2b398586f37c13f4bc5432a75603d186047419f0",
-                "reference": "2b398586f37c13f4bc5432a75603d186047419f0",
+                "url": "https://api.github.com/repos/dotink/inkwell-controller/zipball/7e69c3d5cb130de405f8db192fd832266148e679",
+                "reference": "7e69c3d5cb130de405f8db192fd832266148e679",
                 "shasum": ""
             },
             "require": {
@@ -548,7 +548,7 @@
                 "source": "https://github.com/dotink/inkwell-controller/tree/master",
                 "issues": "https://github.com/dotink/inkwell-controller/issues"
             },
-            "time": "2015-01-24 11:37:41"
+            "time": "2015-02-04 04:05:54"
         },
         {
             "name": "dotink/inkwell-core",
@@ -716,12 +716,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-http.git",
-                "reference": "e5e77b9de6b96a9e4ecca70553660b87cce36fc4"
+                "reference": "35ab98465e0de0b6d839e73f17b5b7d5d8c0e097"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-http/zipball/e5e77b9de6b96a9e4ecca70553660b87cce36fc4",
-                "reference": "e5e77b9de6b96a9e4ecca70553660b87cce36fc4",
+                "url": "https://api.github.com/repos/dotink/inkwell-http/zipball/35ab98465e0de0b6d839e73f17b5b7d5d8c0e097",
+                "reference": "35ab98465e0de0b6d839e73f17b5b7d5d8c0e097",
                 "shasum": ""
             },
             "require": {
@@ -764,7 +764,7 @@
                 "source": "https://github.com/dotink/inkwell-http/tree/master",
                 "issues": "https://github.com/dotink/inkwell-http/issues"
             },
-            "time": "2015-02-01 02:52:39"
+            "time": "2015-02-04 04:03:57"
         },
         {
             "name": "dotink/inkwell-orm",
@@ -826,12 +826,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-routing.git",
-                "reference": "6bf9d7044a4880ba8f5c3dc0687ce9de35357cab"
+                "reference": "795af71db6b2a4dfc75a9df9789c2e637771e111"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-routing/zipball/6bf9d7044a4880ba8f5c3dc0687ce9de35357cab",
-                "reference": "6bf9d7044a4880ba8f5c3dc0687ce9de35357cab",
+                "url": "https://api.github.com/repos/dotink/inkwell-routing/zipball/795af71db6b2a4dfc75a9df9789c2e637771e111",
+                "reference": "795af71db6b2a4dfc75a9df9789c2e637771e111",
                 "shasum": ""
             },
             "require": {
@@ -874,7 +874,7 @@
                 "source": "https://github.com/dotink/inkwell-routing/tree/master",
                 "issues": "https://github.com/dotink/inkwell-routing/issues"
             },
-            "time": "2015-02-01 02:52:12"
+            "time": "2015-02-03 06:41:10"
         },
         {
             "name": "dotink/inkwell-transport",

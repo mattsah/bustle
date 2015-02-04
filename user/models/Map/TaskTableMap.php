@@ -131,6 +131,26 @@ class TaskTableMap extends TableMap
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
 
+    // sortable behavior
+    /**
+     * rank column
+     */
+    const RANK_COL = "tasks.priority";
+
+
+        /**
+    * If defined, the `SCOPE_COL` contains a json_encoded array with all columns.
+    * @var boolean
+    */
+    const MULTI_SCOPE_COL = true;
+
+
+    /**
+    * Scope column for the set
+    */
+    const SCOPE_COL = '["tasks.ASSIGNEE","tasks.START_DATE"]';
+
+
     /**
      * holds an array of fieldnames
      *
@@ -231,6 +251,19 @@ class TaskTableMap extends TableMap
   ),
 ), 'CASCADE', 'CASCADE', 'TaskTimeRecords', false);
     } // buildRelations()
+
+    /**
+     *
+     * Gets the list of behaviors registered for this table
+     *
+     * @return array Associative array (name => parameters) of behaviors
+     */
+    public function getBehaviors()
+    {
+        return array(
+            'sortable' => array('rank_column' => 'priority', 'use_scope' => 'true', 'scope_column' => 'assignee,start_date', ),
+        );
+    } // getBehaviors()
     /**
      * Method to invalidate the instance pool of all tables related to tasks     * by a foreign key with ON DELETE CASCADE
      */

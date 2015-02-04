@@ -1187,4 +1187,335 @@ abstract class TaskQuery extends ModelCriteria
         });
     }
 
+    // sortable behavior
+
+    /**
+     * Returns the objects in a certain list, from the list scope
+     *
+     * @param     int $scopeAssigneeId Scope value for column `AssigneeId`
+     * @param     string $scopeStartDate Scope value for column `StartDate`
+     *
+     * @return    $this|ChildTaskQuery The current query, for fluid interface
+     */
+    public function inList($scopeAssigneeId, $scopeStartDate)
+    {
+
+        $scope[] = $scopeAssigneeId;
+        $scope[] = $scopeStartDate;
+
+
+        static::sortableApplyScopeCriteria($this, $scope, 'addUsingAlias');
+
+        return $this;
+    }
+
+    /**
+     * Filter the query based on a rank in the list
+     *
+     * @param     integer   $rank rank
+     * @param     int $scopeAssigneeId Scope value for column `AssigneeId`
+     * @param     string $scopeStartDate Scope value for column `StartDate`
+
+     *
+     * @return    ChildTaskQuery The current query, for fluid interface
+     */
+    public function filterByRank($rank, $scopeAssigneeId, $scopeStartDate)
+    {
+
+        return $this
+            ->inList($scopeAssigneeId, $scopeStartDate)
+            ->addUsingAlias(TaskTableMap::RANK_COL, $rank, Criteria::EQUAL);
+    }
+
+    /**
+     * Order the query based on the rank in the list.
+     * Using the default $order, returns the item with the lowest rank first
+     *
+     * @param     string $order either Criteria::ASC (default) or Criteria::DESC
+     *
+     * @return    $this|ChildTaskQuery The current query, for fluid interface
+     */
+    public function orderByRank($order = Criteria::ASC)
+    {
+        $order = strtoupper($order);
+        switch ($order) {
+            case Criteria::ASC:
+                return $this->addAscendingOrderByColumn($this->getAliasedColName(TaskTableMap::RANK_COL));
+                break;
+            case Criteria::DESC:
+                return $this->addDescendingOrderByColumn($this->getAliasedColName(TaskTableMap::RANK_COL));
+                break;
+            default:
+                throw new \Propel\Runtime\Exception\PropelException('ChildTaskQuery::orderBy() only accepts "asc" or "desc" as argument');
+        }
+    }
+
+    /**
+     * Get an item from the list based on its rank
+     *
+     * @param     integer   $rank rank
+     * @param     int $scopeAssigneeId Scope value for column `AssigneeId`
+     * @param     string $scopeStartDate Scope value for column `StartDate`
+     * @param     ConnectionInterface $con optional connection
+     *
+     * @return    ChildTask
+     */
+    public function findOneByRank($rank, $scopeAssigneeId, $scopeStartDate, ConnectionInterface $con = null)
+    {
+
+        return $this
+            ->filterByRank($rank, $scopeAssigneeId, $scopeStartDate)
+            ->findOne($con);
+    }
+
+    /**
+     * Returns a list of objects
+     *
+     * @param     int $scopeAssigneeId Scope value for column `AssigneeId`
+     * @param     string $scopeStartDate Scope value for column `StartDate`
+
+     * @param      ConnectionInterface $con    Connection to use.
+     *
+     * @return     mixed the list of results, formatted by the current formatter
+     */
+    public function findList($scopeAssigneeId, $scopeStartDate, $con = null)
+    {
+
+        return $this
+            ->inList($scopeAssigneeId, $scopeStartDate)
+            ->orderByRank()
+            ->find($con);
+    }
+
+    /**
+     * Get the highest rank
+     *
+     * @param     int $scopeAssigneeId Scope value for column `AssigneeId`
+     * @param     string $scopeStartDate Scope value for column `StartDate`
+     * @param     ConnectionInterface optional connection
+     *
+     * @return    integer highest position
+     */
+    public function getMaxRank($scopeAssigneeId, $scopeStartDate, ConnectionInterface $con = null)
+    {
+        if (null === $con) {
+            $con = Propel::getServiceContainer()->getReadConnection(TaskTableMap::DATABASE_NAME);
+        }
+        // shift the objects with a position lower than the one of object
+        $this->addSelectColumn('MAX(' . TaskTableMap::RANK_COL . ')');
+
+        $scope[] = $scopeAssigneeId;
+        $scope[] = $scopeStartDate;
+
+
+                static::sortableApplyScopeCriteria($this, $scope);
+        $stmt = $this->doSelect($con);
+
+        return $stmt->fetchColumn();
+    }
+
+    /**
+     * Get the highest rank by a scope with a array format.
+     *
+     * @param     mixed $scope      The scope value as scalar type or array($value1, ...).
+
+     * @param     ConnectionInterface optional connection
+     *
+     * @return    integer highest position
+     */
+    public function getMaxRankArray($scope, ConnectionInterface $con = null)
+    {
+        if ($con === null) {
+            $con = Propel::getConnection(TaskTableMap::DATABASE_NAME);
+        }
+        // shift the objects with a position lower than the one of object
+        $this->addSelectColumn('MAX(' . TaskTableMap::RANK_COL . ')');
+        static::sortableApplyScopeCriteria($this, $scope);
+        $stmt = $this->doSelect($con);
+
+        return $stmt->fetchColumn();
+    }
+
+    /**
+     * Get an item from the list based on its rank
+     *
+     * @param     integer   $rank rank
+     * @param      int $scope        Scope to determine which suite to consider
+     * @param     ConnectionInterface $con optional connection
+     *
+     * @return ChildTask
+     */
+    static public function retrieveByRank($rank, $scope = null, ConnectionInterface $con = null)
+    {
+        if (null === $con) {
+            $con = Propel::getServiceContainer()->getReadConnection(TaskTableMap::DATABASE_NAME);
+        }
+
+        $c = new Criteria;
+        $c->add(TaskTableMap::RANK_COL, $rank);
+                static::sortableApplyScopeCriteria($c, $scope);
+
+        return static::create(null, $c)->findOne($con);
+    }
+
+    /**
+     * Reorder a set of sortable objects based on a list of id/position
+     * Beware that there is no check made on the positions passed
+     * So incoherent positions will result in an incoherent list
+     *
+     * @param     mixed               $order id => rank pairs
+     * @param     ConnectionInterface $con   optional connection
+     *
+     * @return    boolean true if the reordering took place, false if a database problem prevented it
+     */
+    public function reorder($order, ConnectionInterface $con = null)
+    {
+        if (null === $con) {
+            $con = Propel::getServiceContainer()->getReadConnection(TaskTableMap::DATABASE_NAME);
+        }
+
+        $con->transaction(function () use ($con, $order) {
+            $ids = array_keys($order);
+            $objects = $this->findPks($ids, $con);
+            foreach ($objects as $object) {
+                $pk = $object->getPrimaryKey();
+                if ($object->getPriority() != $order[$pk]) {
+                    $object->setPriority($order[$pk]);
+                    $object->save($con);
+                }
+            }
+        });
+
+        return true;
+    }
+
+    /**
+     * Return an array of sortable objects ordered by position
+     *
+     * @param     Criteria  $criteria  optional criteria object
+     * @param     string    $order     sorting order, to be chosen between Criteria::ASC (default) and Criteria::DESC
+     * @param     ConnectionInterface $con       optional connection
+     *
+     * @return    array list of sortable objects
+     */
+    static public function doSelectOrderByRank(Criteria $criteria = null, $order = Criteria::ASC, ConnectionInterface $con = null)
+    {
+        if (null === $con) {
+            $con = Propel::getServiceContainer()->getReadConnection(TaskTableMap::DATABASE_NAME);
+        }
+
+        if (null === $criteria) {
+            $criteria = new Criteria();
+        } elseif ($criteria instanceof Criteria) {
+            $criteria = clone $criteria;
+        }
+
+        $criteria->clearOrderByColumns();
+
+        if (Criteria::ASC == $order) {
+            $criteria->addAscendingOrderByColumn(TaskTableMap::RANK_COL);
+        } else {
+            $criteria->addDescendingOrderByColumn(TaskTableMap::RANK_COL);
+        }
+
+        return ChildTaskQuery::create(null, $criteria)->find($con);
+    }
+
+    /**
+     * Return an array of sortable objects in the given scope ordered by position
+     *
+     * @param     int       $scope  the scope of the list
+     * @param     string    $order  sorting order, to be chosen between Criteria::ASC (default) and Criteria::DESC
+     * @param     ConnectionInterface $con    optional connection
+     *
+     * @return    array list of sortable objects
+     */
+    static public function retrieveList($scope, $order = Criteria::ASC, ConnectionInterface $con = null)
+    {
+        $c = new Criteria();
+        static::sortableApplyScopeCriteria($c, $scope);
+
+        return ChildTaskQuery::doSelectOrderByRank($c, $order, $con);
+    }
+
+    /**
+     * Return the number of sortable objects in the given scope
+     *
+     * @param     int       $scope  the scope of the list
+     * @param     ConnectionInterface $con    optional connection
+     *
+     * @return    array list of sortable objects
+     */
+    static public function countList($scope, ConnectionInterface $con = null)
+    {
+        $c = new Criteria();
+        $c->add(TaskTableMap::SCOPE_COL, $scope);
+
+        return ChildTaskQuery::create(null, $c)->count($con);
+    }
+
+    /**
+     * Deletes the sortable objects in the given scope
+     *
+     * @param     int       $scope  the scope of the list
+     * @param     ConnectionInterface $con    optional connection
+     *
+     * @return    int number of deleted objects
+     */
+    static public function deleteList($scope, ConnectionInterface $con = null)
+    {
+        $c = new Criteria();
+        static::sortableApplyScopeCriteria($c, $scope);
+
+        return TaskTableMap::doDelete($c, $con);
+    }
+
+    /**
+     * Applies all scope fields to the given criteria.
+     *
+     * @param  Criteria $criteria Applies the values directly to this criteria.
+     * @param  mixed    $scope    The scope value as scalar type or array($value1, ...).
+     * @param  string   $method   The method we use to apply the values.
+     *
+     */
+    static public function sortableApplyScopeCriteria(Criteria $criteria, $scope, $method = 'add')
+    {
+
+        $criteria->$method(TaskTableMap::COL_ASSIGNEE, $scope[0], Criteria::EQUAL);
+
+        $criteria->$method(TaskTableMap::COL_START_DATE, $scope[1], Criteria::EQUAL);
+
+    }
+
+    /**
+     * Adds $delta to all Rank values that are >= $first and <= $last.
+     * '$delta' can also be negative.
+     *
+     * @param      int $delta Value to be shifted by, can be negative
+     * @param      int $first First node to be shifted
+     * @param      int $last  Last node to be shifted
+     * @param      int $scope Scope to use for the shift
+     * @param      ConnectionInterface $con Connection to use.
+     */
+    static public function sortableShiftRank($delta, $first, $last = null, $scope = null, ConnectionInterface $con = null)
+    {
+        if (null === $con) {
+            $con = Propel::getServiceContainer()->getWriteConnection(TaskTableMap::DATABASE_NAME);
+        }
+
+        $whereCriteria = new Criteria(TaskTableMap::DATABASE_NAME);
+        $criterion = $whereCriteria->getNewCriterion(TaskTableMap::RANK_COL, $first, Criteria::GREATER_EQUAL);
+        if (null !== $last) {
+            $criterion->addAnd($whereCriteria->getNewCriterion(TaskTableMap::RANK_COL, $last, Criteria::LESS_EQUAL));
+        }
+        $whereCriteria->add($criterion);
+                static::sortableApplyScopeCriteria($whereCriteria, $scope);
+
+        $valuesCriteria = new Criteria(TaskTableMap::DATABASE_NAME);
+        $valuesCriteria->add(TaskTableMap::RANK_COL, array('raw' => TaskTableMap::RANK_COL . ' + ?', 'value' => $delta), Criteria::CUSTOM_EQUAL);
+
+        $whereCriteria->doUpdate($valuesCriteria, $con);
+        TaskTableMap::clearInstancePool();
+    }
+
 } // TaskQuery

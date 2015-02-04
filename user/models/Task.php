@@ -12,7 +12,19 @@ use Base\Task as BaseTask;
  * long as it does not already exist in the output directory.
  *
  */
-class Task extends BaseTask
+class Task extends BaseTask implements API\ResourceInterface
 {
+    public function post($values, $auth)
+    {
+        $this->setTitle($values['title']);
+        $this->setUserRelatedByOwnerId($auth->entity);
 
+        if (isset($values['assignee'])) {
+            $this->setUserRelatedByAssigneeId($auth->entity);
+
+            if (isset($values['startDate'])) {
+                $this->setStartDate($values['startDate']);
+            }
+        }
+    }
 }
