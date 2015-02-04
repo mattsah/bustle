@@ -36,18 +36,19 @@
 		// HTTP RESPONSES
 		//
 
-		'HTTP\OK'             => 'Ok',
-		'HTTP\CREATED'        => 'Created',
-		'HTTP\ACCEPTED'       => 'Accepted',
-		'HTTP\NO_CONTENT'     => 'No Content',
-		'HTTP\BAD_REQUEST'    => 'Bad Request',
-		'HTTP\NOT_AUTHORIZED' => 'Not Authorized',
-		'HTTP\FORBIDDEN'      => 'Forbidden',
-		'HTTP\NOT_FOUND'      => 'Not Found',
-		'HTTP\NOT_ALLOWED'    => 'Not Allowed',
-		'HTTP\NOT_ACCEPTABLE' => 'Not Acceptable',
-		'HTTP\SERVER_ERROR'   => 'Internal Server Error',
-		'HTTP\UNAVAILABLE'    => 'Service Unavailable',
+		'HTTP\OK'                   => 'Ok',
+		'HTTP\CREATED'              => 'Created',
+		'HTTP\ACCEPTED'             => 'Accepted',
+		'HTTP\NO_CONTENT'           => 'No Content',
+		'HTTP\BAD_REQUEST'          => 'Bad Request',
+		'HTTP\NOT_AUTHORIZED'       => 'Not Authorized',
+		'HTTP\FORBIDDEN'            => 'Forbidden',
+		'HTTP\NOT_FOUND'            => 'Not Found',
+		'HTTP\NOT_ALLOWED'          => 'Not Allowed',
+		'HTTP\NOT_ACCEPTABLE'       => 'Not Acceptable',
+		'HTTP\UNSUPPORTED_MIMETYPE' => 'Unsupported Media Type',
+		'HTTP\SERVER_ERROR'         => 'Internal Server Error',
+		'HTTP\UNAVAILABLE'          => 'Service Unavailable',
 
 		//
 		// HTTP REDIRECTS
