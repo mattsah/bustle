@@ -1,9 +1,11 @@
 # Requests (HTTP)
 
-Requests are not a separate component, but are part of larger components which provide specific
+Requests are not a separate component, but are part of a larger component which provides specific
 input / output components for your application.  The most common request is HTTP requests.  This
-is what is documented here.  If you're writing a command line application, check out
-[the inKWell CLI component](../supplemental/01-cli).
+is what is documented here.
+
+Requests are designed for both receiving (from clients as a server) and sending (as client to a
+server).
 
 ## Installation
 
@@ -18,48 +20,27 @@ composer require dotink/inkwell-http
 	</p>
 </div>
 
-## Providers
+## Instantiation
 
-| Via                 | Description
-|---------------------|-----------------------------------------------------
-| `$app['request']`   | The original request made to the application
-| `$app['gateway']`   | An HTTP gateway responsible for populating requests and rendering responses
-
-The HTTP component will only register the above providers in the event that the application is
-accessed via HTTP based SAPIs.
-
-## Accessing the request
-
-In both closures and controllers, the request object can be accessed using `$this->request`.
-Without a configured resolver, closures our bound to the router which has access to the request
-object directly.
-
-## Parameters
-
-Parameters are available on the `params` object which is a simple collection:
+Although you can instantiate an empty request and work with it directly, in most cases you're
+going to want your request to be populated from the data provided by the SAPI.  In order to do
+this you can create a gateway server and populate the request.
 
 ```php
-$name = $this->request->params->get('name');
+use Inkwell\HTTP;
+
+$request = new HTTP\Resource\Request();
+$gateway = new HTTP\Gateway\Server();
+
+$gateway->populate($request);
 ```
 
-The params object contains parameters parsed from the route as well as the traditional `$_GET` and
-`$_POST` super global values.  
+## Getting / Setting
 
-<div class="notice">
-	<p>
-		Parameters which are parsed from routes are added using the `set()` method, so you cannot
-		access them via `$_GET` or `$_POST` directly, however, these values are not cleared so
-		any standard data which would be available in them is.
-	</p>
-</div>
+There are a number of properties you can get/set on the request itself or on components which
+are directly relatedo the request.
 
-If you need to set a parameter for a subrequest or later method call, you can use `set()`:
-
-```php
-$this->request->params->set('foo', 'bar');
-```
-
-## Getting the URL
+### URLs
 
 The URL is held in a URL object which provides a number of additional methods, see:
 [https://github.com/dotink/flourish-url](https://github.com/dotink/flourish-url).  To get the URL
@@ -76,26 +57,96 @@ $host = $this->request->getURL()->getHost();
 $path = $this->request->getURL()->getPath();
 ```
 
-You can additionally modify the URL rather easily for redirection or other purposes:
+URLs are immutable, so if you need to modify the URL on the request, you need to make sure you
+set it to the returned URL:
 
 ```php
-$url = $this->request->getURL();
+$new_url = $this->request->getUrl()->modify('/new/path.html');
 
-if ($url->getScheme() != 'https') {
-	$this->response->setStatusCode(301);
-	$this->response->headers->set('Location', $url->modify(['scheme' => 'https']));
+$this->request->setURL($new_url);
+```
 
-	return $this->response;
+### HTTP Method
+
+Get the method:
+
+```php
+$method = $request->getMethod();
+```
+
+Check the method:
+
+```php
+use IW\HTTP;
+
+if ($request->checkMethod(HTTP\POST)) {
+	//
+	// Do some posting
+	//
 }
 ```
 
-The above would immediately redirect to the HTTPS version of the URL by replacing the scheme only.
+Set the method:
 
-## Getting Headers
+```php
+use IW\HTTP;
 
-As with the previous example on the response, you can get the request headers via the `headers`
-property which, similar to `params`, represents a simple collection:
+$request->setMethod(HTTP\GET);
+```
+
+### HTTP Headers
+
+You can get or set headers on a request by working with the headers property which is populated
+as an instance of `Dotink\Flourish\Collection`, see:
+[https://github.com/dotink/flourish-collection](https://github.com/dotink/flourish-collection).
 
 ```php
 $accept = $this->request->headers->get('Accept');
+```
+
+You can get all headers as an array via:
+
+```php
+$headers = $this->request->headers->get()
+```
+
+Set a specific header by doing:
+
+```php
+$this->request->headers->set('X-Forwarded-For', $ip_address);
+```
+
+Set multiple headers with an array:
+
+```php
+$this->request->headers->set([
+	'Accept-Language' => $this->request->cookies->get('lang'),
+	'X-Custom-Header' => $value
+]);
+```
+
+### Parameter Data
+
+Get data:
+
+```php
+$name = $this->request->params->get('name');
+```
+
+Provide a default:
+
+```php
+$page = $this->request->params->get('page', 1);
+```
+
+Get all the data:
+
+```php
+$params = $this->request->params->get();
+```
+
+Set data:
+
+```php
+$this->request->params->set('task', $next_task->getId());
 ```

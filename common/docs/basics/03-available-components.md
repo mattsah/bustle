@@ -15,16 +15,17 @@ Components provide classes, configs, and actions which allow you to easily add f
 inKWell for use in your application code.  Official components are considered part of the framework
 but can be added or used on an as needed basis.  Currently available components include:
 
-- Router
-- Controllers
-- Event Manager
-- Views
+- Routing
+- Controller
+- Events
+- View
+- Auth
+- ORM
 
 Additional planned components are:
 
 - Cache
 - Logger
-- ORM
 
 ## Creating Custom Components
 

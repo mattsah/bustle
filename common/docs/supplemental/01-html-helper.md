@@ -6,7 +6,7 @@
 composer require dotink/inkwell-html
 ```
 
-### Overview
+## Instantiation
 
 The HTML helper provides a facade class and a number of fly-weight classes which are invoked to
 perform particular functionality.  It is best consumed with a view object which will automatically
@@ -15,19 +15,17 @@ well.
 
 If you're using the [official inKWell view component](../responding/01-views), then the plugin
 action provided by the html component will do this for you by registering a filter on views which
-are dependency injected, see `config/default/html.php`:
+are dependency injected.
 
-```php
-$broker->prepare('Inkwell\View', function($view) {
-	$view->filter('html', ['Inkwell\HTML\html', 'out']);
-});
-```
+If you're not using that view component, you can either use the `html::out()` method directly or
+enable your view's data access methods to wrap your data with it.
 
-If you're not using that view component, you can either use the `out()` method directly or enable
-your view's data access methods to wrap your data with it.
+There is no instantiation, it's just a facade.
 
-In either case, you will likely want to make sure your templates are namespaced as follows, as this
-is the namespace of the `html` facade:
+## Usage
+
+You will likely want to make sure your templates are namespaced with `Inkwell\HTML` to prevent the
+need for verbose class references.  This is the namespace of the `html` facade:
 
 ```php
 namespace Inkwell\HTML;
@@ -49,7 +47,7 @@ If no filters are set, the default action is to escape values, so the output of 
 ```html
 <?php html::per([1, 2, 3], function($i, $val){ ?>
 	I see the number <?= $val ?><br />
-<?php }) ?>
+<?php })) ?>
 ```
 
 This will output:
@@ -99,26 +97,11 @@ You can use the `money()` to output monetary values.
 <?= html::money(2) ?>
 ```
 
-Will output `$2.00` by default.  Unlike some simpler filters, money can be configured by changing
-the values in `config/default/html.php` or by overloading them in a location specific
-configuration:
+Will output `$2.00` by default.  Unlike some simpler filters, money can be configured.  You can
+configure it by performing the following prior to use:
 
 ```php
-'money' => [
-	'currency'  => '$',
-	'decimal'   => '.',
-	'separator' => ','
-]
-```
-
-These are configured via the `config/default/html.php` provided action:
-
-```php
-HTML\html::add([
-	'money' => new HTML\money(
-		$app['engine']->fetch('html', 'money.currency', '$'),
-		$app['engine']->fetch('html', 'money.decimal',  '.'),
-		$app['engine']->fetch('html', 'money.separator', ',')
-	)
+Inkwell\HTML\html::add([
+	'money' => new Inkwell\HTML\money($currency, $decimal, $separator)
 ]);
 ```

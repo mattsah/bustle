@@ -1,26 +1,29 @@
 # Nano Core
 
-Unlike other frameworks the core of inKWell is designed to provide nothing other than
+The inKWell core provides only the most basic components for creating an application.  The core
+alone is suggested for people who have highly specific requirements or who want to integrate
+third-party components.
+
+The core provides:
 
 - An application container
 - Configuration and bootstrapping utilities
 - Dependency injection
 
-This is designed so you can use it as a center piece for highly customized applications for which
-you wish to use other third party components including routers, controllers, HTTP messaging or
-transport libraries, etc.
+Using just the core, you can integrate alternative routers, controllers, ORMs, etc using the same
+configuration and bootstrapping system as inKWell's official components.
 
 <div class="notice">
 	<p>
-		If you're not looking to start this far down.  You can jump ahead to the
-		<a href="../handling-requests/01-routing">routing documentation</a> in order to begin
-		working with inKWell's additional components.
+		If you're not looking to start this bare bones, you can jump ahead to the
+		<a href="../handling-requests/01-routing">routing documentation</a> to get started
+		handling requests.
 	</p>
 </div>
 
 ## What's in the Box?
 
-1. The [Application Helper](https://github.com/dotink/inkwell-core) which provides a simple
+1. The [Application Container](https://github.com/dotink/inkwell-core) which provides a simple
 container and useful helper methods for the most basic application interfacing tasks.
 2. The [Affinity Boostrapper](https://github.com/dotink/affinity) which gives you an easy and
 pluggable configuration and bootstrapping system.
@@ -34,8 +37,8 @@ Everything else is a plugin or extension.
 The entire bootstrapping process is contained in the `init.php` file at the application root.
 
 This script concerns itself with initializing the aforementioned components and returning an
-application instance which can then be used to access the established service providers and run
-the main application logic.
+application instance which can then be used to access service providers and configuration during
+the bootstrap process and finally execute your application logic.
 
 To get the application instance simply do:
 
@@ -76,7 +79,14 @@ The application instance is a simple container which implements `ArrayAccess` an
 store object instances and other information during application bootstrapping or in your main
 application code.
 
-To use it, simply assign things to it as if it were an array:
+<div class="notice">
+	<p>
+		Using the application instance as a service locator is <em>highly discouraged</em> and
+		you should not rely on contained providers outside of your bootstrapping code.
+	</p>
+</div>
+
+To use the applicaiton container, simply assign things to it as if it were an array:
 
 ```
 $app['router'] = new My\Router();
@@ -84,9 +94,12 @@ $app['router'] = new My\Router();
 
 ## Resolving Dependencies
 
-The `$broker` variable (as seen above) contains an instance of the Auryn dependency injector which
-you can use to configure and resolve class instantiation.  You can read more about how to use it at
-[https://github.com/rdlowrey/Auryn](https://github.com/rdlowrey/Auryn).
+The `$broker` variable provided to bootstrapper actions (as seen in a previous example) contains
+an instance of the Auryn dependency injector which you can use to configure and resolve class
+instantiation.
+
+Although inKWell uses Auryn, it is a separate project and offers additional documentation and
+support at [https://github.com/rdlowrey/Auryn](https://github.com/rdlowrey/Auryn).
 
 The basics are as follows:
 
@@ -112,6 +125,14 @@ Does the same as above, but with an explicit parameter:
 $broker->define('My\Router', [':routes_directory' => $app->getDirectory('routes')]);
 ```
 
+### Preparing Objects Which Implement an Interface
+
+```php
+$broker->prepare('My\Interesting\Interface', function($instance, $broker) {
+	$instance->someInterfaceMethod('...');
+});
+```
+
 ## Bootstrapping
 
 While it's possible to run the above examples inside the main application callback, this often
@@ -126,7 +147,7 @@ configurations and bootstrapping actions from third parties.
 
 ### Directory Structure
 
-Affinity uses two main directories in the application root to house it's separate pieces.  The
+Affinity uses two main directories in the application root to house its separate pieces.  The
 default configuration root is `config` and the default action root is `include`.
 
 Within each directory you will also find a `default` subdirectory which houses the default
@@ -186,7 +207,7 @@ $app['engine']->fetch('test', 'key', 'default');
 ```
 
 The parameters for the `fetch()` method are the configuration id, the parameter within that
-configuration, an the default value if it's not found, respectively.  You can access deeply nested
+configuration, and the default value if it's not found, respectively.  You can access deeply nested
 data using a javascript style object notation for the second parameter:
 
 ```php
@@ -228,8 +249,11 @@ return Affinity\Config::create(['providers'], [
 When fetching information from an aggregate ID, the returned array consists of one entry for
 every configuration file which provides that aggregate data keyed by the specific configuration
 id.  In the case of the above mappings, this means we have to first loop over the individual
-configuration data, and *then* over the mapping themselves.  This is how it's done in the `core`
-action:
+configuration data, and *then* over the mapping themselves.
+
+You can fetch a list of specific IDs which provide aggregate data by fetching the aggregate ID
+alone, without specifying a parameter. This is how it's done in the `core` action to set up
+providers:
 
 ```php
 foreach ($app['engine']->fetch('@providers') as $id) {
@@ -256,8 +280,8 @@ prepare your application for running.  Some of their main functions include:
 - Registering providers in the application container
 
 Unlike configs which are just arrays of information, actions represent callable logic.  Each action
-is provided the application istance and broker (instance of Auryn).  Additionally, actions can,
-themselves be run in a particular order by specifying dependencies, so, if one action sets up
+is provided the application instance and broker (instance of Auryn).  Additionally, actions can,
+themselves, be run in a particular order by specifying dependencies, so, if one action sets up
 a provider in the application container which is used by other actions, those actions can specify
 that they depend on it running first.
 
@@ -297,7 +321,7 @@ return Affinity\Config::create(['routes'], [
 ]);
 ```
 
-Assuming the `My\Router` class knew what to do with those on `add()`, although a bit contrived
+Assuming the `My\Router` class knew what to do with those on `add()`, although a bit contrived,
 the above example would be a workable routing paradigm that bridges a more traditional direct URL
 to file mapping and a more modern MVC approach.  If a more modern MVC approach is preferred and
 you don't want to create your own router, you might want to check out the

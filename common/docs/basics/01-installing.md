@@ -11,8 +11,8 @@ composer create-project -s dev inkwell/framework <target>
 
 The inKWell framework is currently in a prolonged beta.  Although it's unlikely that developer
 facing functionality will break, there's still some work being done on how certain components
-interact.  We encourage users to submit [issues on GitHub](https://github.com/dotink/inkwell-framework/issues)
-for any of the documented functionality if we break it.
+interact.  We encourage users to submit any issues in the core or components to the framework
+[issue tracker on GitHub](https://github.com/dotink/inkwell-framework/issues).
 
 ## Server Setup
 
@@ -26,8 +26,7 @@ In addition to an `.htaccess` file a comparable `.user.ini` file is there for CG
 <div class="notice">
 	<p>
 		If you choose to use inkwell's official components rather than just using the nano core,
-		we suggest you skip ahead right to the
-		<a href="../handling-requests/01-routing">routing documentation</a>.
+		we suggest you check out the <a href="../quick-start">Quick Start Guide</a> instead.
 	</p>
 </div>
 

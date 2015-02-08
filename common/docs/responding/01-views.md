@@ -1,8 +1,7 @@
 # Views
 
 The inKWell view component allows you to load and render templates in a modular fashion which
-allows for templates to act as both partials or as main pages without any additional changes or
-method calls.
+allows for templates to act as both partials or as main pages without any additional logic.
 
 ## Installation
 
@@ -10,74 +9,60 @@ method calls.
 composer require dotink/inkwell-view
 ```
 
-## Creating a View
+## Basic Usage
 
-While it's possible to instantiate view objects directly, normally you'll want to have them
-dependency injected.  The view component adds an additional action and configuration which ensures
-views are instantiated with a common root directory when depency injected or created via Auryn.
-
-```php
-return Affinity\Action::create(['core'], function($app, $broker) {
-	$root_directory = $app['engine']->fetch('view', 'root_directory', 'user/templates');
-
-	$broker->define('Inkwell\View', [
-		':root_directory' => $app->getDirectory($root_directory)
-	]);
-});
-```
-
-If you're using [the inKWell controller component](../handling-requests/02-controllers) you can
-add the view directly to your constructor:
+Views are instantiated with a root directory and then load templates relative to that directory:
 
 ```php
 use Inkwell\View;
 
-public function __construct(View $view)
-{
-	$this->view = $view;
-}
+$view = new View('/path/to/templates');
+
+$view->load('home.html');
+
+$view->set([
+	'title' => 'Welcome to My Amazing Website',
+]);
+
+$view->append([
+	'content' => 'blog/latest.php',
+	'sidebar' => 'events/upcoming.php'
+]);
+
+echo $view->compose();
 ```
 
-Alternatively if you instantiate views directly, you'll want to pass them the root directory as
-the first argument:
+## Setting Up View Objects
 
-```php
-$view = new View('/path/to/my/views');
-```
+Normally you will want your views to be created by dependency injection so that the root directory
+can be added to the constructor automatically as well as a shared instance of the asset manager
+and common filters.
+
+Below you can see how these additional aspects can be set up on new or existing views.
 
 ## Asset Handling
 
 Previous versions of inKWell attempted to integrate asset management into the view object.  While
 the new view component doesn't do this, it does allow for you to assign a separate asset manager
-via the second argument.
-
-You can modify the view action to add this parameter:
+via the second argument:
 
 ```php
-$broker->define('Inkwell\View', [
-	':root_directory' => $app->getDirectory($root_directory),
-	':assets'         => new AssetManager()
+$view = new View('/path/to/templates', $asset_manager);
+```
+
+### Filtering
+
+You can add all filters for your template formats as an array at instantiation time as a third
+argument.  The format is `['format' => $callable]`:
+
+```php
+$view = new View('/path/to/templates', $asset_manager, [
+	'html' => new Inkwell\HTML\html()
 ]);
 ```
 
-Or pass it directly as a second argument:
-
-```php
-$view = new View('/path/to/my/views', $asset_manager);
-```
-
-## Setting Up the View
-
-The view object works with simple templates which use embedded PHP for their template logic.  When
-you load a view, the '.php' extension will be automatically appended to the template.  You can,
-however, specify a view type by using double extensions.
-
-```php
-$view->load('mytemplate.html');
-```
-
-This would use the the `mytemplate.html.php` template in the root directory.  The type can be
-used to apply additional filtering:
+Optionally, you can add one at a time.  In this example we use a simple closure instead of a filter
+class:
 
 ```php
 $view->filter('html', function($data) {
@@ -91,12 +76,38 @@ Filtering will allow you to automatically escape data retrieved from the view.  
 advanced filtering or transformation techniques, we suggest you check out the
 [inKWell html component](../supplemental/01-html-helper) for HTML templates.
 
+## Working With Templates
+
+The view object works with simple templates which use embedded PHP for their template logic.
+Templates themselves run in the scope of the view so `$this` will always refer to the view and has
+access to all private/protected methods and properties.
+
+### Loading
+
+When you load a view, the `.php` extension will be automatically appended to the template path.
+You can, however, use double extensions to automatically specify the view format.  So, for example
+if you are working with HTML views, you might load a 'mytemplate.html':
+
+```php
+$view->load('mytemplate.html');
+```
+
+On the filesystem level, however, this will attempt to load `mytemplate.html.php` from the root
+directory.  It's good practice to always specify a format.
+
+If you would like to create an independent view object with it's own distinct components and data
+but sharing the same assets or filters, you can use the `create()` method:
+
+```php
+$view->create('mytemplate.html');
+```
+
 ### View Data
 
-Once you have your view set up, you can begin adding data to it using the `set()` method. This
+Once you have your view loaded, you can begin adding data to it using the `set()` method. This
 method accepts either an array (as a single parameter) for bulk assignment or as individual calls.
 
-#### Setting
+#### Setting Data
 
 Setting will destroy any existing data referred to by the same key(s).
 
@@ -113,13 +124,14 @@ $view->set([
 ]);
 ```
 
-Although lots of data is set in controllers, soemtimes it makes more sense for data to be set in
+Although lots of data is set in other contexts, sometimes it makes more sense for data to be set in
 templates.  Data such as page title, meta descriptions, etc, are often times better kept inside the
 template so they can be modified by front end developers and because they are more frequently
-associated with the particular template than a given controller.
+associated with the particular template than a given controller or service provider.
 
-The view object can be accessed inside a template via `$this` and you can set values using the
-`ArrayAccess` interface:
+Since the template runs in the scope of the view, the view object can be accessed inside a template
+via `$this`.  Although it is not required, we suggest setting view data inside the templates using
+the `ArrayAccess` interface as this is often times easier for front-end developers to understand:
 
 ```php
 $this['title'] = 'Welcome to inKWell';
@@ -133,7 +145,7 @@ this will check if the actual key is set, so if the value is `NULL`, it will sti
 <div class="notice">
 	<p>
 		Retrieving data from an inKWell view will automatically return `NULL` for a non-existent
-		value, so the default behavior is that if a value is et to `NULL` it removes it from the
+		value, so the default behavior is that if a value is set to `NULL` it removes it from the
 		internal data array.
 	</p>
 </div>
@@ -152,18 +164,31 @@ if (!$view->has('false')) {
 }
 ```
 
-### Getting Data
+#### Getting Data
 
-The best way to retrieve view data is using the `__invoke` method which means you call the view as
-a function.  As with one of our previous examples, we refer to the view as `$this` inside the
-template:
+You can retrieve raw data from a view using the `get()` method.  This is generally useful outside
+of the template context, because you will want to get back exactly what you put in:
+
+```php
+$title = $view->get('title');
+```
+Inside the template, however, the best way to retrieve view data is using the `__invoke` method.
+
+<div class="notice">
+	<p>
+		Using the `__invoke()` method, any data you access will be filtered by the applicable
+		callback registered with the `filter()` method.  In our previous example, this would mean
+		string data is returned HTML encoded.
+	</p>
+</div>
+
 
 ```php
 <?= $this('title') ?>
 ```
 
 Using this method, it's also possible to get keyed data in arrays, object properties, or even call
-getters on an object:
+getters on an object by using javascript style object notation:
 
 ```php
 <?= $this('user.firstName') ?>
@@ -184,40 +209,80 @@ This works recursively, so you can access deeply nested properties:
 <?= $this('user.group.name') ?>
 ```
 
-<div class="notice">
-	<p>
-		Using the `__invoke()` method, any data you access will be filtered by the applicable
-		callback registered with the `filter()` method.  In our previous example, this would mean
-		string data is returned HTML encoded.
-	</p>
-</div>
-
-If you need to bypass filters completely, you can still access data outside or inside the
-template using the `ArrayAccess` mechanism:
+If you need to bypass filters completely inside a template but still want to use a terse format,
+you can still access data via the `ArrayAccess` mechanism:
 
 ```php
 <?= $this['title'] ?>
 ```
 
-## Rendering
+### Components / Subviews
 
-The easiest way to render a view from within a controller or closure is to simply return it.  This
-assumes you're using the inKWell router and the http stack which provides the requisite gateway
-for rendering the view:
+A single view will often times be representative of a number of templates, sometimes called
+partials.  Partials can be assigned or appended in or outside the template context, and can be
+inserted or injected from within.
+
+To understand this more clearly it is important to understand that each view object has a container
+element which is either `NULL` or a parent view.
+
+#### Assigning a Component
 
 ```php
-return $view;
+$view->assign('header', 'common/header.html');
 ```
 
-If you need to render the view directly or pass it to another routing solution as a string, you
-can use the `compose()` method:
+<div class="notice">
+	<p>
+		When a component is provided as a template path, a view object is created with with the
+		original root, assets, and filters of the container (in this case `$view`) and is given
+		a copy of the components and data.
+	</p>
+</div>
+
+You can assign multiple components at once by passing an array:
+
+```php
+$view->assign([
+	'header' => 'common/header.html',
+	'footer' => 'common/footer.html'
+]);
+```
+
+#### Appending a Component
+
+Assigning components will wipe out existing values, however, sometime you want to append to a
+component instead.  For example, if you have a sidebar in which you want to be able to
+progressively add components to, you can use `append()`:
+
+```php
+$view->append('sidebar', $notice);
+$view->append('sidebar', $advertisement);
+```
+
+The `$notice` and `$advertisement` variables represent separately instantiated view objects in
+the above example.  That is, to say, you can append one view object to another directly.
+
+<div class="notice">
+	<p>
+		When a component is provided as a distinct view object it retains all its original
+		settings, components, data.
+	</p>
+</div>
+
+
+## Rendering
+
+Views can be rendered directly by calling the `compose()` method.
 
 ```php
 $html = $view->compose();
 ```
 
+The data is returned, so you can also echo this directly:
+
+```php
+echo $view->compose();
+```
+
 Composition will render all contained elements which are inserted in the view, and if the view
-is contained in a parent element for expansion will render itself into the parent view.  The
-gateway looks for the `compose()` method on returned object responses and executes this on the way
-out, so there's no distinct  difference between in-controller/closure compilation other than
-that outgoing middleware may be able to modify the view if not compiled.
+is contained in a parent element for expansion will render itself into the parent view.
