@@ -22,7 +22,7 @@
 		new Affinity\NativeDriver($action_dir)
 	);
 
-	$app['engine']->start($environment, $app, $broker);
+	$app['engine']->start($environment, ['app' => $app, 'broker' => $broker]);
 
 	return $app;
 }

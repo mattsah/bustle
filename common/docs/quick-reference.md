@@ -68,9 +68,10 @@ File: `config/default/<sub path to my config>.php`
 
 	use IW\HTTP;
 
-	return Affinity\Config::create([routes'], [
+	return Affinity\Config::create(['routes'], [
 		'@routes' => [
 			'base_url' => '/',
+
 			'links' => [
 
 				// Your Routes Here
