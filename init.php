@@ -16,6 +16,7 @@
 	$action_dir    = $app->getDirectory($app->getEnvironment('IW_ACTION_ROOT', 'include'));
 	$environment   = $app->getEnvironment('IW_ENVIRONMENT', 'prod');
 
+	$app['broker'] = $broker;
 	$app['loader'] = $loader;
 	$app['engine'] = new Affinity\Engine(
 		new Affinity\NativeDriver($config_dir),
