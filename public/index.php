@@ -9,58 +9,41 @@
 
 	try {
 
-		call_user_func(function() {
+		//
+		// Track backwards until we discover our includes directory.  The only file required
+		// to be in place for this is includes/init.php which should return our application
+		// instance.
+		//
+
+		for (
+			$init_path  = __DIR__;
+			$init_path != '/' && !is_file($init_path . DIRECTORY_SEPARATOR . 'init.php');
+			$init_path  = realpath($init_path . DIRECTORY_SEPARATOR . '..')
+		);
+
+		if ($app = @include($init_path . DIRECTORY_SEPARATOR . 'init.php')) {
 
 			//
-			// Track backwards until we discover our includes directory.  The only file required
-			// to be in place for this is includes/init.php which should return our application
-			// instance.
+			// We've got an application instance so let's run!
 			//
-
-			for (
-
-				//
-				// Initial assignment
-				//
-
-				$init_path = 'init.php';
-
-				//
-				// While Condition
-				//
-
-				!is_file($init_path);
-
-				//
-				// Modifier
-				//
-
-				$init_path = realpath('..' . DIRECTORY_SEPARATOR . $init_path)
-			);
-
-			$app = include($init_path);
 
 			$app->run(function($app, $broker) {
-				$app['gateway']->transport(
+				$router   = $app['router'];
+				$request  = $app['request'];
+				$resolver = $app['router.resolver'];
 
-					//
-					// Running the router will return the response for transport
-					//
-
-					$app['response'] = $app['router']->run($app['request'], $app['router.resolver'])
-				);
+				exit($app['gateway']->transport($router->run($request, $resolver)));
 			});
-		});
+		}
 
 	} catch (Exception $e) {
-
-		//
-		// Panic here, attempt to determine what state we're in, see if some errors handlers are
-		// callable or if we're totally fucked.  In the end, throw the exception and be damned.
-		//
-
-		throw $e;
-
-		exit(0);
+		if (!$app->checkExecutionMode(IW\EXEC_MODE\PRODUCTION)) {
+			throw $e;
+			exit(-1);
+		}
 	}
+
+	header('HTTP/1.1 500 Internal Server Error');
+	echo 'Something has gone terribly wrong.';
+	exit(-1);
 }

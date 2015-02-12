@@ -17,14 +17,14 @@
 			],
 
 			'handlers' => [
-				HTTP\FORBIDDEN => 'ErrorHandler::forbidden'
+				HTTP\FORBIDDEN => 'Inkwell\Security\AccountController::forbidden'
 			]
 		],
 
 		'@auth' => [
 			'permissions' => [
 				'Admin' => [
-					'tasks' => ['read']
+					'task' => ['read']
 				]
 			]
 		]

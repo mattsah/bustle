@@ -1,10 +1,14 @@
 <?php
+	use Inkwell\HTML\html;
 
 	return Affinity\Action::create(['core', 'http'], function($app, $broker) {
+
 		$collection = $broker->make('Inkwell\Routing\Collection');
 		$router     = $broker->make('Inkwell\Routing\Engine', [
 			':collection' => $collection,
-			':response'   => $app['response']
+			':response'   => isset($app['response'])
+				? $app['response']
+				: NULL
 		]);
 
 		$router->setMutable($app['engine']->fetch('routing',  'mutable',  TRUE));
@@ -41,9 +45,13 @@
 			//
 
 			foreach ($handlers as $status => $action) {
-				$router->handle($base_url, $status, $action);
+				$collection->handle($base_url, $status, $action);
 			}
 
+		}
+
+		if (class_exists('Inkwell\HTML\html')) {
+			html::add(['anchor' => new Inkwell\Routing\HTML\anchor($router)]);
 		}
 
 		$app['router']            = $router;

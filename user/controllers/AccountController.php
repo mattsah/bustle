@@ -1,6 +1,7 @@
 <?php namespace Inkwell\Security
 {
 	use IW\HTTP;
+	use Inkwell\Auth;
 	use Inkwell\View;
 	use Inkwell\Controller;
 	use Dotink\Flourish\Message;
@@ -9,8 +10,12 @@
 	use SignatureInvalidException;
 	use Exception;
 
-	class AccountController extends Controller\BaseController
+	class AccountController extends Controller\BaseController implements Auth\ConsumerInterface
 	{
+		use Auth\ControllerConsumer;
+
+		const MSG_LOGIN            = 'You must be logged in to access that resource.';
+		const MSG_LOGIN_DIFFERENT  = 'You do not have permissions to access that resources, try logging in as a different user.';
 		const MSG_INCORRECT_USER   = 'Your username appears to be incorrect';
 		const MSG_INVALID_TOKEN    = 'Your token is invalid or expired, please try joining again';
 		const MSG_INVALID_EMAIL    = 'The e-mail you submitted is invalid for the original token';
@@ -33,7 +38,7 @@
 		/**
 		 *
 		 */
-		public function __construct(View $view, Message $message, UserProviderInterface $user_provider)
+		public function __construct(View $view, Message $message, UserProviderInterface $user_provider = NULL)
 		{
 			$this->view         = $view;
 			$this->message      = $message;
@@ -48,11 +53,41 @@
 		{
 			parent::__prepare($action, $context);
 
+			if (!$this->userProvider && $action != 'forbidden') {
+				$this->response->setStatus(HTTP\NOT_FOUND);
+				$this->router->defer(NULL);
+			}
+
 			$this->view->load('account/' . $action . '.html');
 			$this->view->set([
 				'error'   => $this->message->create('error'),
 				'success' => $this->message->create('success')
 			]);
+		}
+
+
+		/**
+		 * Handles resources which are forbidden to the current user
+		 *
+		 */
+		public function forbidden()
+		{
+			if ($this->userProvider) {
+				$this->userProvider->setLoginRedirect(
+					$this->auth->entity,
+					$this->request->getURL()->getPathWithQuery()
+				);
+
+				if ($this->auth->is('Anonymous')) {
+					$this->message->create('error', self::MSG_LOGIN);
+				} else {
+					$this->message->create('error', self::MSG_LOGIN_DIFFERENT);
+				}
+
+				return $this->router->redirect('/login', HTTP\REDIRECT_SEE_OTHER, FALSE);
+			}
+
+			return 'Forbidden';
 		}
 
 
@@ -91,7 +126,7 @@
 			// Try to get the user from a cookie
 			//
 
-			$user  = $this->getUserFromCookie();
+			$user = $this->getUserFromCookie();
 
 			//
 			// If we're not the entry action, we're being used to get the logged in user
@@ -121,12 +156,12 @@
 				if (!$user) {
 					$error = $this->message->create('error', self::MSG_INCORRECT_USER);
 
-				} elseif (!password_verify($password, $this->userProvider->getPassword($user))) {
+				} elseif (!$this->userProvider->verifyPassword($user, $password)) {
 					$error = $this->message->create('error', self::MSG_INVALID_PASSWORD);
 
 				} else {
-
 					$this->completeLogin($user);
+
 				}
 			}
 
@@ -178,8 +213,7 @@
 						$this->message->create('error', self::MSG_INVALID_EMAIL);
 					}
 
-					$data             = array_merge($data, $this->request->params->get());
-					$data['password'] = password_hash($data['password'], PASSWORD_BCRYPT);
+					$data = array_merge($data, $this->request->params->get());
 
 					try {
 						$user = $this->userProvider->createUser($data);

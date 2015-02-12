@@ -14,7 +14,7 @@
 	 */
 	class MainController extends Controller\BaseController implements Auth\ConsumerInterface
 	{
-		use Auth\Controller;
+		use Auth\ControllerConsumer;
 
 		/**
 		 *
@@ -64,7 +64,7 @@
 		 */
 		public function dashboard()
 		{
-			$this->requireAuth('read', 'tasks');
+			$this->requireAuth('read', 'task');
 
 			$date = $this->date->adjust('-1 day');
 

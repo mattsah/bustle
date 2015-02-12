@@ -31,7 +31,7 @@
 				throw new Exception(self::MSG_USER_EXISTS);
 			}
 
-			$user->setPassword($data['password']);
+			$this->setPassword($user, $data['password']);
 
 			$person->setName($data['name']);
 			$person->setFullName($data['full_name']);
@@ -103,17 +103,6 @@
 		/**
 		 *
 		 */
-		public function getPassword($user)
-		{
-			return $user
-				? $user->getPassword()
-				: NULL;
-		}
-
-
-		/**
-		 *
-		 */
 		public function setLoginRedirect($user, $location)
 		{
 			$_SESSION['USER_PROVIDER_LOGIN_REDIRECT'] = $location;
@@ -125,6 +114,19 @@
 		 */
 		public function setPassword($user, $password)
 		{
-			return $user->setPassword($password);
+			return $user->setPassword(password_hash($password, PASSWORD_BCRYPT));
+		}
+
+
+		/**
+		 *
+		 */
+		public function verifyPassword($user, $password)
+		{
+			if ($user) {
+				return password_verify($password, $user->getPassword());
+			}
+
+			return FALSE;
 		}
 	}

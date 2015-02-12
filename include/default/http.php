@@ -3,7 +3,7 @@
 	return Affinity\Action::create(['core', 'events'], function($app, $broker) {
 
 		//
-		// Boostrap response states and codes
+		// Boostrap HTTP response states and codes
 		//
 
 		foreach ($app['engine']->fetch('http', 'response_states') as $status => $data) {
@@ -20,6 +20,13 @@
 			$app['engine']->fetch('http', 'default_status', IW\HTTP\NOT_FOUND)
 		);
 
+		//
+		// If we're being accessed via CLI, we're done
+		//
+
+		if ($app->checkSAPI('cli', 'embed')) {
+			return;
+		}
 
 		//
 		// Handle JSON Encoding Output
@@ -41,10 +48,7 @@
 		$request  = $broker->make('Inkwell\HTTP\Resource\Request');
 		$gateway  = $broker->make('Inkwell\HTTP\Gateway\Server');
 
-		if (!$app->checkSAPI('cli', 'embed')) {
-			$gateway->populate($request);
-		}
-
+		$gateway->populate($request);
 
 		//
 		// Set up providers

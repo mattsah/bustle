@@ -2,9 +2,12 @@
 
 	return Affinity\Config::create(['providers', 'auth'], [
 		'@providers' => [
+
 			//
 			// The provider mapping lists concrete class providers for given interfaces, the
-			// interface is the key, while the class is the value.
+			// interface is the key, while the class is the value.  In the setup below if
+			// the broker is tasked with creating an EntityInterface, it will use the
+			// AnonymousUser.
 			//
 
 			'mapping' => [
@@ -16,7 +19,9 @@
 
 			//
 			// Aliasing broader actions to more specific actions.  These are suggested action
-			// names.
+			// names.  This means that providing a particular role the rights to 'manage', for
+			// example, you are actually providing them the ability to 'create', 'remove',
+			// 'update', and 'select'.
 			//
 
 			'aliases' => [
@@ -45,6 +50,10 @@
 
 			'permissions' => [
 				'Anonymous' => [
+
+					//
+					// The default Anonymous role has no permissions
+					//
 
 				]
 			],

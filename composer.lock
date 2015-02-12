@@ -4,20 +4,53 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "42374c345761e740f5d4e78eaf3fd4b1",
+    "hash": "70b09d30a5579b726a5901b346070d27",
     "packages": [
+        {
+            "name": "dnoegel/php-xdg-base-dir",
+            "version": "0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dnoegel/php-xdg-base-dir.git",
+                "reference": "265b8593498b997dc2d31e75b89f053b5cc9621a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dnoegel/php-xdg-base-dir/zipball/265b8593498b997dc2d31e75b89f053b5cc9621a",
+                "reference": "265b8593498b997dc2d31e75b89f053b5cc9621a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "@stable"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "XdgBaseDir\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "implementation of xdg base directory specification for php",
+            "time": "2014-10-24 07:27:01"
+        },
         {
             "name": "dotink/affinity",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/affinity.git",
-                "reference": "b8a535782c29a56f06cef3ff785ffd0c88dc8331"
+                "reference": "1.0.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/affinity/zipball/b8a535782c29a56f06cef3ff785ffd0c88dc8331",
-                "reference": "b8a535782c29a56f06cef3ff785ffd0c88dc8331",
+                "url": "https://api.github.com/repos/dotink/affinity/zipball/1.0.2",
+                "reference": "1.0.2",
                 "shasum": ""
             },
             "require": {
@@ -45,10 +78,10 @@
                 "bootstrap"
             ],
             "support": {
-                "source": "https://github.com/dotink/affinity/tree/master",
+                "source": "https://github.com/dotink/affinity/tree/1.0.2",
                 "issues": "https://github.com/dotink/affinity/issues"
             },
-            "time": "2015-02-03 21:28:35"
+            "time": "2015-02-10 08:11:43"
         },
         {
             "name": "dotink/flourish-collection",
@@ -56,12 +89,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/flourish-collection.git",
-                "reference": "b16cb0b9a3b15e83bb6e75e5d40c44a91cc50c91"
+                "reference": "1.0.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/flourish-collection/zipball/b16cb0b9a3b15e83bb6e75e5d40c44a91cc50c91",
-                "reference": "b16cb0b9a3b15e83bb6e75e5d40c44a91cc50c91",
+                "url": "https://api.github.com/repos/dotink/flourish-collection/zipball/1.0.1",
+                "reference": "1.0.1",
                 "shasum": ""
             },
             "require": {
@@ -101,10 +134,10 @@
                 "iterator"
             ],
             "support": {
-                "source": "https://github.com/dotink/flourish-collection/tree/master",
+                "source": "https://github.com/dotink/flourish-collection/tree/1.0.1",
                 "issues": "https://github.com/dotink/flourish-collection/issues"
             },
-            "time": "2015-02-04 04:03:13"
+            "time": "2015-02-10 09:02:24"
         },
         {
             "name": "dotink/flourish-core",
@@ -112,12 +145,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/flourish-core.git",
-                "reference": "3d8fcf1a1905b685dfe5801596f9256e5472d118"
+                "reference": "1.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/flourish-core/zipball/3d8fcf1a1905b685dfe5801596f9256e5472d118",
-                "reference": "3d8fcf1a1905b685dfe5801596f9256e5472d118",
+                "url": "https://api.github.com/repos/dotink/flourish-core/zipball/1.0.0",
+                "reference": "1.0.0",
                 "shasum": ""
             },
             "require": {
@@ -154,10 +187,10 @@
                 "exception handling"
             ],
             "support": {
-                "source": "https://github.com/dotink/flourish-core/tree/master",
+                "source": "https://github.com/dotink/flourish-core/tree/1.0.0",
                 "issues": "https://github.com/dotink/flourish-core/issues"
             },
-            "time": "2015-01-21 05:57:36"
+            "time": "2015-02-11 05:20:22"
         },
         {
             "name": "dotink/flourish-datetime",
@@ -277,12 +310,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/flourish-text.git",
-                "reference": "752700f5da07752f4fbae6f29e66f0df7535997f"
+                "reference": "ed0e5aa8ad37692dbe4496e870949fa3900dda4c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/flourish-text/zipball/752700f5da07752f4fbae6f29e66f0df7535997f",
-                "reference": "752700f5da07752f4fbae6f29e66f0df7535997f",
+                "url": "https://api.github.com/repos/dotink/flourish-text/zipball/ed0e5aa8ad37692dbe4496e870949fa3900dda4c",
+                "reference": "ed0e5aa8ad37692dbe4496e870949fa3900dda4c",
                 "shasum": ""
             },
             "require": {
@@ -324,7 +357,7 @@
                 "source": "https://github.com/dotink/flourish-text/tree/master",
                 "issues": "https://github.com/dotink/flourish-text/issues"
             },
-            "time": "2015-01-21 05:57:45"
+            "time": "2015-02-11 20:44:37"
         },
         {
             "name": "dotink/flourish-url",
@@ -332,12 +365,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/flourish-url.git",
-                "reference": "e1145ad14f78ee0b9657c3d0bff8736e123eb7fd"
+                "reference": "1.0.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/flourish-url/zipball/e1145ad14f78ee0b9657c3d0bff8736e123eb7fd",
-                "reference": "e1145ad14f78ee0b9657c3d0bff8736e123eb7fd",
+                "url": "https://api.github.com/repos/dotink/flourish-url/zipball/1.0.2",
+                "reference": "1.0.2",
                 "shasum": ""
             },
             "require": {
@@ -378,10 +411,10 @@
                 "URL"
             ],
             "support": {
-                "source": "https://github.com/dotink/flourish-url/tree/master",
+                "source": "https://github.com/dotink/flourish-url/tree/1.0.2",
                 "issues": "https://github.com/dotink/flourish-url/issues"
             },
-            "time": "2015-01-21 05:57:47"
+            "time": "2015-02-11 06:42:41"
         },
         {
             "name": "dotink/inkwell-auth",
@@ -389,12 +422,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-auth.git",
-                "reference": "d768e52a7915acca2f6454ae495b3471020e87f9"
+                "reference": "a2c82e1cb064c21dc4e8f99dd25a09b372e63a68"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-auth/zipball/d768e52a7915acca2f6454ae495b3471020e87f9",
-                "reference": "d768e52a7915acca2f6454ae495b3471020e87f9",
+                "url": "https://api.github.com/repos/dotink/inkwell-auth/zipball/a2c82e1cb064c21dc4e8f99dd25a09b372e63a68",
+                "reference": "a2c82e1cb064c21dc4e8f99dd25a09b372e63a68",
                 "shasum": ""
             },
             "require": {
@@ -432,10 +465,62 @@
                 "rbac"
             ],
             "support": {
-                "source": "https://github.com/dotink/inkwell-auth/tree/master",
-                "issues": "https://github.com/dotink/inkwell-auth/issues"
+                "source": "https://github.com/dotink/inkwell-auth/tree/master"
             },
-            "time": "2015-01-31 01:44:20"
+            "time": "2015-02-12 09:28:34"
+        },
+        {
+            "name": "dotink/inkwell-console",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dotink/inkwell-console.git",
+                "reference": "ecf3c6452a2e4980bd4002a5b1c3c8e59c950381"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dotink/inkwell-console/zipball/ecf3c6452a2e4980bd4002a5b1c3c8e59c950381",
+                "reference": "ecf3c6452a2e4980bd4002a5b1c3c8e59c950381",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0",
+                "psy/psysh": "@stable"
+            },
+            "type": "opus-package",
+            "extra": {
+                "opus": {
+                    "inkwell/framework": {
+                        "plugin/bin": "bin",
+                        "plugin/config": "config"
+                    }
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "license": [
+                "AGPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Matthew J. Sahagian",
+                    "email": "matt@imarc.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Interactive Console for inKWell",
+            "keywords": [
+                "cli",
+                "repl"
+            ],
+            "support": {
+                "source": "https://github.com/dotink/inkwell-console/tree/master",
+                "issues": "https://github.com/dotink/inkwell-console/issues"
+            },
+            "time": "2015-02-12 11:12:10"
         },
         {
             "name": "dotink/inkwell-controller",
@@ -443,12 +528,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-controller.git",
-                "reference": "092d3c0dbc62bbcc5b095f6a293ed5e073c28350"
+                "reference": "f90a4f85736ad55a886ec165eb9e9fcd33964eb2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-controller/zipball/092d3c0dbc62bbcc5b095f6a293ed5e073c28350",
-                "reference": "092d3c0dbc62bbcc5b095f6a293ed5e073c28350",
+                "url": "https://api.github.com/repos/dotink/inkwell-controller/zipball/f90a4f85736ad55a886ec165eb9e9fcd33964eb2",
+                "reference": "f90a4f85736ad55a886ec165eb9e9fcd33964eb2",
                 "shasum": ""
             },
             "require": {
@@ -487,10 +572,9 @@
                 "routing"
             ],
             "support": {
-                "source": "https://github.com/dotink/inkwell-controller/tree/master",
-                "issues": "https://github.com/dotink/inkwell-controller/issues"
+                "source": "https://github.com/dotink/inkwell-controller/tree/master"
             },
-            "time": "2015-02-04 06:31:46"
+            "time": "2015-02-11 09:30:18"
         },
         {
             "name": "dotink/inkwell-core",
@@ -498,12 +582,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-core.git",
-                "reference": "2422d684b41568b9b4a09cf8d0138c50d93074af"
+                "reference": "a7644910a1566ffe62ac16cca6b9e501a3275910"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-core/zipball/2422d684b41568b9b4a09cf8d0138c50d93074af",
-                "reference": "2422d684b41568b9b4a09cf8d0138c50d93074af",
+                "url": "https://api.github.com/repos/dotink/inkwell-core/zipball/a7644910a1566ffe62ac16cca6b9e501a3275910",
+                "reference": "a7644910a1566ffe62ac16cca6b9e501a3275910",
                 "shasum": ""
             },
             "require": {
@@ -541,10 +625,9 @@
                 "mvc"
             ],
             "support": {
-                "source": "https://github.com/dotink/inkwell-core/tree/master",
-                "issues": "https://github.com/dotink/inkwell-core/issues"
+                "source": "https://github.com/dotink/inkwell-core/tree/master"
             },
-            "time": "2015-01-31 01:42:17"
+            "time": "2015-02-12 07:37:09"
         },
         {
             "name": "dotink/inkwell-events",
@@ -552,12 +635,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-events.git",
-                "reference": "b388087cff7c9cee9bdbe642390751607e7519b4"
+                "reference": "400fb841fdaf048b018795af832236d6e94963a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-events/zipball/b388087cff7c9cee9bdbe642390751607e7519b4",
-                "reference": "b388087cff7c9cee9bdbe642390751607e7519b4",
+                "url": "https://api.github.com/repos/dotink/inkwell-events/zipball/400fb841fdaf048b018795af832236d6e94963a9",
+                "reference": "400fb841fdaf048b018795af832236d6e94963a9",
                 "shasum": ""
             },
             "require": {
@@ -594,10 +677,9 @@
                 "events"
             ],
             "support": {
-                "source": "https://github.com/dotink/inkwell-events/tree/master",
-                "issues": "https://github.com/dotink/inkwell-events/issues"
+                "source": "https://github.com/dotink/inkwell-events/tree/master"
             },
-            "time": "2015-01-21 09:08:29"
+            "time": "2015-02-11 09:23:48"
         },
         {
             "name": "dotink/inkwell-html",
@@ -605,12 +687,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-html.git",
-                "reference": "533be4a17d4a947c7ed00aa4c88f6e5395a645c3"
+                "reference": "3499a6753ddf0ea6edf07144fb9360d3e8e10542"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-html/zipball/533be4a17d4a947c7ed00aa4c88f6e5395a645c3",
-                "reference": "533be4a17d4a947c7ed00aa4c88f6e5395a645c3",
+                "url": "https://api.github.com/repos/dotink/inkwell-html/zipball/3499a6753ddf0ea6edf07144fb9360d3e8e10542",
+                "reference": "3499a6753ddf0ea6edf07144fb9360d3e8e10542",
                 "shasum": ""
             },
             "require": {
@@ -647,10 +729,9 @@
                 "templating"
             ],
             "support": {
-                "source": "https://github.com/dotink/inkwell-html/tree/master",
-                "issues": "https://github.com/dotink/inkwell-html/issues"
+                "source": "https://github.com/dotink/inkwell-html/tree/master"
             },
-            "time": "2015-01-30 04:31:43"
+            "time": "2015-02-11 09:10:13"
         },
         {
             "name": "dotink/inkwell-http",
@@ -658,12 +739,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-http.git",
-                "reference": "f5392d673c0bb5d5b31f2771c46f1df33c759d87"
+                "reference": "ef2c30a0b306ec5c52d4ba083399517b3fa13f9f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-http/zipball/f5392d673c0bb5d5b31f2771c46f1df33c759d87",
-                "reference": "f5392d673c0bb5d5b31f2771c46f1df33c759d87",
+                "url": "https://api.github.com/repos/dotink/inkwell-http/zipball/ef2c30a0b306ec5c52d4ba083399517b3fa13f9f",
+                "reference": "ef2c30a0b306ec5c52d4ba083399517b3fa13f9f",
                 "shasum": ""
             },
             "require": {
@@ -703,10 +784,9 @@
                 "http"
             ],
             "support": {
-                "source": "https://github.com/dotink/inkwell-http/tree/master",
-                "issues": "https://github.com/dotink/inkwell-http/issues"
+                "source": "https://github.com/dotink/inkwell-http/tree/master"
             },
-            "time": "2015-02-04 06:43:01"
+            "time": "2015-02-11 09:22:26"
         },
         {
             "name": "dotink/inkwell-orm",
@@ -714,12 +794,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-orm.git",
-                "reference": "fa3df35517dcc3e339c3cc07cca3e6075c3e5773"
+                "reference": "fce89e989c900aa84adae47dcbde1588600d296e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-orm/zipball/fa3df35517dcc3e339c3cc07cca3e6075c3e5773",
-                "reference": "fa3df35517dcc3e339c3cc07cca3e6075c3e5773",
+                "url": "https://api.github.com/repos/dotink/inkwell-orm/zipball/fce89e989c900aa84adae47dcbde1588600d296e",
+                "reference": "fce89e989c900aa84adae47dcbde1588600d296e",
                 "shasum": ""
             },
             "require": {
@@ -757,10 +837,9 @@
                 "database"
             ],
             "support": {
-                "source": "https://github.com/dotink/inkwell-orm/tree/master",
-                "issues": "https://github.com/dotink/inkwell-orm/issues"
+                "source": "https://github.com/dotink/inkwell-orm/tree/master"
             },
-            "time": "2015-01-25 02:14:44"
+            "time": "2015-02-12 11:11:46"
         },
         {
             "name": "dotink/inkwell-routing",
@@ -768,12 +847,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-routing.git",
-                "reference": "795af71db6b2a4dfc75a9df9789c2e637771e111"
+                "reference": "cb7e0888802c9c8f3cc9ece59e91fd89c7592da0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-routing/zipball/795af71db6b2a4dfc75a9df9789c2e637771e111",
-                "reference": "795af71db6b2a4dfc75a9df9789c2e637771e111",
+                "url": "https://api.github.com/repos/dotink/inkwell-routing/zipball/cb7e0888802c9c8f3cc9ece59e91fd89c7592da0",
+                "reference": "cb7e0888802c9c8f3cc9ece59e91fd89c7592da0",
                 "shasum": ""
             },
             "require": {
@@ -813,10 +892,9 @@
                 "router"
             ],
             "support": {
-                "source": "https://github.com/dotink/inkwell-routing/tree/master",
-                "issues": "https://github.com/dotink/inkwell-routing/issues"
+                "source": "https://github.com/dotink/inkwell-routing/tree/master"
             },
-            "time": "2015-02-03 06:41:10"
+            "time": "2015-02-12 11:01:20"
         },
         {
             "name": "dotink/inkwell-transport",
@@ -824,12 +902,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-transport.git",
-                "reference": "df9a7ab56b8027af32d528b29297a3b23b25d594"
+                "reference": "272a00a3924b4086b474cff64bb50ab5cd13aa3a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-transport/zipball/df9a7ab56b8027af32d528b29297a3b23b25d594",
-                "reference": "df9a7ab56b8027af32d528b29297a3b23b25d594",
+                "url": "https://api.github.com/repos/dotink/inkwell-transport/zipball/272a00a3924b4086b474cff64bb50ab5cd13aa3a",
+                "reference": "272a00a3924b4086b474cff64bb50ab5cd13aa3a",
                 "shasum": ""
             },
             "require": {
@@ -863,10 +941,9 @@
                 "http"
             ],
             "support": {
-                "source": "https://github.com/dotink/inkwell-transport/tree/master",
-                "issues": "https://github.com/dotink/inkwell-transport/issues"
+                "source": "https://github.com/dotink/inkwell-transport/tree/master"
             },
-            "time": "2015-01-21 06:15:27"
+            "time": "2015-02-11 09:19:39"
         },
         {
             "name": "dotink/inkwell-view",
@@ -874,12 +951,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-view.git",
-                "reference": "fe948464910336e3bc15d8a2c04c8cc2d9dad6b5"
+                "reference": "dd04d4e1d8889c4805d9b39b3386ea519c403009"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-view/zipball/fe948464910336e3bc15d8a2c04c8cc2d9dad6b5",
-                "reference": "fe948464910336e3bc15d8a2c04c8cc2d9dad6b5",
+                "url": "https://api.github.com/repos/dotink/inkwell-view/zipball/dd04d4e1d8889c4805d9b39b3386ea519c403009",
+                "reference": "dd04d4e1d8889c4805d9b39b3386ea519c403009",
                 "shasum": ""
             },
             "require": {
@@ -918,10 +995,9 @@
                 "views"
             ],
             "support": {
-                "source": "https://github.com/dotink/inkwell-view/tree/master",
-                "issues": "https://github.com/dotink/inkwell-view/issues"
+                "source": "https://github.com/dotink/inkwell-view/tree/master"
             },
-            "time": "2015-02-01 06:21:48"
+            "time": "2015-02-07 09:17:57"
         },
         {
             "name": "filp/whoops",
@@ -1128,12 +1204,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ircmaxell/password_compat.git",
-                "reference": "de01fa521702990ed066446f2931914272336444"
+                "reference": "c859f7c11ef51f3a7bc5527b3df3f3830b620b0d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ircmaxell/password_compat/zipball/de01fa521702990ed066446f2931914272336444",
-                "reference": "de01fa521702990ed066446f2931914272336444",
+                "url": "https://api.github.com/repos/ircmaxell/password_compat/zipball/c859f7c11ef51f3a7bc5527b3df3f3830b620b0d",
+                "reference": "c859f7c11ef51f3a7bc5527b3df3f3830b620b0d",
                 "shasum": ""
             },
             "require-dev": {
@@ -1162,7 +1238,138 @@
                 "hashing",
                 "password"
             ],
-            "time": "2015-01-09 18:38:25"
+            "time": "2015-02-04 19:29:18"
+        },
+        {
+            "name": "jakub-onderka/php-console-color",
+            "version": "0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/JakubOnderka/PHP-Console-Color.git",
+                "reference": "e0b393dacf7703fc36a4efc3df1435485197e6c1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/JakubOnderka/PHP-Console-Color/zipball/e0b393dacf7703fc36a4efc3df1435485197e6c1",
+                "reference": "e0b393dacf7703fc36a4efc3df1435485197e6c1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "jakub-onderka/php-code-style": "1.0",
+                "jakub-onderka/php-parallel-lint": "0.*",
+                "jakub-onderka/php-var-dump-check": "0.*",
+                "phpunit/phpunit": "3.7.*",
+                "squizlabs/php_codesniffer": "1.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "JakubOnderka\\PhpConsoleColor": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Jakub Onderka",
+                    "email": "jakub.onderka@gmail.com",
+                    "homepage": "http://www.acci.cz"
+                }
+            ],
+            "time": "2014-04-08 15:00:19"
+        },
+        {
+            "name": "jakub-onderka/php-console-highlighter",
+            "version": "v0.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/JakubOnderka/PHP-Console-Highlighter.git",
+                "reference": "05bce997da20acf873e6bf396276798f3cd2c76a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/JakubOnderka/PHP-Console-Highlighter/zipball/05bce997da20acf873e6bf396276798f3cd2c76a",
+                "reference": "05bce997da20acf873e6bf396276798f3cd2c76a",
+                "shasum": ""
+            },
+            "require": {
+                "jakub-onderka/php-console-color": "~0.1",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "jakub-onderka/php-code-style": "~1.0",
+                "jakub-onderka/php-parallel-lint": "~0.5",
+                "phpunit/phpunit": "~4.0",
+                "squizlabs/php_codesniffer": "~1.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "JakubOnderka\\PhpConsoleHighlighter": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jakub Onderka",
+                    "email": "acci@acci.cz",
+                    "homepage": "http://www.acci.cz/"
+                }
+            ],
+            "time": "2014-07-14 20:59:35"
+        },
+        {
+            "name": "nikic/php-parser",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nikic/PHP-Parser.git",
+                "reference": "1366e833a16c4267883187da6da7b317f0582dd7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/1366e833a16c4267883187da6da7b317f0582dd7",
+                "reference": "1366e833a16c4267883187da6da7b317f0582dd7",
+                "shasum": ""
+            },
+            "require": {
+                "ext-tokenizer": "*",
+                "php": ">=5.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "lib/bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nikita Popov"
+                }
+            ],
+            "description": "A PHP parser written in PHP",
+            "keywords": [
+                "parser",
+                "php"
+            ],
+            "time": "2015-01-31 21:59:38"
         },
         {
             "name": "propel/propel",
@@ -1170,12 +1377,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/propelorm/Propel2.git",
-                "reference": "eba539966bafca4f2992307ad6364da40eb4a9ff"
+                "reference": "34424073615e7a9f2f21fd45914ab06a7abda27c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/propelorm/Propel2/zipball/eba539966bafca4f2992307ad6364da40eb4a9ff",
-                "reference": "eba539966bafca4f2992307ad6364da40eb4a9ff",
+                "url": "https://api.github.com/repos/propelorm/Propel2/zipball/34424073615e7a9f2f21fd45914ab06a7abda27c",
+                "reference": "34424073615e7a9f2f21fd45914ab06a7abda27c",
                 "shasum": ""
             },
             "require": {
@@ -1227,7 +1434,7 @@
                 "orm",
                 "persistence"
             ],
-            "time": "2015-01-29 20:08:07"
+            "time": "2015-02-10 11:06:12"
         },
         {
             "name": "psr/log",
@@ -1235,12 +1442,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "a78d6504ff5d4367497785ab2ade91db3a9fbe11"
+                "reference": "1af1529b49a6e065ae6802e70192aba35d79b7d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/a78d6504ff5d4367497785ab2ade91db3a9fbe11",
-                "reference": "a78d6504ff5d4367497785ab2ade91db3a9fbe11",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/1af1529b49a6e065ae6802e70192aba35d79b7d8",
+                "reference": "1af1529b49a6e065ae6802e70192aba35d79b7d8",
                 "shasum": ""
             },
             "type": "library",
@@ -1270,7 +1477,77 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2014-01-18 15:33:09"
+            "time": "2015-02-05 09:32:11"
+        },
+        {
+            "name": "psy/psysh",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bobthecow/psysh.git",
+                "reference": "218ea9e49c9fe21e28fce6cf77f22615af92daef"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/218ea9e49c9fe21e28fce6cf77f22615af92daef",
+                "reference": "218ea9e49c9fe21e28fce6cf77f22615af92daef",
+                "shasum": ""
+            },
+            "require": {
+                "dnoegel/php-xdg-base-dir": "0.1",
+                "jakub-onderka/php-console-highlighter": "0.3.*",
+                "nikic/php-parser": "~1.0",
+                "php": ">=5.3.0",
+                "symfony/console": "~2.3.10|~2.4.2|~2.5"
+            },
+            "require-dev": {
+                "fabpot/php-cs-fixer": "~1.3",
+                "phpunit/phpunit": "~3.7|~4.0",
+                "squizlabs/php_codesniffer": "~2.0",
+                "symfony/finder": "~2.1"
+            },
+            "suggest": {
+                "ext-pcntl": "Enabling the PCNTL extension makes PsySH a lot happier :)",
+                "ext-posix": "If you have PCNTL, you'll want the POSIX extension as well.",
+                "ext-readline": "Enables support for arrow-key history navigation, and showing and manipulating command history."
+            },
+            "bin": [
+                "bin/psysh"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "0.3.x-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/Psy/functions.php"
+                ],
+                "psr-0": {
+                    "Psy\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Justin Hileman",
+                    "email": "justin@justinhileman.info",
+                    "homepage": "http://justinhileman.com"
+                }
+            ],
+            "description": "An interactive shell for modern PHP.",
+            "homepage": "https://github.com/bobthecow/psysh",
+            "keywords": [
+                "REPL",
+                "console",
+                "interactive",
+                "shell"
+            ],
+            "time": "2015-02-12 05:21:32"
         },
         {
             "name": "rdlowrey/auryn",
@@ -1278,12 +1555,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/rdlowrey/Auryn.git",
-                "reference": "6ddc46074fc89978c328d5444c198249ad4ffd3a"
+                "reference": "8810ec50ff3eebc591188f8f458d70be25c38c5b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rdlowrey/Auryn/zipball/6ddc46074fc89978c328d5444c198249ad4ffd3a",
-                "reference": "6ddc46074fc89978c328d5444c198249ad4ffd3a",
+                "url": "https://api.github.com/repos/rdlowrey/Auryn/zipball/8810ec50ff3eebc591188f8f458d70be25c38c5b",
+                "reference": "8810ec50ff3eebc591188f8f458d70be25c38c5b",
                 "shasum": ""
             },
             "require": {
@@ -1328,7 +1605,7 @@
                 "dic",
                 "ioc"
             ],
-            "time": "2014-10-30 14:18:07"
+            "time": "2015-02-11 04:29:21"
         },
         {
             "name": "symfony/config",
@@ -1337,12 +1614,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Config.git",
-                "reference": "1624dd47e1f4dc89ae4e7ca4a0476325042f8e82"
+                "reference": "a634f4e901f5d20696020980cae70d8d94c6193d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Config/zipball/1624dd47e1f4dc89ae4e7ca4a0476325042f8e82",
-                "reference": "1624dd47e1f4dc89ae4e7ca4a0476325042f8e82",
+                "url": "https://api.github.com/repos/symfony/Config/zipball/a634f4e901f5d20696020980cae70d8d94c6193d",
+                "reference": "a634f4e901f5d20696020980cae70d8d94c6193d",
                 "shasum": ""
             },
             "require": {
@@ -1376,7 +1653,7 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "http://symfony.com",
-            "time": "2015-01-25 04:39:35"
+            "time": "2015-02-11 07:17:51"
         },
         {
             "name": "symfony/console",
@@ -1385,12 +1662,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "9f041fb5735b0d25d117e77ab8597a8376c74fbd"
+                "reference": "9ae2430b0985bb9771eb15caf3638dd54f956422"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/9f041fb5735b0d25d117e77ab8597a8376c74fbd",
-                "reference": "9f041fb5735b0d25d117e77ab8597a8376c74fbd",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/9ae2430b0985bb9771eb15caf3638dd54f956422",
+                "reference": "9ae2430b0985bb9771eb15caf3638dd54f956422",
                 "shasum": ""
             },
             "require": {
@@ -1433,7 +1710,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com",
-            "time": "2015-01-25 05:59:26"
+            "time": "2015-02-11 07:17:51"
         },
         {
             "name": "symfony/filesystem",
@@ -1442,12 +1719,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Filesystem.git",
-                "reference": "e681ca515e1e668a551b089177867e62e03d7d2d"
+                "reference": "177e0a8e29fab3f0556f7a973b5a42935e42a4d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Filesystem/zipball/e681ca515e1e668a551b089177867e62e03d7d2d",
-                "reference": "e681ca515e1e668a551b089177867e62e03d7d2d",
+                "url": "https://api.github.com/repos/symfony/Filesystem/zipball/177e0a8e29fab3f0556f7a973b5a42935e42a4d7",
+                "reference": "177e0a8e29fab3f0556f7a973b5a42935e42a4d7",
                 "shasum": ""
             },
             "require": {
@@ -1480,7 +1757,7 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "http://symfony.com",
-            "time": "2015-01-09 06:51:41"
+            "time": "2015-02-11 07:17:51"
         },
         {
             "name": "symfony/finder",
@@ -1489,12 +1766,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Finder.git",
-                "reference": "0c737de96a94d14a51738d285ad426a102baac0e"
+                "reference": "509d125782f31ebbd0bb3cd9824f1ccc1e5d5a18"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Finder/zipball/0c737de96a94d14a51738d285ad426a102baac0e",
-                "reference": "0c737de96a94d14a51738d285ad426a102baac0e",
+                "url": "https://api.github.com/repos/symfony/Finder/zipball/509d125782f31ebbd0bb3cd9824f1ccc1e5d5a18",
+                "reference": "509d125782f31ebbd0bb3cd9824f1ccc1e5d5a18",
                 "shasum": ""
             },
             "require": {
@@ -1527,7 +1804,7 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "http://symfony.com",
-            "time": "2015-01-09 06:51:41"
+            "time": "2015-02-11 07:17:51"
         },
         {
             "name": "symfony/translation",
@@ -1536,12 +1813,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Translation.git",
-                "reference": "6429021a7658ed9e4eeb4eb4ac991498167927d3"
+                "reference": "a137d0bb09b3e841fb21cb2599afce217d96e0b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Translation/zipball/6429021a7658ed9e4eeb4eb4ac991498167927d3",
-                "reference": "6429021a7658ed9e4eeb4eb4ac991498167927d3",
+                "url": "https://api.github.com/repos/symfony/Translation/zipball/a137d0bb09b3e841fb21cb2599afce217d96e0b4",
+                "reference": "a137d0bb09b3e841fb21cb2599afce217d96e0b4",
                 "shasum": ""
             },
             "require": {
@@ -1585,7 +1862,7 @@
             ],
             "description": "Symfony Translation Component",
             "homepage": "http://symfony.com",
-            "time": "2015-01-06 10:39:25"
+            "time": "2015-02-12 08:47:54"
         },
         {
             "name": "symfony/validator",
@@ -1594,12 +1871,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Validator.git",
-                "reference": "ec6acefefe36233f36fa60ebc86d1900d4315dca"
+                "reference": "7ecb4f34c22a5fcedd87bc3aca1bffca37e1a3da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Validator/zipball/ec6acefefe36233f36fa60ebc86d1900d4315dca",
-                "reference": "ec6acefefe36233f36fa60ebc86d1900d4315dca",
+                "url": "https://api.github.com/repos/symfony/Validator/zipball/7ecb4f34c22a5fcedd87bc3aca1bffca37e1a3da",
+                "reference": "7ecb4f34c22a5fcedd87bc3aca1bffca37e1a3da",
                 "shasum": ""
             },
             "require": {
@@ -1655,7 +1932,7 @@
             ],
             "description": "Symfony Validator Component",
             "homepage": "http://symfony.com",
-            "time": "2015-01-26 15:52:15"
+            "time": "2015-02-11 07:17:51"
         },
         {
             "name": "symfony/yaml",
@@ -1664,12 +1941,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "02ba3dc638c5d3f0ab3b47ddb74f98c11dcc0c60"
+                "reference": "43aac3461a5679f486f7c96e4d7e780a59fec997"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/02ba3dc638c5d3f0ab3b47ddb74f98c11dcc0c60",
-                "reference": "02ba3dc638c5d3f0ab3b47ddb74f98c11dcc0c60",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/43aac3461a5679f486f7c96e4d7e780a59fec997",
+                "reference": "43aac3461a5679f486f7c96e4d7e780a59fec997",
                 "shasum": ""
             },
             "require": {
@@ -1702,7 +1979,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2015-01-25 04:39:35"
+            "time": "2015-02-11 07:17:51"
         },
         {
             "name": "willdurand/negotiation",
@@ -1773,7 +2050,8 @@
         "dotink/inkwell-auth": 20,
         "firebase/php-jwt": 20,
         "dotink/flourish-message": 20,
-        "ircmaxell/password-compat": 20
+        "ircmaxell/password-compat": 20,
+        "dotink/inkwell-console": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

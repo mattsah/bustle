@@ -1,6 +1,7 @@
 <?php
 
 	use Whoops\Handler\PrettyPageHandler;
+	use Whoops\Handler\PlainTextHandler;
 	use Whoops\Handler\JsonResponseHandler;
 
 	return Affinity\Action::create(function($app, $broker) {
@@ -29,8 +30,15 @@
 
 			switch ($debugging['destination']) {
 				case IW\ERROR\DESTINATION_RESPONSE:
-					$debug_handler = new PrettyPageHandler();
-					$debug_handler->setPageTitle("Whoops! There was a problem.");
+					if ($app->checkSAPI('cli', 'embed')) {
+						$debug_handler = new PlainTextHandler();
+
+					} else {
+						$debug_handler = new PrettyPageHandler();
+						$debug_handler->setPageTitle("Whoops! There was a problem.");
+
+					}
+
 					$debug_manager->pushHandler($debug_handler);
 					break;
 
