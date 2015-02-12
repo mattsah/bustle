@@ -57,13 +57,10 @@ $host = $this->request->getURL()->getHost();
 $path = $this->request->getURL()->getPath();
 ```
 
-URLs are immutable, so if you need to modify the URL on the request, you need to make sure you
-set it to the returned URL:
+You can set partial aspects of the URL, thereby modifying it:
 
 ```php
-$new_url = $this->request->getUrl()->modify('/new/path.html');
-
-$this->request->setURL($new_url);
+$this->request->setURL('/new/path.html');
 ```
 
 ### HTTP Method

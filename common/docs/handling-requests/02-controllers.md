@@ -186,8 +186,8 @@ reset the response body and status code to reflect a HTTP `405` and throw a
 
 ### Accept Negotiation
 
-The `Inkwell\Controller\NegotiatorInterface` provides a simple way to set negotiator objects for
-the acceptable language and mime types.  It provides the following methods:
+The `Inkwell\Controller\NegotiatorConsumerInterface` provides a simple way to set negotiator
+objects for the acceptable language and mime types.  It provides the following methods:
 
 - `setLanguageNegotiator()`
 - `setMimeTypeNegotiator()`
@@ -215,9 +215,9 @@ $mimetype = $this->acceptMimeType(['text/html', 'application/json']);
 
 <div class="notice">
 	<p>
-		Note:  If you implement the `NegotiatorInterface` and/or use the `Negotiator` trait on your
-		own controllers which do not extend `BaseController`, you will still need to implement
-		your own methods to use them.
+		Note:  If you implement the `NegotiatorConsumerInterface` and/or use the
+		`NegotiatorConsumer` trait on your own controllers which do not extend `BaseController`,
+		you will still need to implement your own methods to use them.
 	</p>
 </div>
 
