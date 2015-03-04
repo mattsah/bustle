@@ -29,12 +29,17 @@ Additional planned components are:
 
 ## Creating Custom Components
 
-Creating inKWell components is easy.  Create a composer package with an `src` directory to contain
-classes, interfaces, traits, etc.  Add your default configuration(s) to `plugin/config/default`
-(use subdirectories for additional namespacing) and your default action(s) to `plugin/include/default`
-then simply add the following to your `composer.json`:
+Creating inKWell components is easy.
 
-```
+The general operations are as follows:
+
+- Create a composer package with an `src` directory to contain classes, interfaces, traits, etc.
+- Add your default configuration(s) to `plugin/config/default` (use subdirectories for additional
+  namespacing).
+- Add your default bootstrap action(s) to `plugin/include/default`
+- Then enable it as an opus-package in your `composer.json`:
+
+```json
 "type": "opus-package",
 "extra": {
 	"opus": {
@@ -45,6 +50,13 @@ then simply add the following to your `composer.json`:
 	}
 }
 ```
+
+For a more complete tutorial using a real world example of packaging Doctrine 2 ORM for use
+with inKWell, check out
+["Creating a Component for Doctrine"](/docs/tutorials/01-creating-a-component-for-doctrine).
+
+To understand more about configuration and bootstrap actions, try [the bootstrapping section of
+the nano core docs](/docs/basics/02-nano-core#Bootstrapping).
 
 Once you've got the package registered with [packagist](https://packagist.org/) simply run:
 

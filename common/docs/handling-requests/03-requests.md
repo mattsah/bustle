@@ -136,6 +136,12 @@ Provide a default:
 $page = $this->request->params->get('page', 1);
 ```
 
+Get nested data:
+
+```php
+$name = $this->request->params->get('person.name', 'Jesse Doe');
+```
+
 Get all the data:
 
 ```php
@@ -146,4 +152,32 @@ Set data:
 
 ```php
 $this->request->params->set('task', $next_task->getId());
+```
+
+Set nested data:
+
+```php
+$this->request->params->set('person.age', 30);
+```
+
+### Cookies
+
+Get a cookie value:
+
+```php
+$user_token = $this->request->cookies->get('user_token', NULL);
+```
+
+### Files
+
+Get a file:
+
+```php
+$document = $this->request->files->get('document');
+```
+
+Get a nested file:
+
+```php
+$profile_image = $this->request->files->get('user.profile_image');
 ```

@@ -313,6 +313,12 @@ $this->request->params->get('id');
 $this->request->params->get('page', 1);
 ```
 
+##### Getting a Nested Parameter
+
+```php
+$this->request->params->get('person.name', 'Jesse Doe');
+```
+
 ### Returning
 
 You can return objects which implement a `compose()` method to render to strings.  Note, that this
@@ -353,9 +359,165 @@ $this->view->load('home.html', $initial_data);
 
 ### Setting Data
 
+There are multiple ways to set data on a view, however, when working outside the template it
+is recommended that the `set()` method is used.  This will throw an exception if you attempt to
+override data within a view, thereby ensuring integrity from other sources.
+
 ```php
 $this->view->set([
 	'record' => $record,
 	'user'   => $this->auth->entity
 ]);
 ```
+
+### Getting Data
+
+If you need to get previously set data out of a template it from outside a view, it is suggested
+you use the `get()` method.  This will throw an exception if you attempt to get data that does not
+exist, thereby ensuring integrity of the data you're working with.
+
+```php
+$record = $this->view->get('record');
+```
+
+### Checking Data
+
+If you just need to see if data exists, use `has()`:
+
+```php
+if ($this->view->has('record')) {
+	// Do something that requires record
+}
+```
+
+### Using Subcomponents
+
+Subcomponents are additional templates or views which can be inserted into a template by name
+using the `insert()` method.  This is useful for normalizing templates and allowing multiple
+subcomponents to be inserted with a single common alias.
+
+```php
+$this->view->assign([
+	'sidebar' => 'common/join_callout.html'
+]);
+```
+
+You can also append to an existing element:
+
+```php
+$this->view->append([
+	'sidebar' => 'common/advertising.html'
+]);
+```
+
+### Rendering
+
+```php
+$content = $this->view->compose();
+```
+
+### Working in Templates
+
+A template is run in the scope of the view object.  The view object can be referred to as `$this`
+inside the template.
+
+#### Setting Data
+
+Using the `ArrayAccess` method it is possible to overload data from a component template.
+
+```php
+$this['title'] = 'This will overload any title for a parent / master template';
+```
+
+### Getting Data
+
+Using the `ArrayAccess` method, you can get view data which will return `NULL` if that data is
+not available, thereby allowing for easy defaults:
+
+```php
+$record = $this['record'] ?: new Record();
+```
+
+### Filtering
+
+Data which is accessed via the `__invoke` method will be passed through any registered filters for
+the view format.  In the case of HTML, this includes escaping by default:
+
+```php
+$title = $this('title') ?: 'This is the default title';
+```
+
+Accessing nested data:
+
+```php
+$title = $this('article.title');
+```
+
+The above would attempt to get the title from the article as follows:
+
+- If article is an array, the key `['title']`
+- If the article is an object the property `title`
+- If the article is an object and the method `getTitle()` is callable
+
+## HTML Filter and Helper
+
+The HTML filter should be applied inside any view with a format of `html`.  Formats are set
+based on the extension of the template such that `example.html.php` is an HTML template.  You can
+use the helper more generally just by accessing the class, but only HTML templates will have
+data accessed via `$this()` automatically escaped.
+
+
+```php
+<h1><?= $this('title') ?: 'The default title' ?></h1>
+```
+
+### Manually Escaping
+
+While the above example would automatically escape data on an HTML template, it's possible
+to manually escape:
+
+```php
+<?= html::esc($some_value) ?>
+```
+
+### Looping
+
+```html
+<?php html::per($this('items'), function($i, $item) { ?>
+	<!--
+		$item and $i will be escaped if they're strings.
+	-->
+<?php }) ?>
+```
+
+If `$item` in the above example is an object which you will want to access additional properties
+on without calling `html::out()` you can envelop it in the view to incorporate its parameters:
+
+```html
+<?php html::per($this('articles'), $this(function($i, $article) { ?>
+	<h2><?= $this('article.title') ?></h2>
+	<p class="summary">
+		<?= $this('article.summary') ?>
+	</p>
+<?php })) ?>
+```
+
+### Multiple Filters
+
+The `html::out()` method will apply all active filters.  If no filters are set, this defaults to
+the escape filter.
+
+```php
+<?php html::filter(['raw', 'lower'], function() { ?>
+		<?= html::out('<A HREF="/">Go Home!</a>') ?>
+<?php }) ?>
+```
+
+The above would actually produce the output:
+
+```html
+<a href="/">go home!</a>
+```
+
+This would be unescaped, and therefore produce a link on your site rather than presenting the user
+with the text as shown.

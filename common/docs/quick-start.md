@@ -13,7 +13,7 @@ In order to install inKWell you will need [composer](https://getcomposer.org/). 
 to composer will simply use `composer` and not `composer.phar`, depending on how you've installed
 it, you may need to call a different command.
 
-### Create You Project Folder
+### Create Your Project Folder
 
 ```bash
 mkdir <target>
@@ -30,6 +30,27 @@ composer create-project -s dev inkwell/framework <target>
 ```bash
 composer require dotink/inkwell-components
 ```
+
+## Server Setup
+
+The default docroot for an inKWell project is the `public` folder in the application root.  This
+leaves all your classes, configuration, etc, back one directory.
+
+You will want to configure your server to access this as the document root and ensure that the
+`.htaccess` or ``.user.ini` are being read.  For Apache this means you'll have to allow overrides,
+in the case of nginx, you will want to set up `try_files` to try the `index.php` entry point.
+
+### Make Writable Writable
+
+You will want to make writable owned by the same user or group as the web server.  On debian
+servers, this user is often `www-data`, so for example you might run:
+
+```bash
+chown www-data <app_root>/writable
+```
+
+If you're running the local dev server then chances are this will already be writable if you
+installed with the same user who is running the server.
 
 ## First Run
 
@@ -321,8 +342,19 @@ In addition to static links like the above, you can do a lot more with dynamic U
 router.  A dynamic URL will have a route where certain segmants are replaced with parameter
 matching tokens.  URLs which match will then forward to the assigned controller.
 
-Let's check this out by creating another controller.  We'll stick this one in
-`user/controllers/BirthdayController.php`:
+For example let's add the following to the `links` section of the `config/default/routing.php`:
+
+```php
+'/birthday/[!:name]/[#:year]-[#:month]-[#:day]' => 'BirthdayController::age'
+```
+
+The above route indicates that we'll be looking for `/birthday/` followed by a name (which can
+include anything but a slash), then another slash, then positive or negative integers.  While we
+don't actually want negative integers, we're going to use this for now just for simple
+demonstration.
+
+We can handle this route by creating our controller with the appropriate action.  We'll stick this
+in `user/controllers/BirthdayController.php`:
 
 ```php
 <?php
@@ -360,17 +392,6 @@ Now let's create our corresponding view in `user/templates/birthday/age.html.php
 		</p>
 	</section>
 ```
-
-Now let's add the following to the `links` section of the `config/default/routing.php`:
-
-```php
-'/birthday/[!:name]/[#:year]-[#:month]-[#:day]' => 'BirthdayController::age'
-```
-
-The above route indicates that we'll be looking for `/birthday/` followed by a name (which can
-include anything but a slash), then another slash, then positive or negative integers.  While we
-don't actually want negative integers, we're going to use this for now just for simple
-demonstration.
 
 Once all this is added and saved, let's make sure we refresh our autoloader to find the new
 controller:

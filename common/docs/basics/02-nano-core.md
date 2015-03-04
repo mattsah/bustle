@@ -139,15 +139,17 @@ While it's possible to run the above examples inside the main application callba
 results in a huge entry file which is difficult to maintain long term and has little to no clear
 separation of configuration values from application bootstrapping logic.
 
-Enter Affinity.
+Enter [the Affinity boostrapper](https://github.com/dotink/affinity).
 
-Affinity is the bootstrapping kernel of inKWell.  It provides a very clear separation of
-configuration values from configuration logic and allows for you to easily plug in new
-configurations and bootstrapping actions from third parties.
+
+Affinity is responsible for handling the configuration, initial wiring of dependencies, class
+configuration, etc.  It provides a very clear separation between configuration values from
+configuration logic and allows for you to easily plug in new configurations and bootstrapping
+actions from third parties.
 
 ### Directory Structure
 
-Affinity uses two main directories in the application root to house its separate pieces.  The
+Affinity uses two main directories in the application root to house its separate concerns.  The
 default configuration root is `config` and the default action root is `include`.
 
 Within each directory you will also find a `default` subdirectory which houses the default
@@ -172,10 +174,10 @@ string `'core'` while a file such as `include/default/routes/main.php` is identi
 
 ### Configuration
 
-To change the configuration root to a different folder, you'll need to set the `IW_CONFIG_ROOT`
-environment variable to a different location.  The location can be absolute or relative to the
-application root.  The following example shows how to change this to `settings` inside your
-Apache config.
+If you wish to change the configuration root to a different folder, you'll need to set the
+`IW_CONFIG_ROOT` environment variable to a different location.  The location can be absolute or
+relative to the application root.  The following example shows how to change this to `settings`
+inside your Apache config.
 
 ```apache
 SetEnv IW_CONFIG_ROOT settings
@@ -183,8 +185,9 @@ SetEnv IW_CONFIG_ROOT settings
 
 #### Creating a Configuration
 
-You can create a configuring by returning it from any PHP file located in an environment
-directory.  For example, let's imagine adding the following to `config/default/test.php`:
+You can create a configuring by using the `Affinity\Config::create()` method and returning it
+from any PHP file located in a configuration directory.  For example, let's imagine adding the
+following to `config/default/test.php`:
 
 ```php
 return Affinity\Config::create([
@@ -196,6 +199,15 @@ return Affinity\Config::create([
 	]
 ]);
 ```
+
+The `create()` method takes two parameters.
+
+- An optional first parameter, an array of configuration "types" which map to aggregate IDs (more
+  on this later).
+- The configuration array itself.
+
+Both arguments are simple arrays, and if you only pass one, it is assumed to be the configuration
+alone.
 
 #### Accessing Configuration Data
 
@@ -225,8 +237,10 @@ $app['engine']->fetch('@providers', 'mapping', array());
 ```
 
 In order to provide information for aggregate ID fetches, you need to pass an optional first
-parameter to the Affinity\Config::create() method containing a list of aggregates you provide.
-The data is then keyed initially under the aggregate ID within the config itself.
+parameter to the `Affinity\Config::create()`` method containing a list of aggregates which that
+configuration provides.
+
+The data is then keyed under the aggregate ID within the config itself:
 
 ```php
 return Affinity\Config::create(['providers'], [
@@ -279,11 +293,7 @@ prepare your application for running.  Some of their main functions include:
 - Running static class methods for config or setting static class properties for config
 - Registering providers in the application container
 
-Unlike configs which are just arrays of information, actions represent callable logic.  Each action
-is provided the application instance and broker (instance of Auryn).  Additionally, actions can,
-themselves, be run in a particular order by specifying dependencies, so, if one action sets up
-a provider in the application container which is used by other actions, those actions can specify
-that they depend on it running first.
+Unlike configs which are just arrays of information, actions represent callable logic.
 
 Similar to configurations, you can change where actions are loaded from by adjusting the
 `IW_ACTION_ROOT` environment variable.  By default, they will run from `include` and, again,
@@ -306,6 +316,14 @@ return Affinity\Action::create(function($app, $broker) {
 });
 ```
 
+The `create()` method for actions takes two arguments:
+
+- An optional first argument which is an array specifying the IDs of actions which needs to be run
+  prior to the one we're creating.
+- A callback which will be provided the initial context passed to Affinity when it is started.  This
+  can vary for other affinity setups, but within inKWell this context includes the `$app` container
+  and the `$broker` which is an instance of the Auryn dependency manager.
+
 The above example shows what an action bootstrapping our a router might look like.  The
 hypothetical router just maps routes to a specific file for inclusion, but demonstrates how we
 use the configuraiton and actions in combination.  An appropriate configuration for the above
@@ -321,11 +339,16 @@ return Affinity\Config::create(['routes'], [
 ]);
 ```
 
-Assuming the `My\Router` class knew what to do with those on `add()`, although a bit contrived,
-the above example would be a workable routing paradigm that bridges a more traditional direct URL
-to file mapping and a more modern MVC approach.  If a more modern MVC approach is preferred and
-you don't want to create your own router, you might want to check out the
-[routing documentation](../handling-requests/01-routing) to see what ours can do.
+If, for example, we need to ensure that the router setup action always runs after a `core` action,
+we can do the following to create the action, note the array as the first parameter:
+
+```php
+return Affinity\Action::create(['core'], function($app, $broker) {
+	...
+```
+
+Bootstrapper dependencies should be considered dependencies of the package as a whole, since
+Affinity will error if a startup dependency is required to run first, but is not available.
 
 ## Pulling it Together
 
@@ -338,3 +361,7 @@ $app->run(function($app, $broker) {
 	$app['router']->handle($_SERVER[REQUEST_URI]);
 });
 ```
+
+If you don't want to create your own router and don't have another preferred router that you'll
+be configuring to work in your inKWell application, you might want to check out the
+[routing documentation](../handling-requests/01-routing) to see what ours can do.
