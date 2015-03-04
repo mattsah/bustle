@@ -10,10 +10,9 @@
 		// Setup execution mode and debugging
 		//
 
-		if (!$app->checkSAPI(['cli', 'embed'])) {
-			ini_set('display_errors', 0);
-			ini_set('display_startup_errors', 0);
-		}
+		error_reporting(E_ALL);
+		ini_set('display_errors', 0);
+		ini_set('display_startup_errors', 0);
 
 		$server_admin      = $app->getEnvironment('SERVER_ADMIN', 'root');
 		$debugging         = $app['engine']->fetch('core', 'debugging', []);

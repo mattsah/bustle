@@ -2,9 +2,10 @@
 
 	$this->expand('content', 'layouts/full.html');
 
+
 	?>
 	<form class="account login" method="post" action="">
-		<?= $this('error')->exists() ? $this('error')->retrieve()->compose() : NULL ?>
+		<?php $this->inject('messaging.html') ?>
 
 		<label>Login</label>
 		<input type="text" name="login" />

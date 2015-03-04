@@ -1,7 +1,9 @@
 <?php
 
 	use Inkwell\Auth;
+	use Inkwell\View;
 	use Inkwell\Security;
+	use Dotink\Flourish\Collection;
 
 	class UserProvider implements Security\UserProviderInterface
 	{
@@ -14,8 +16,8 @@
 		 */
 		public function __construct(UserQuery $users, PersonQuery $people)
 		{
-			$this->users  = $users;
-			$this->people = $people;
+			$this->users   = $users;
+			$this->people  = $people;
 		}
 
 
@@ -48,6 +50,17 @@
 		}
 
 
+		public function getJoinPath()
+		{
+			return '/join';
+		}
+
+
+		public function getLoginPath()
+		{
+			return '/login';
+		}
+
 		/**
 		 * Gets a user from a login
 		 */
@@ -68,7 +81,7 @@
 		/**
 		 * Gets a login from a user
 		 */
-		public function getLogin($user)
+		public function getUserLogin($user)
 		{
 			if ($user instanceof Auth\AnonymousUser) {
 				return NULL;
@@ -103,6 +116,24 @@
 		/**
 		 *
 		 */
+		public function handleJoin(Collection $params, $token, View $view)
+		{
+
+		}
+
+
+		/**
+		 *
+		 */
+		public function handleRegister(Collection $params, array $token_data, View $view)
+		{
+
+		}
+
+
+		/**
+		 *
+		 */
 		public function setLoginRedirect($user, $location)
 		{
 			$_SESSION['USER_PROVIDER_LOGIN_REDIRECT'] = $location;
@@ -128,5 +159,14 @@
 			}
 
 			return FALSE;
+		}
+
+
+		/**
+		 *
+		 */
+		public function verifyUser($user)
+		{
+
 		}
 	}

@@ -35,7 +35,8 @@
 		"firebase/php-jwt": "dev-master",
 		"dotink/flourish-message": "dev-master",
 		"ircmaxell/password-compat": "dev-master",
-		"dotink/inkwell-console": "dev-master"
+		"dotink/inkwell-console": "dev-master",
+		"dotink/inkwell-security": "dev-master"
 	},
 	"autoload": {
 		"classmap": ["user/"]

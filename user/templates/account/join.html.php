@@ -4,8 +4,7 @@
 
 	?>
 	<form class="account join" method="post" action="">
-		<?= $this('success')->exists() ? $this('success')->retrieve()->compose() : NULL ?>
-		<?= $this('error')->exists()   ? $this('error')->retrieve()->compose()   : NULL?>
+		<?php $this->inject('messaging.html') ?>
 
 		<label>Name</label>
 		<input type="text" name="name" />

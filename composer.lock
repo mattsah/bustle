@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "70b09d30a5579b726a5901b346070d27",
+    "hash": "d36478b1fde8d010b9ca349203313abf",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -45,12 +45,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/affinity.git",
-                "reference": "1.0.2"
+                "reference": "1.0.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/affinity/zipball/1.0.2",
-                "reference": "1.0.2",
+                "url": "https://api.github.com/repos/dotink/affinity/zipball/1.0.3",
+                "reference": "1.0.3",
                 "shasum": ""
             },
             "require": {
@@ -78,10 +78,10 @@
                 "bootstrap"
             ],
             "support": {
-                "source": "https://github.com/dotink/affinity/tree/1.0.2",
+                "source": "https://github.com/dotink/affinity/tree/1.0.3",
                 "issues": "https://github.com/dotink/affinity/issues"
             },
-            "time": "2015-02-10 08:11:43"
+            "time": "2015-02-16 08:50:32"
         },
         {
             "name": "dotink/flourish-collection",
@@ -89,12 +89,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/flourish-collection.git",
-                "reference": "1.0.1"
+                "reference": "1a595d18303f86d0c491bc8f1fe8c9ae3fa71850"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/flourish-collection/zipball/1.0.1",
-                "reference": "1.0.1",
+                "url": "https://api.github.com/repos/dotink/flourish-collection/zipball/1a595d18303f86d0c491bc8f1fe8c9ae3fa71850",
+                "reference": "1a595d18303f86d0c491bc8f1fe8c9ae3fa71850",
                 "shasum": ""
             },
             "require": {
@@ -134,10 +134,10 @@
                 "iterator"
             ],
             "support": {
-                "source": "https://github.com/dotink/flourish-collection/tree/1.0.1",
+                "source": "https://github.com/dotink/flourish-collection/tree/master",
                 "issues": "https://github.com/dotink/flourish-collection/issues"
             },
-            "time": "2015-02-10 09:02:24"
+            "time": "2015-02-19 08:57:25"
         },
         {
             "name": "dotink/flourish-core",
@@ -145,12 +145,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/flourish-core.git",
-                "reference": "1.0.0"
+                "reference": "ec195a00502bcc8b66e701bdc6b4570f83e7ab5c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/flourish-core/zipball/1.0.0",
-                "reference": "1.0.0",
+                "url": "https://api.github.com/repos/dotink/flourish-core/zipball/ec195a00502bcc8b66e701bdc6b4570f83e7ab5c",
+                "reference": "ec195a00502bcc8b66e701bdc6b4570f83e7ab5c",
                 "shasum": ""
             },
             "require": {
@@ -187,10 +187,10 @@
                 "exception handling"
             ],
             "support": {
-                "source": "https://github.com/dotink/flourish-core/tree/1.0.0",
+                "source": "https://github.com/dotink/flourish-core/tree/master",
                 "issues": "https://github.com/dotink/flourish-core/issues"
             },
-            "time": "2015-02-11 05:20:22"
+            "time": "2015-02-19 05:08:21"
         },
         {
             "name": "dotink/flourish-datetime",
@@ -252,12 +252,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/flourish-message.git",
-                "reference": "0f063e1ffbae98d489987905202896b994f068f1"
+                "reference": "65aa091196d7fce0fdc7421b3f46a541464d7789"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/flourish-message/zipball/0f063e1ffbae98d489987905202896b994f068f1",
-                "reference": "0f063e1ffbae98d489987905202896b994f068f1",
+                "url": "https://api.github.com/repos/dotink/flourish-message/zipball/65aa091196d7fce0fdc7421b3f46a541464d7789",
+                "reference": "65aa091196d7fce0fdc7421b3f46a541464d7789",
                 "shasum": ""
             },
             "require": {
@@ -302,7 +302,7 @@
                 "source": "https://github.com/dotink/flourish-message/tree/master",
                 "issues": "https://github.com/dotink/flourish-message/issues"
             },
-            "time": "2015-01-30 20:10:25"
+            "time": "2015-02-19 06:45:41"
         },
         {
             "name": "dotink/flourish-text",
@@ -422,12 +422,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-auth.git",
-                "reference": "a2c82e1cb064c21dc4e8f99dd25a09b372e63a68"
+                "reference": "9bb540eef7c6fcb15d3ef39f9af07e7f6b4fa80a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-auth/zipball/a2c82e1cb064c21dc4e8f99dd25a09b372e63a68",
-                "reference": "a2c82e1cb064c21dc4e8f99dd25a09b372e63a68",
+                "url": "https://api.github.com/repos/dotink/inkwell-auth/zipball/9bb540eef7c6fcb15d3ef39f9af07e7f6b4fa80a",
+                "reference": "9bb540eef7c6fcb15d3ef39f9af07e7f6b4fa80a",
                 "shasum": ""
             },
             "require": {
@@ -454,8 +454,8 @@
             "authors": [
                 {
                     "name": "Matthew J. Sahagian",
-                    "email": "matt@imarc.net",
-                    "role": "Developer"
+                    "email": "msahagian@dotink.org",
+                    "role": "Lead Architect / Developer"
                 }
             ],
             "description": "RBAC/ACLs for inKWell",
@@ -467,7 +467,7 @@
             "support": {
                 "source": "https://github.com/dotink/inkwell-auth/tree/master"
             },
-            "time": "2015-02-12 09:28:34"
+            "time": "2015-02-22 10:34:54"
         },
         {
             "name": "dotink/inkwell-console",
@@ -475,12 +475,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-console.git",
-                "reference": "ecf3c6452a2e4980bd4002a5b1c3c8e59c950381"
+                "reference": "ed7bf77ff76c6c23efa705465622b9bf65aa4898"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-console/zipball/ecf3c6452a2e4980bd4002a5b1c3c8e59c950381",
-                "reference": "ecf3c6452a2e4980bd4002a5b1c3c8e59c950381",
+                "url": "https://api.github.com/repos/dotink/inkwell-console/zipball/ed7bf77ff76c6c23efa705465622b9bf65aa4898",
+                "reference": "ed7bf77ff76c6c23efa705465622b9bf65aa4898",
                 "shasum": ""
             },
             "require": {
@@ -507,8 +507,8 @@
             "authors": [
                 {
                     "name": "Matthew J. Sahagian",
-                    "email": "matt@imarc.net",
-                    "role": "Developer"
+                    "email": "msahagian@dotink.org",
+                    "role": "Lead Architect / Developer"
                 }
             ],
             "description": "Interactive Console for inKWell",
@@ -520,7 +520,7 @@
                 "source": "https://github.com/dotink/inkwell-console/tree/master",
                 "issues": "https://github.com/dotink/inkwell-console/issues"
             },
-            "time": "2015-02-12 11:12:10"
+            "time": "2015-02-22 10:35:10"
         },
         {
             "name": "dotink/inkwell-controller",
@@ -528,12 +528,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-controller.git",
-                "reference": "f90a4f85736ad55a886ec165eb9e9fcd33964eb2"
+                "reference": "d55b34222b93935bf136d440f8654bcfcd9921ef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-controller/zipball/f90a4f85736ad55a886ec165eb9e9fcd33964eb2",
-                "reference": "f90a4f85736ad55a886ec165eb9e9fcd33964eb2",
+                "url": "https://api.github.com/repos/dotink/inkwell-controller/zipball/d55b34222b93935bf136d440f8654bcfcd9921ef",
+                "reference": "d55b34222b93935bf136d440f8654bcfcd9921ef",
                 "shasum": ""
             },
             "require": {
@@ -574,7 +574,7 @@
             "support": {
                 "source": "https://github.com/dotink/inkwell-controller/tree/master"
             },
-            "time": "2015-02-11 09:30:18"
+            "time": "2015-02-16 07:31:42"
         },
         {
             "name": "dotink/inkwell-core",
@@ -739,12 +739,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-http.git",
-                "reference": "ef2c30a0b306ec5c52d4ba083399517b3fa13f9f"
+                "reference": "39765bea5cabdced9d32850465a5a0f1cf422e97"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-http/zipball/ef2c30a0b306ec5c52d4ba083399517b3fa13f9f",
-                "reference": "ef2c30a0b306ec5c52d4ba083399517b3fa13f9f",
+                "url": "https://api.github.com/repos/dotink/inkwell-http/zipball/39765bea5cabdced9d32850465a5a0f1cf422e97",
+                "reference": "39765bea5cabdced9d32850465a5a0f1cf422e97",
                 "shasum": ""
             },
             "require": {
@@ -786,7 +786,7 @@
             "support": {
                 "source": "https://github.com/dotink/inkwell-http/tree/master"
             },
-            "time": "2015-02-11 09:22:26"
+            "time": "2015-02-19 06:31:51"
         },
         {
             "name": "dotink/inkwell-orm",
@@ -794,12 +794,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-orm.git",
-                "reference": "fce89e989c900aa84adae47dcbde1588600d296e"
+                "reference": "9ad188bd30276cc90b3c669d3d314a90e627c4b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-orm/zipball/fce89e989c900aa84adae47dcbde1588600d296e",
-                "reference": "fce89e989c900aa84adae47dcbde1588600d296e",
+                "url": "https://api.github.com/repos/dotink/inkwell-orm/zipball/9ad188bd30276cc90b3c669d3d314a90e627c4b8",
+                "reference": "9ad188bd30276cc90b3c669d3d314a90e627c4b8",
                 "shasum": ""
             },
             "require": {
@@ -827,8 +827,8 @@
             "authors": [
                 {
                     "name": "Matthew J. Sahagian",
-                    "email": "matt@imarc.net",
-                    "role": "Developer"
+                    "email": "msahagian@dotink.org",
+                    "role": "Lead Architect / Developer"
                 }
             ],
             "description": "An ORM for inKWell (Propel 2)",
@@ -839,7 +839,7 @@
             "support": {
                 "source": "https://github.com/dotink/inkwell-orm/tree/master"
             },
-            "time": "2015-02-12 11:11:46"
+            "time": "2015-02-22 10:35:23"
         },
         {
             "name": "dotink/inkwell-routing",
@@ -847,12 +847,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-routing.git",
-                "reference": "cb7e0888802c9c8f3cc9ece59e91fd89c7592da0"
+                "reference": "699f35a0aa62d53cdce295ec18f87c88fb5e4316"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-routing/zipball/cb7e0888802c9c8f3cc9ece59e91fd89c7592da0",
-                "reference": "cb7e0888802c9c8f3cc9ece59e91fd89c7592da0",
+                "url": "https://api.github.com/repos/dotink/inkwell-routing/zipball/699f35a0aa62d53cdce295ec18f87c88fb5e4316",
+                "reference": "699f35a0aa62d53cdce295ec18f87c88fb5e4316",
                 "shasum": ""
             },
             "require": {
@@ -887,14 +887,72 @@
                     "role": "Lead Architect / Developer"
                 }
             ],
-            "description": "Route incoming requests to various callbacks or directly to files",
+            "description": "The inKWell Router",
             "keywords": [
                 "router"
             ],
             "support": {
                 "source": "https://github.com/dotink/inkwell-routing/tree/master"
             },
-            "time": "2015-02-12 11:01:20"
+            "time": "2015-02-22 13:53:34"
+        },
+        {
+            "name": "dotink/inkwell-security",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dotink/inkwell-security.git",
+                "reference": "09ada14106eed646549d8f9f3b777665863e7eb4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dotink/inkwell-security/zipball/09ada14106eed646549d8f9f3b777665863e7eb4",
+                "reference": "09ada14106eed646549d8f9f3b777665863e7eb4",
+                "shasum": ""
+            },
+            "require": {
+                "dotink/flourish-message": "dev-master",
+                "dotink/inkwell-auth": "dev-master",
+                "dotink/inkwell-controller": "dev-master",
+                "dotink/inkwell-view": "dev-master",
+                "firebase/php-jwt": "dev-master",
+                "ircmaxell/password-compat": "dev-master",
+                "php": ">=5.4.0"
+            },
+            "type": "opus-package",
+            "extra": {
+                "opus": {
+                    "inkwell/framework": {
+                        "plugin/config": "config",
+                        "plugin/include": "include"
+                    }
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "license": [
+                "AGPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Matthew J. Sahagian",
+                    "email": "msahagian@dotink.org",
+                    "role": "Lead Architect / Developer"
+                }
+            ],
+            "description": "Authentication and security for inKWell",
+            "keywords": [
+                "authentication",
+                "security"
+            ],
+            "support": {
+                "source": "https://github.com/dotink/inkwell-security/tree/master",
+                "issues": "https://github.com/dotink/inkwell-security/issues"
+            },
+            "time": "2015-02-22 13:23:56"
         },
         {
             "name": "dotink/inkwell-transport",
@@ -951,12 +1009,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/inkwell-view.git",
-                "reference": "dd04d4e1d8889c4805d9b39b3386ea519c403009"
+                "reference": "bb21c37465c0ccba818e79e89397c71c73e6533a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/inkwell-view/zipball/dd04d4e1d8889c4805d9b39b3386ea519c403009",
-                "reference": "dd04d4e1d8889c4805d9b39b3386ea519c403009",
+                "url": "https://api.github.com/repos/dotink/inkwell-view/zipball/bb21c37465c0ccba818e79e89397c71c73e6533a",
+                "reference": "bb21c37465c0ccba818e79e89397c71c73e6533a",
                 "shasum": ""
             },
             "require": {
@@ -997,7 +1055,7 @@
             "support": {
                 "source": "https://github.com/dotink/inkwell-view/tree/master"
             },
-            "time": "2015-02-07 09:17:57"
+            "time": "2015-02-19 08:23:12"
         },
         {
             "name": "filp/whoops",
@@ -1005,12 +1063,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/filp/whoops.git",
-                "reference": "01f84f8121a882b100cb153a9b92056439a34c5b"
+                "reference": "dcce91553e2e056857f1ea844949e9a8a71b613d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filp/whoops/zipball/01f84f8121a882b100cb153a9b92056439a34c5b",
-                "reference": "01f84f8121a882b100cb153a9b92056439a34c5b",
+                "url": "https://api.github.com/repos/filp/whoops/zipball/dcce91553e2e056857f1ea844949e9a8a71b613d",
+                "reference": "dcce91553e2e056857f1ea844949e9a8a71b613d",
                 "shasum": ""
             },
             "require": {
@@ -1055,7 +1113,7 @@
                 "whoops",
                 "zf2"
             ],
-            "time": "2015-01-22 15:11:11"
+            "time": "2015-02-17 15:50:31"
         },
         {
             "name": "firebase/php-jwt",
@@ -1064,12 +1122,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/firebase/php-jwt.git",
-                "reference": "83b8899cb73d85d648af93f37ec0ac89f4a5bbae"
+                "reference": "724b1fcfb88b7bbbbd92fddd5deb7518c3988267"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/83b8899cb73d85d648af93f37ec0ac89f4a5bbae",
-                "reference": "83b8899cb73d85d648af93f37ec0ac89f4a5bbae",
+                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/724b1fcfb88b7bbbbd92fddd5deb7518c3988267",
+                "reference": "724b1fcfb88b7bbbbd92fddd5deb7518c3988267",
                 "shasum": ""
             },
             "require": {
@@ -1100,7 +1158,7 @@
             ],
             "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",
             "homepage": "https://github.com/firebase/php-jwt",
-            "time": "2014-11-18 17:58:25"
+            "time": "2015-02-12 15:57:00"
         },
         {
             "name": "imarc/auth",
@@ -1108,12 +1166,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/imarc/auth.git",
-                "reference": "eef3a81e7705e97dd0b068aa9d12251bfef8ea90"
+                "reference": "013f2081bd97bd48931d0063ce55ce70ab5be6bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/imarc/auth/zipball/eef3a81e7705e97dd0b068aa9d12251bfef8ea90",
-                "reference": "eef3a81e7705e97dd0b068aa9d12251bfef8ea90",
+                "url": "https://api.github.com/repos/imarc/auth/zipball/013f2081bd97bd48931d0063ce55ce70ab5be6bf",
+                "reference": "013f2081bd97bd48931d0063ce55ce70ab5be6bf",
                 "shasum": ""
             },
             "require": {
@@ -1152,7 +1210,7 @@
                 "auth",
                 "rbac"
             ],
-            "time": "2015-01-30 07:01:24"
+            "time": "2015-02-20 07:56:23"
         },
         {
             "name": "imarc/opus",
@@ -1160,12 +1218,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/imarc/opus.git",
-                "reference": "ad0ec947db9798b3ad2f61062ec399062907aa94"
+                "reference": "9a03c5b48d8e5b094dca77cc045d801ae096bbf4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/imarc/opus/zipball/ad0ec947db9798b3ad2f61062ec399062907aa94",
-                "reference": "ad0ec947db9798b3ad2f61062ec399062907aa94",
+                "url": "https://api.github.com/repos/imarc/opus/zipball/9a03c5b48d8e5b094dca77cc045d801ae096bbf4",
+                "reference": "9a03c5b48d8e5b094dca77cc045d801ae096bbf4",
                 "shasum": ""
             },
             "require": {
@@ -1196,7 +1254,7 @@
             "keywords": [
                 "package management"
             ],
-            "time": "2015-01-27 05:05:03"
+            "time": "2015-02-22 20:52:20"
         },
         {
             "name": "ircmaxell/password-compat",
@@ -1332,12 +1390,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "1366e833a16c4267883187da6da7b317f0582dd7"
+                "reference": "d56ff5a351d43cb4d26589f2aff878ae7cf01ff1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/1366e833a16c4267883187da6da7b317f0582dd7",
-                "reference": "1366e833a16c4267883187da6da7b317f0582dd7",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/d56ff5a351d43cb4d26589f2aff878ae7cf01ff1",
+                "reference": "d56ff5a351d43cb4d26589f2aff878ae7cf01ff1",
                 "shasum": ""
             },
             "require": {
@@ -1369,7 +1427,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2015-01-31 21:59:38"
+            "time": "2015-02-26 18:19:40"
         },
         {
             "name": "propel/propel",
@@ -1377,12 +1435,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/propelorm/Propel2.git",
-                "reference": "34424073615e7a9f2f21fd45914ab06a7abda27c"
+                "reference": "a1295a152c167f32c1750a418c10ae75a43fccab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/propelorm/Propel2/zipball/34424073615e7a9f2f21fd45914ab06a7abda27c",
-                "reference": "34424073615e7a9f2f21fd45914ab06a7abda27c",
+                "url": "https://api.github.com/repos/propelorm/Propel2/zipball/a1295a152c167f32c1750a418c10ae75a43fccab",
+                "reference": "a1295a152c167f32c1750a418c10ae75a43fccab",
                 "shasum": ""
             },
             "require": {
@@ -1434,7 +1492,7 @@
                 "orm",
                 "persistence"
             ],
-            "time": "2015-02-10 11:06:12"
+            "time": "2015-03-01 14:40:18"
         },
         {
             "name": "psr/log",
@@ -1485,12 +1543,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/bobthecow/psysh.git",
-                "reference": "218ea9e49c9fe21e28fce6cf77f22615af92daef"
+                "reference": "3787f3436f4fd898e0ac1eb6f5abd2ab6b24085b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/218ea9e49c9fe21e28fce6cf77f22615af92daef",
-                "reference": "218ea9e49c9fe21e28fce6cf77f22615af92daef",
+                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/3787f3436f4fd898e0ac1eb6f5abd2ab6b24085b",
+                "reference": "3787f3436f4fd898e0ac1eb6f5abd2ab6b24085b",
                 "shasum": ""
             },
             "require": {
@@ -1508,6 +1566,7 @@
             },
             "suggest": {
                 "ext-pcntl": "Enabling the PCNTL extension makes PsySH a lot happier :)",
+                "ext-pdo-sqlite": "The doc command requires SQLite to work.",
                 "ext-posix": "If you have PCNTL, you'll want the POSIX extension as well.",
                 "ext-readline": "Enables support for arrow-key history navigation, and showing and manipulating command history."
             },
@@ -1540,14 +1599,14 @@
                 }
             ],
             "description": "An interactive shell for modern PHP.",
-            "homepage": "https://github.com/bobthecow/psysh",
+            "homepage": "http://psysh.org",
             "keywords": [
                 "REPL",
                 "console",
                 "interactive",
                 "shell"
             ],
-            "time": "2015-02-12 05:21:32"
+            "time": "2015-02-25 20:35:54"
         },
         {
             "name": "rdlowrey/auryn",
@@ -1614,17 +1673,20 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Config.git",
-                "reference": "a634f4e901f5d20696020980cae70d8d94c6193d"
+                "reference": "1055ce82e84d5f0b8d0b06886d2f500c72ee044e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Config/zipball/a634f4e901f5d20696020980cae70d8d94c6193d",
-                "reference": "a634f4e901f5d20696020980cae70d8d94c6193d",
+                "url": "https://api.github.com/repos/symfony/Config/zipball/1055ce82e84d5f0b8d0b06886d2f500c72ee044e",
+                "reference": "1055ce82e84d5f0b8d0b06886d2f500c72ee044e",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.9",
                 "symfony/filesystem": "~2.3|~3.0.0"
+            },
+            "require-dev": {
+                "symfony/phpunit-bridge": "~2.7|~3.0.0"
             },
             "type": "library",
             "extra": {
@@ -1653,7 +1715,7 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "http://symfony.com",
-            "time": "2015-02-11 07:17:51"
+            "time": "2015-02-25 12:51:44"
         },
         {
             "name": "symfony/console",
@@ -1662,12 +1724,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "9ae2430b0985bb9771eb15caf3638dd54f956422"
+                "reference": "f9ee7f03c1af5e6cf59e2270ac3b8ed7f47e2158"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/9ae2430b0985bb9771eb15caf3638dd54f956422",
-                "reference": "9ae2430b0985bb9771eb15caf3638dd54f956422",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/f9ee7f03c1af5e6cf59e2270ac3b8ed7f47e2158",
+                "reference": "f9ee7f03c1af5e6cf59e2270ac3b8ed7f47e2158",
                 "shasum": ""
             },
             "require": {
@@ -1676,6 +1738,7 @@
             "require-dev": {
                 "psr/log": "~1.0",
                 "symfony/event-dispatcher": "~2.1|~3.0.0",
+                "symfony/phpunit-bridge": "~2.7|~3.0.0",
                 "symfony/process": "~2.1|~3.0.0"
             },
             "suggest": {
@@ -1710,7 +1773,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com",
-            "time": "2015-02-11 07:17:51"
+            "time": "2015-02-24 12:09:34"
         },
         {
             "name": "symfony/filesystem",
@@ -1719,16 +1782,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Filesystem.git",
-                "reference": "177e0a8e29fab3f0556f7a973b5a42935e42a4d7"
+                "reference": "d4ae276ad15d0ae17ae07bd8b7de1c5381217283"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Filesystem/zipball/177e0a8e29fab3f0556f7a973b5a42935e42a4d7",
-                "reference": "177e0a8e29fab3f0556f7a973b5a42935e42a4d7",
+                "url": "https://api.github.com/repos/symfony/Filesystem/zipball/d4ae276ad15d0ae17ae07bd8b7de1c5381217283",
+                "reference": "d4ae276ad15d0ae17ae07bd8b7de1c5381217283",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.9"
+            },
+            "require-dev": {
+                "symfony/phpunit-bridge": "~2.7|~3.0.0"
             },
             "type": "library",
             "extra": {
@@ -1757,7 +1823,7 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "http://symfony.com",
-            "time": "2015-02-11 07:17:51"
+            "time": "2015-02-18 10:38:04"
         },
         {
             "name": "symfony/finder",
@@ -1766,16 +1832,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Finder.git",
-                "reference": "509d125782f31ebbd0bb3cd9824f1ccc1e5d5a18"
+                "reference": "5db34b8c6ab8c04452a5660ad9535766940b5348"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Finder/zipball/509d125782f31ebbd0bb3cd9824f1ccc1e5d5a18",
-                "reference": "509d125782f31ebbd0bb3cd9824f1ccc1e5d5a18",
+                "url": "https://api.github.com/repos/symfony/Finder/zipball/5db34b8c6ab8c04452a5660ad9535766940b5348",
+                "reference": "5db34b8c6ab8c04452a5660ad9535766940b5348",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.9"
+            },
+            "require-dev": {
+                "symfony/phpunit-bridge": "~2.7|~3.0.0"
             },
             "type": "library",
             "extra": {
@@ -1804,7 +1873,7 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "http://symfony.com",
-            "time": "2015-02-11 07:17:51"
+            "time": "2015-02-21 13:05:27"
         },
         {
             "name": "symfony/translation",
@@ -1813,12 +1882,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Translation.git",
-                "reference": "a137d0bb09b3e841fb21cb2599afce217d96e0b4"
+                "reference": "decb41096e98a76e3759fdb042842b2f3838a6a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Translation/zipball/a137d0bb09b3e841fb21cb2599afce217d96e0b4",
-                "reference": "a137d0bb09b3e841fb21cb2599afce217d96e0b4",
+                "url": "https://api.github.com/repos/symfony/Translation/zipball/decb41096e98a76e3759fdb042842b2f3838a6a1",
+                "reference": "decb41096e98a76e3759fdb042842b2f3838a6a1",
                 "shasum": ""
             },
             "require": {
@@ -1828,6 +1897,7 @@
                 "psr/log": "~1.0",
                 "symfony/config": "~2.7|~3.0",
                 "symfony/intl": "~2.7|~3.0",
+                "symfony/phpunit-bridge": "~2.7|~3.0",
                 "symfony/yaml": "~2.7|~3.0"
             },
             "suggest": {
@@ -1862,7 +1932,7 @@
             ],
             "description": "Symfony Translation Component",
             "homepage": "http://symfony.com",
-            "time": "2015-02-12 08:47:54"
+            "time": "2015-02-21 13:23:59"
         },
         {
             "name": "symfony/validator",
@@ -1871,12 +1941,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Validator.git",
-                "reference": "7ecb4f34c22a5fcedd87bc3aca1bffca37e1a3da"
+                "reference": "245a63191054e78e5000b25f6cc621519bfb64d6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Validator/zipball/7ecb4f34c22a5fcedd87bc3aca1bffca37e1a3da",
-                "reference": "7ecb4f34c22a5fcedd87bc3aca1bffca37e1a3da",
+                "url": "https://api.github.com/repos/symfony/Validator/zipball/245a63191054e78e5000b25f6cc621519bfb64d6",
+                "reference": "245a63191054e78e5000b25f6cc621519bfb64d6",
                 "shasum": ""
             },
             "require": {
@@ -1891,6 +1961,7 @@
                 "symfony/expression-language": "~2.4|~3.0.0",
                 "symfony/http-foundation": "~2.1|~3.0.0",
                 "symfony/intl": "~2.3|~3.0.0",
+                "symfony/phpunit-bridge": "~2.7|~3.0.0",
                 "symfony/property-access": "~2.3|~3.0.0",
                 "symfony/yaml": "~2.0,>=2.0.5|~3.0.0"
             },
@@ -1932,7 +2003,7 @@
             ],
             "description": "Symfony Validator Component",
             "homepage": "http://symfony.com",
-            "time": "2015-02-11 07:17:51"
+            "time": "2015-02-22 11:48:16"
         },
         {
             "name": "symfony/yaml",
@@ -1941,16 +2012,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "43aac3461a5679f486f7c96e4d7e780a59fec997"
+                "reference": "d04b39229628a0cc36ae5616db9c7f6f7119ac8f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/43aac3461a5679f486f7c96e4d7e780a59fec997",
-                "reference": "43aac3461a5679f486f7c96e4d7e780a59fec997",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/d04b39229628a0cc36ae5616db9c7f6f7119ac8f",
+                "reference": "d04b39229628a0cc36ae5616db9c7f6f7119ac8f",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.9"
+            },
+            "require-dev": {
+                "symfony/phpunit-bridge": "~2.7|~3.0.0"
             },
             "type": "library",
             "extra": {
@@ -1979,7 +2053,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2015-02-11 07:17:51"
+            "time": "2015-02-18 10:38:04"
         },
         {
             "name": "willdurand/negotiation",
@@ -2051,7 +2125,8 @@
         "firebase/php-jwt": 20,
         "dotink/flourish-message": 20,
         "ircmaxell/password-compat": 20,
-        "dotink/inkwell-console": 20
+        "dotink/inkwell-console": 20,
+        "dotink/inkwell-security": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
